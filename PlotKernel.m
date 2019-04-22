@@ -29,7 +29,7 @@ nMarker = length(markerSequence);
 lineSequence = {'-','--',':','-.'};
 nLine = length(lineSequence);
 
-kerFun = @(t,x) 1 + abs(t) + abs(x) - abs(x-t);
+kerFun = @(t,x) 1 + 0.5*(abs(t) + abs(x) - abs(x-t));
 
 
 %1-D plot
@@ -37,7 +37,7 @@ x = (-3:0.002:3)';
 xcent = [-3 -2 -1 1 2 3];
 y = kerFun(x,xcent);
 plot(x,y,'-')
-axis([-3 3 0 7])
+axis([-3 3 0 4])
 xlabel('$x$')
 ylabel('$K(t,x), \ t = -3, -2, \ldots, 3$')
 print('-depsc','KernelPict.eps')
@@ -48,7 +48,7 @@ x = (-3:0.01:3)';
 [xx,yy] = meshgrid(x,x);
 z = kerFun(xx,yy);
 surf(xx,yy,z,'facecolor','interp','EdgeColor','None')
-axis([-3 3 -3 3 0 7])
+axis([-3 3 -3 3 0 4])
 xlabel('$t$')
 ylabel('$x$')
 zlabel('$K(t,x)$')
