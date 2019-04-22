@@ -32,6 +32,7 @@
 \usepackage[numbers]{natbib}
 \usepackage{enumerate,multirow,booktabs}
 \usepackage{url}
+\usepackage{algpseudocode}
 \usepackage{natbib}
 
 \newcommand{\blind}{1}
@@ -45,25 +46,31 @@
 \newcommand{\naturals}{\mathbb{R}}
 \newcommand{\vc}{\boldsymbol{c}}
 \newcommand{\vx}{\boldsymbol{x}}
+\newcommand{\vX}{\boldsymbol{X}}
 \newcommand{\vt}{\boldsymbol{t}}
 \newcommand{\vz}{\boldsymbol{z}}
 \newcommand{\vu}{\boldsymbol{u}}
 \newcommand{\vy}{\boldsymbol{y}}
+\newcommand{\mX}{{\mathsf X}}
 \newcommand{\vinfty}{\boldsymbol{\infty}}
 \newcommand{\vzero}{\boldsymbol{0}}
 \newcommand{\vPsi}{\boldsymbol{\Psi}}
 \newcommand{\dif}{{\rm d}}
 \DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\argmax}{argmax}
 \newcommand{\Udes}{\mathcal{U}}
 \newcommand{\Xdes}{\mathcal{X}}
 \newcommand{\FXdes}{F_{\Xdes}}
 \newcommand{\cm}{\mathcal{M}}
+\newcommand{\ch}{\mathcal{H}}
 \newcommand{\Ftar}{F}
 \newcommand{\ftar}{\varrho}
 \newcommand{\cube}{\ensuremath{(0,1)^d}}
 \newcommand{\bbone}{\mathbbm{1}}
+\newcommand{\Ex}{\mathbb{E}}
 \newcommand{\ip}[3][{}]{\ensuremath{\left \langle #2, #3 \right \rangle_{#1}}}
 \newcommand{\norm}[2][{}]{\ensuremath{\left \lVert #2 \right \rVert}_{#1}}
+\DeclareMathOperator{\cov}{cov}
 
 \def\abs#1{\ensuremath{\left \lvert #1 \right \rvert}}
 
@@ -117,7 +124,7 @@ When the target distribution for the design, $\Ftar$, defined over the experimen
 \Xdes = \{\vx_i\}_{i=1}^N = \{\vPsi(\vu_i)\}_{i=1}^N = \vPsi(\Udes), \qquad \vPsi: \cube \to \Omega.
 \end{equation}
 Note that $\Ftar$ may differ from $F_u$ because $\Omega \ne \cube$ and/or $\Ftar$ is non-uniform.  
-A natural transformation, $\vPsi$, when $\Ftar$ has independent marginals is the inverse distribution transformation:
+A natural transformation, $\vPsi(\vu)=[\Psi_1(u_1),\ldots,\Psi_d(u_d)]$, when $\Ftar$ has independent marginals is the inverse distribution transformation:
 \begin{equation}\label{eq:inverse}
 \Psi_j(u_j) = F_j^{-1}(u_j), \quad \text{where } \Ftar(\vx) = F_1(u_1) \cdots F_d(u_d).
 \end{equation}
@@ -142,9 +149,37 @@ Numerical examples are used to show the performance of the method.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Experimental design theory based on  discrepancy assumes an experimental region, $\Omega$, and a target probability distribution, $\Ftar:\Omega \to [0,1]$, which is known a priori. In many of our examples, we assume that $\Ftar$ has a probability density, $\ftar$.  It is convenient to also work with measures, $\nu$, defined on $\Omega$.  If $\nu$ is a probability measure, the associated probability distribution is given by $F(\vx) = \nu((-\vinfty,\vx])$.  The Dirac measure, $\delta_{\vx}$ is the probability measure assigning unit measure to the point $\vx$.  A design, $\Xdes = \{\vx_i\}_{i=1}^N$, is a finite set of points that has an associated empirical distribution, $F_{\Xdes}  = N^{-1} \sum_{i=1}^N \bbone_{(-\vinfty,\vx_i]}$ as well as an associated empirical measure, $\nu_{\Xdes}  = N^{-1} \sum_{i=1}^N \delta_{\vx_i}$.
+Experimental design theory based on  discrepancy assumes an experimental region, $\Omega$, and a target probability distribution, $\Ftar:\Omega \to [0,1]$, which is known a priori. We assume that $\Ftar$ has a probability density, $\ftar$.  It is convenient to also work with measures, $\nu$, defined on $\Omega$.  If $\nu$ is a probability measure, the associated probability distribution is given by $F(\vx) = \nu((-\vinfty,\vx])$.  The Dirac measure, $\delta_{\vx}$ is the probability measure assigning unit measure to the point $\vx$.  A design, $\Xdes = \{\vx_i\}_{i=1}^N$, is a finite set of points that has an associated empirical distribution, $F_{\Xdes}  = N^{-1} \sum_{i=1}^N \bbone_{(-\vinfty,\vx_i]}$ as well as an associated empirical measure, $\nu_{\Xdes}  = N^{-1} \sum_{i=1}^N \delta_{\vx_i}$.
 
-In the remainder of this section we provide three interpretations of the discrepancy---the magnitude of $\Ftar - \FXdes$.  One interpretation is the norm of $\Ftar - \FXdes$.  The second interpretation is worst-case cubature error for integrands in a Hilbert space.  The third interpretation is average case cubature error for stochastic processes.
+Our notation for discrepancy takes the form of 
+\[
+ D(F_{\Xdes},F,K), \ D(\Xdes,F,K), \ D(\Xdes,\varrho,K), \ D(\Xdes,\nu,K), \ D(\nu_{\Xdes},\nu,K), \text{ etc.}, 
+\]
+are all of which mean the same thing.  The first argument always refers to the design, the second argument always refers to the target, and the third argument is a symmetric, positive definite kernel, which is explained below.  We abuse the discrepancy notation because sometimes it is convenient to refer to the design as a set, $\Xdes$, other times by its empirical distribution, $F_{\Xdes}$, and other times by its empirical $\nu_{\Xdes}$.  Likewise sometimes it convenient to refer the target as a probability measure,  $\nu$, other times by its distribution function, $F$, and other times by its density function, $\varrho$.
+
+In the remainder of this section we provide three interpretations of the discrepancy, summarized in Table \ref{tab:ThreeInterpTable}.  One interpretation is the norm of $\nu - \nu_{\Xdes}$.  The second and third interpretations consider the problem of evaluating the mean of a random variable $Y=f(\vX)$, or equivalently a multidimensional integral
+\[
+\mu = \Ex(Y) = \Ex[f(\vX)] = \int_{\Omega} f(\vx) \, \varrho(\vx) \, \dif \vx,
+\]
+where $\vX$ is a random vector with density $\varrho$. The second
+interpretation is worst-case cubature error for integrands, $f$, in the unit ball of a Hilbert space.  The third interpretation is the root mean squared cubature error for integrands, $f$ that are stochastic processes.
+
+\begin{table}
+    \centering
+     \caption{Three interpretations of the discrepancy}
+     \vspace{-3ex}
+\begin{equation*}
+\begin{array}{c@{\qquad}ccc}
+     \text{Kernel Interpretation} & \text{Discrepancy } D(\Xdes,\nu,K) = D(\Xdes,\varrho,K)\\
+     \toprule \\[-1ex]
+     K(\vt,\vx) = \ip[\cm]{\delta_{\vt}}{\delta_{\vx}} & \norm[\cm]{\nu - \nu_{\Xdes}} \\[2ex]
+     f(\vx) = \ip[\ch]{K(\cdot,\vx)}{f} & \displaystyle \sup_{f \in \ch : \norm[\ch]{f} \le 1} \abs{\int_{\Omega} f(\vx) \, \varrho(\vx) \, \dif \vx - \frac 1N \sum_{i=1}^N f(\vx_i)}\\[4ex]
+    K(\vt,\vx) = \cov\bigl(f(\vt), f(\vx) \bigr) & \displaystyle \sqrt{\Ex \abs{\int_{\Omega} f(\vx) \, \varrho(\vx) \, \dif \vx - \frac 1N \sum_{i=1}^N f(\vx_i)}^2}\\
+\end{array}
+\end{equation*}
+    \label{tab:ThreeInterpTable}
+\end{table}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Definition in Terms of a Norm on a Hilbert Space of Measures}
@@ -168,16 +203,20 @@ This can be established directly from \eqref{kerDeltaDef} for $\cm_0$, the vecto
 The discrepancy of the design $\Xdes$ with respect to the target probability measure $\nu$ using the kernel $K$, can be defined as the norm of the difference between the target probability measure, $\nu$, and the empirical probability measure for $\Xdes$:
 \begin{subequations} \label{discDef}
 \begin{align} 
-    D^2(\Xdes,\nu,K) & := \norm[\cm]{\nu - \nu_{\Xdes}}^2 = \int_{\Omega \times \Omega} K(\vt,\vx) \, (\nu - \nu_{\Xdes})(\dif \vt) (\nu - \nu_{\Xdes})(\dif \vx) \\
+    D^2(\Xdes,\nu,K) & := \norm[\cm]{\nu - \nu_{\Xdes}}^2 \\
+    \nonumber
+    & = \int_{\Omega \times \Omega} K(\vt,\vx) \, (\nu - \nu_{\Xdes})(\dif \vt) (\nu - \nu_{\Xdes})(\dif \vx) \\
     \nonumber
     & = \int_{\Omega \times \Omega} K(\vt,\vx) \, \nu(\dif \vt) \nu (\dif \vx)\\
     & \qquad \qquad - \frac 2N \sum_{i=1}^N \int_{\Omega} K(\vt,\vx_i) \, \nu(\dif \vt) + \sum_{i,k=1}^N K(\vx_i,\vx_k).
 \end{align}
-The first argument refers to the design, the second to the target measure, and the third refers to the kernel used to define the kernel used to define the Hilbert space norm for $\cm$.
-The formula for the discrepancy may be written equivalently in terms of the probability density, $\rho$, corresponding to the probability measure, $\varrho$:
+The formula for the discrepancy may be written equivalently in terms of the probability distribution, $F$,  or the probability density, $\varrho$, corresponding to the target probability measure, $\nu$:
 \begin{align}
 \nonumber
-    D^2(\Xdes,\varrho,K)  & = \int_{\Omega \times \Omega} K(\vt,\vx) \, \varrho(\vt) \varrho (\vx) \, \dif \vt\dif \vx\\
+    D^2(\Xdes,F,K)  & = \int_{\Omega \times \Omega} K(\vt,\vx) \, \dif F( \vt) \dif F(\vx)\\
+    & \qquad \qquad - \frac 2N \sum_{i=1}^N \int_{\Omega} K(\vt,\vx_i)  \, \dif F(\vt) + \sum_{i,k=1}^N K(\vx_i,\vx_k), \\
+\nonumber
+   & = \int_{\Omega \times \Omega} K(\vt,\vx) \, \varrho(\vt) \varrho (\vx) \, \dif \vt\dif \vx\\
     & \qquad \qquad - \frac 2N \sum_{i=1}^N \int_{\Omega} K(\vt,\vx_i)  \, \varrho(\vt) \, \dif \vt + \sum_{i,k=1}^N K(\vx_i,\vx_k).
 \end{align}
 \end{subequations}
@@ -188,10 +227,26 @@ D(\Xdes,\nu,K), \ D(\Xdes,F,K), \ D(\Xdes,\varrho,K), \ D(\nu_{\Xdes},\nu,K), \t
 are all equivalent.
 
 The equivalent formulas for the discrepancy in \eqref{discDef} depend inherently on the choice of $K$.  That is key to the answering our question \eqref{BigQ}.  A kernel often used is 
-\begin{align}
-    K(\vt,\vx)  = \prod\limits_{j=1}^d\left[1+ |t_j|+ |x_j|- |x_j-t_j|\right].
-\end{align}
-This kernel is plotted in 
+\begin{equation} \label{OrigKernel}
+     K(\vt,\vx)  = \prod\limits_{j=1}^d\left[1+ |t_j|+ |x_j|- |x_j-t_j|\right].
+\end{equation}
+This kernel is plotted in Figure \ref{fig:kernelpict} for $d=1$.  Note that for this kernel in one dimension the distance between two Dirac measures is 
+\begin{equation*}
+    \norm[\cm]{\delta_{x} - \delta_{t}} = \sqrt{\abs{x-t}}.
+\end{equation*}
+
+\begin{figure}
+    \centering
+    \includegraphics[height = 4cm]{KernelPict.eps} \qquad
+    \includegraphics[height = 4cm]{Kernel3DPict.eps}
+    \caption{The kernel defined in \eqref{OrigKernel} for $d=1$.}
+    \label{fig:kernelpict}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Definition in Terms of a Norm on a Hilbert Space of Measures}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 
 \section{A Discrepancy Defined for Normal Distribution}
@@ -308,13 +363,38 @@ We further investigate the correlation between uniform discrepancy and the norma
 
 \section{Improvement by the Coordinate-Exchange Algorithm}
 The common practice to generate $d-$dim standard normal random numbers is inverse distribution transformation. However, as discussed in section \ref{sec:inconsistency}, a random sequence with low uniform discrepancy doesn't guarantee a low normal discrepancy sequence after inverse distribution transformation. We propose an efficient algorithm that assures low normal discrepancy of the generated $d$-dim standard normal random numbers.
+
+In this section, to better illustrate the coordinate exchange method, we represent a $N$ points $d$-dim design $\{\vx_i\}_{i=1}^N$ with a design matrix $$\mX = \left(\begin{array}{c}\vx_1^T\\ \vdots\\\vx_N^T\end{array}\right).$$ We propose using the coordinate exchange method to optimize the normal discrepancy of a current design. The coordinate exchange method was first proposed by Meyer and Nachtsheim \cite{meyer1995coordinate}, and it rapidly becomes a widely used algorithm to construct exact optimal designs in experimental design community. The coordinate exchange method searches for the ``worst" coordinate $x_{ij}$ of the current design, and replace it with a better coordinate that improves the current design criterion. With only one coordinate $x_{ij}$  changeable, optimizing the design criterion becomes essentially a univariate optimization problem that can be solve easily and efficiently. In general, with a current design $\mX^{(0)}$ the coordinate exchange method functions as follows:
 \begin{algorithm}[ht]
 \begin{algorithmic}[1]
-\caption{Algorithm to generate a $d$-dim low normal discrepancy sequence}
-\State Start with a $d$-dim low uniform discrepancy sequence, e.g., Sobol sequence 
-\State 
+\caption{Coordinate exchange method}
+\State Set $k=0$.
+\State Compute the row deletion function $d_r(i)$ ($i=1,...,N$) for $N$ rows of $\mX^{(k)}$ and choose the row $i^*$ with the largest row deletion value, i,e, $i^* = \argmax_{i} d_r(i)$. 
+\State Compute the column deletion function $d_c(j)$ ($j=1,...,d$) for $d$ columns of $\mX^{k}$ and choose the column $j^*$ with the largest column deletion value, i.e., $j^* = \argmax_{j} d_c(j)$. 
+\State Solve the univariate nonlinear optimization problem
+$$\max_{x} \Delta(x_{i^*j^*},x),\,\,\,\,\text{s.t.} x\in \mathbb{R},$$
+and denote the optimal solution as $x^*$.
+\If{$\Delta(x_{i^*j^*},x^*)>0$} 
+\State {replace $x_{i^*j^*}$ with $x^*$ and the denote the new design as $\mX^{(k+1)}$.}
+\State {$k=k+1$.}
+\Else 
+\State{terminate the algorithm and conclude the current design is optimal.} 
+\EndIf
 \end{algorithmic}
 \end{algorithm}
+
+
+
+\begin{algorithm}[ht]
+\begin{algorithmic}[2]
+\caption{Generate a $d$-dim low normal discrepancy sequence}
+\State Start with a $d$-dim low uniform discrepancy design $\{\vu_i\}_{i=1}^N$, e.g., Sobol sequence.
+\State Perform inverse distribution transformation on $\{\vu_i\}_{i=1}^N$ to generate $d$-dim standard normal design $\{\vx_i\}_{i=1}^N$.
+\State Improve the design $\{\vx_i\}_{i=1}^N$ with coordinate exchange algorithm by minimizing its the normal discrepancy.
+\end{algorithmic}
+\end{algorithm}
+
+
 \section{Simulation}
 
 \section{Conclusion}
