@@ -1,4 +1,4 @@
-%%%%%%%%%%%%%%%%%%%% author.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ %%%%%%%%%%%%%%%%%%%% author.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % sample root file for your "contribution" to a contributed volume
 %
@@ -27,13 +27,15 @@
 \usepackage[bottom]{footmisc}% places footnotes at page bottom
 
 \usepackage{psfrag,bbm,epsf}
-\usepackage{amssymb, color,enumerate,float,mathtools,algorithmicx}
+\usepackage{xspace,subfigure}
+\usepackage{amssymb, xcolor,enumerate,float,mathtools,algorithmicx}
 \usepackage{algorithm}
 \usepackage[numbers]{natbib}
 \usepackage{enumerate,multirow,booktabs}
 \usepackage{url}
 \usepackage{algpseudocode}
 \usepackage{natbib}
+\usepackage{showlabels}
 
 \newcommand{\blind}{1}
 \newtheorem{lem}{Lemma}
@@ -44,13 +46,18 @@
 \newtheorem{cor}{Corollary}
 \newcommand{\reals}{\mathbb{R}}
 \newcommand{\naturals}{\mathbb{R}}
+\newcommand{\va}{\boldsymbol{a}}
+\newcommand{\vb}{\boldsymbol{b}}
 \newcommand{\vc}{\boldsymbol{c}}
 \newcommand{\vx}{\boldsymbol{x}}
 \newcommand{\vX}{\boldsymbol{X}}
 \newcommand{\vt}{\boldsymbol{t}}
 \newcommand{\vz}{\boldsymbol{z}}
 \newcommand{\vu}{\boldsymbol{u}}
+\newcommand{\vv}{\boldsymbol{v}}
 \newcommand{\vy}{\boldsymbol{y}}
+\newcommand{\fraku}{\mathfrak{u}}
+\newcommand{\frakv}{\mathfrak{v}}
 \newcommand{\mX}{{\mathsf X}}
 \newcommand{\vinfty}{\boldsymbol{\infty}}
 \newcommand{\vzero}{\boldsymbol{0}}
@@ -63,6 +70,7 @@
 \newcommand{\FXdes}{F_{\Xdes}}
 \newcommand{\cm}{\mathcal{M}}
 \newcommand{\ch}{\mathcal{H}}
+\newcommand{\MATLAB}{\textsc{Matlab}\xspace}
 \newcommand{\Ftar}{F}
 \newcommand{\ftar}{\varrho}
 \newcommand{\cube}{\ensuremath{(0,1)^d}}
@@ -71,6 +79,9 @@
 \newcommand{\ip}[3][{}]{\ensuremath{\left \langle #2, #3 \right \rangle_{#1}}}
 \newcommand{\norm}[2][{}]{\ensuremath{\left \lVert #2 \right \rVert}_{#1}}
 \DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator{\err}{err}
+\newcommand{\unif}{\textup{unif}}
+\newcommand{\normal}{\textup{normal}}
 
 \def\abs#1{\ensuremath{\left \lvert #1 \right \rvert}}
 
@@ -78,7 +89,7 @@
 
 \newcommand{\FJH}[1]{{\color{blue}Fred: #1}}
 \newcommand{\LK}[1]{{\color{green}Lulu: #1}} %choose your color
-\newcommand{\YL}[1]{{\color{red}Yiou: #1}} %choose your color
+\newcommand{\YL}[1]{{\color{teal}Yiou: #1}} %choose your color
 
 % see the list of further useful packages
 % in the Reference Guide
@@ -97,8 +108,7 @@
 \author{Yiou Li, Lulu Kang, and Fred Hickernell}
 % Use \authorrunning{Short Title} for an abbreviated version of
 % your contribution title if the original one is too long
-\institute{Yiou Li \at DePaul University, 1 E. Jackson
-Chicago, IL 60604, \email{yli139@depaul.edu}
+\institute{Yiou Li \at DePaul University, 2320 N. Kenmore Avenue, Chicago, IL 60614 \email{yli139@depaul.edu}
 \and Lulu Kang \at Illinois Institute of Technology, 10 W 32nd Street, Chicago, IL 60616 \email{lkang2@iit.edu} 
 \and 
 Fred Hickernell \at Illinois Institute of Technology, 10 W 32nd Street, Chicago, IL 60616 \email{hickernell@iit.edu}}
@@ -116,31 +126,31 @@ Fred Hickernell \at Illinois Institute of Technology, 10 W 32nd Street, Chicago,
 Professor Kai-Tai Fang and his collaborators have demonstrated the effectiveness of low discrepancy points as space filling designs \cite{FanWan94, FanLiSud06, FangHic07a}.  
 They promoted discrepancy as a quality measure for statistical experimental designs to the statistics, science, and engineering communities \cite{FanMaWin02, FanMuk00, FanMa01a, FanMa01b}. 
 
-Low discrepancy designs, $\Udes = \{\vu_i\}_{i=1}^N$, are typically constructed so that their empirical distribution, $F_\Udes$, approximates $F_u$, the uniform distribution on the unit cube, \cube.  
-The discrepancy measures how large $F_u-F_\Udes$ is.  
+Low discrepancy designs, $\Udes = \{\vu_i\}_{i=1}^N$, are typically constructed so that their empirical distribution, $F_\Udes$, approximates $F_\unif$, the uniform distribution on the unit cube, \cube.  
+The discrepancy measures how large $F_\unif-F_\Udes$ is.  
 
 When the target distribution for the design, $\Ftar$, defined over the experimental domain $\Omega$, is \emph{not} the uniform distribution on the unit cube, then one typically constructs the desired design, $\Xdes$, by transforming a low discrepancy uniform design, i.e., 
 \begin{equation} \label{eq:transPts}
 \Xdes = \{\vx_i\}_{i=1}^N = \{\vPsi(\vu_i)\}_{i=1}^N = \vPsi(\Udes), \qquad \vPsi: \cube \to \Omega.
 \end{equation}
-Note that $\Ftar$ may differ from $F_u$ because $\Omega \ne \cube$ and/or $\Ftar$ is non-uniform.  
-A natural transformation, $\vPsi(\vu)=[\Psi_1(u_1),\ldots,\Psi_d(u_d)]$, when $\Ftar$ has independent marginals is the inverse distribution transformation:
+Note that $\Ftar$ may differ from $F_\unif$ because $\Omega \ne \cube$ and/or $\Ftar$ is non-uniform.  
+A natural transformation, $\vPsi(\vu)=[\Psi_1(u_1),\ldots,\Psi_d(u_d)]$, when $\Ftar$ has independent marginals, is the inverse distribution transformation:
 \begin{equation}\label{eq:inverse}
-\Psi_j(u_j) = F_j^{-1}(u_j), \quad \text{where } \Ftar(\vx) = F_1(u_1) \cdots F_d(u_d).
+\Psi_j(u_j) = F_j^{-1}(u_j), \quad j =1, \ldots, d, \qquad \text{where } \Ftar(\vx) = F_1(u_1) \cdots F_d(u_d).
 \end{equation}
-A number of transformation methods for different distributions can be found in \cite{devroye2006nonuniform}. 
+A number of transformation methods for different distributions can be found in \cite{devroye2006nonuniform}. \FJH{How about Prof. Fang's books?}
 
 The question addressed in this chapter is whether the design $\Xdes$ resulting from transformation \eqref{eq:transPts} of a low discrepancy design, $\Udes$, is itself low discrepancy with respect to the target distribution $\Ftar$. 
 In other words, 
 \begin{equation} \label{BigQ} \tag{Q}
-\text{\emph{does small $F_u - F_\Udes$ imply small $\Ftar - F_\Xdes$?}}
+\text{\emph{does small $F_\unif - F_\Udes$ imply small $\Ftar - F_\Xdes$?}}
 \end{equation}
 We demonstrate that the answer may be yes or no, depending on how the question is posed.  
 We discuss both cases.  
-For illustrative purposes, we consider the case where $\Ftar$ is the multivariate normal distribution.
+For illustrative purposes, we consider the case where $\Ftar$ is the multivariate standard normal distribution.
 
-In the rest of this chapter, we first explain the discrepancy that measures how large $\Ftar - F_\Xdes$ is and motivate it from three different perspectives.  Next, we the inverse transformation can lead to inconsistency in terms the discrepancies of the designs before and after transformation. 
-We also proposed a remedy method to improve the design in terms of the discrepancy between $\Ftar$ and $F_\Xdes$. 
+In the rest of this chapter, we first explain the discrepancy that measures how large $\Ftar - F_\Xdes$ is and motivate it from three different perspectives.  Next, we show how the inverse transformation can lead to does not always preserve the low discrepancy of a design.
+We also propose a remedy method to improve the design in terms of the discrepancy between $\Ftar$ and $F_\Xdes$. 
 Numerical examples are used to show the performance of the method. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -155,82 +165,84 @@ Our notation for discrepancy takes the form of
 \[
  D(F_{\Xdes},F,K), \ D(\Xdes,F,K), \ D(\Xdes,\varrho,K), \ D(\Xdes,\nu,K), \ D(\nu_{\Xdes},\nu,K), \text{ etc.}, 
 \]
-are all of which mean the same thing.  The first argument always refers to the design, the second argument always refers to the target, and the third argument is a symmetric, positive definite kernel, which is explained below.  We abuse the discrepancy notation because sometimes it is convenient to refer to the design as a set, $\Xdes$, other times by its empirical distribution, $F_{\Xdes}$, and other times by its empirical $\nu_{\Xdes}$.  Likewise sometimes it convenient to refer the target as a probability measure,  $\nu$, other times by its distribution function, $F$, and other times by its density function, $\varrho$.
+all of which mean the same thing.  The first argument always refers to the design, the second argument always refers to the target, and the third argument is a symmetric, positive definite kernel, which is explained below.  We abuse the discrepancy notation because sometimes it is convenient to refer to the design as a set, $\Xdes$, other times by its empirical distribution, $F_{\Xdes}$, and other times by its empirical measure, $\nu_{\Xdes}$.  Likewise, sometimes it is convenient to refer the target as a probability measure,  $\nu$, other times by its distribution function, $F$, and other times by its density function, $\varrho$.
 
-In the remainder of this section we provide three interpretations of the discrepancy, summarized in Table \ref{tab:ThreeInterpTable}.  One interpretation is the norm of $\nu - \nu_{\Xdes}$.  The second and third interpretations consider the problem of evaluating the mean of a random variable $Y=f(\vX)$, or equivalently a multidimensional integral
-\[
+In the remainder of this section we provide three interpretations of the discrepancy, summarized in Table \ref{tab:ThreeInterpTable}.  These results are derived previously in various places, including \cite{Hic99a}.  One interpretation is the norm of $\nu - \nu_{\Xdes}$.  The second and third interpretations consider the problem of evaluating the mean of a random variable $Y=f(\vX)$, or equivalently a multidimensional integral
+\begin{equation}\label{eq:integration}
 \mu = \Ex(Y) = \Ex[f(\vX)] = \int_{\Omega} f(\vx) \, \varrho(\vx) \, \dif \vx,
-\]
+\end{equation}
 where $\vX$ is a random vector with density $\varrho$. The second
-interpretation is worst-case cubature error for integrands, $f$, in the unit ball of a Hilbert space.  The third interpretation is the root mean squared cubature error for integrands, $f$ that are stochastic processes.
+interpretation is worst-case cubature error for integrands, $f$, in the unit ball of a Hilbert space.  The third interpretation is the root mean squared cubature error for integrands, $f$ which are realizations of a stochastic processes.
 
 \begin{table}
-    \centering
-     \caption{Three interpretations of the discrepancy}
-     \vspace{-3ex}
+\centering
+\caption{Three interpretations of the discrepancy}
+\vspace{-3ex}
 \begin{equation*}
 \begin{array}{c@{\qquad}ccc}
-     \text{Kernel Interpretation} & \text{Discrepancy } D(\Xdes,\nu,K) = D(\Xdes,\varrho,K)\\
-     \toprule \\[-1ex]
-     K(\vt,\vx) = \ip[\cm]{\delta_{\vt}}{\delta_{\vx}} & \norm[\cm]{\nu - \nu_{\Xdes}} \\[2ex]
-     f(\vx) = \ip[\ch]{K(\cdot,\vx)}{f} & \displaystyle \sup_{f \in \ch : \norm[\ch]{f} \le 1} \abs{\int_{\Omega} f(\vx) \, \varrho(\vx) \, \dif \vx - \frac 1N \sum_{i=1}^N f(\vx_i)}\\[4ex]
-    K(\vt,\vx) = \cov\bigl(f(\vt), f(\vx) \bigr) & \displaystyle \sqrt{\Ex \abs{\int_{\Omega} f(\vx) \, \varrho(\vx) \, \dif \vx - \frac 1N \sum_{i=1}^N f(\vx_i)}^2}\\
+\text{Kernel Interpretation} & \text{Discrepancy } D(\Xdes,\nu,K) = D(\Xdes,\varrho,K)\\
+\toprule \\[-1ex]
+K(\vt,\vx) = \ip[\cm]{\delta_{\vt}}{\delta_{\vx}} & \norm[\cm]{\nu - \nu_{\Xdes}} \\[2ex]
+f(\vx) = \ip[\ch]{K(\cdot,\vx)}{f} & \displaystyle \sup_{f \in \ch : \norm[\ch]{f} \le 1} \abs{\int_{\Omega} f(\vx) \, \varrho(\vx) \, \dif \vx - \frac 1N \sum_{i=1}^N f(\vx_i)}\\[4ex]
+K(\vt,\vx) = \cov\bigl(f(\vt), f(\vx) \bigr) & \displaystyle \sqrt{\Ex \abs{\int_{\Omega} f(\vx) \, \varrho(\vx) \, \dif \vx - \frac 1N \sum_{i=1}^N f(\vx_i)}^2}\\\bottomrule
 \end{array}
 \end{equation*}
-    \label{tab:ThreeInterpTable}
+\label{tab:ThreeInterpTable}
 \end{table}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Definition in Terms of a Norm on a Hilbert Space of Measures}
+\label{sec:HilbertMeasures}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Let $(\cm, \ip[\cm]{\cdot}{\cdot})$ be a Hilbert space of measures defined on the experimental region, $\Omega$.  Assume that $\cm$ includes all Dirac measures.  Define the function $K:\Omega \times \Omega \to \reals$ in terms of inner products of Dirac measures:
 \begin{equation} \label{kerDeltaDef}
     K(\vt,\vx) := \ip[\cm]{\delta_{\vt}}{\delta_{\vx}}, \qquad \forall \vt, \vx \in \Omega.
 \end{equation}
+The squared distance between two Dirac measures in $\cm$ is then
+\begin{equation} \label{distDelta}
+   \norm[\cm]{\delta_{\vx} - \delta_{\vt}}^2 = K(\vt,\vt) - 2K(\vt,\vx) + K(\vx,\vx), \qquad \forall \vt, \vx \in \Omega.
+\end{equation}
+
+
 It is straightforward to show that $ K$ is symmetric in its arguments and positive-definite, namely:
-\begin{gather*}
+\begin{subequations} \label{eq:sympd}
+\begin{gather}
 K(\vx, \vt) = K(\vt, \vx) \qquad \forall \vt, \vx\in \Omega,\\
-\sum\limits_{i, k=1}^N c_i c_k  K(\vx_i,\vx_k) > 0, \qquad \forall N\in\mathbb{N}, \  \vc \in\mathbb{R}^N, \ \vc \ne \vzero,  \ \Xdes \in\Omega.
-\end{gather*}
-For arbitrary measures $\lambda, \nu \in \cm$, their inner product can be expressed in terms of a double integral of the kernel, $K$:
+\sum\limits_{i, k=1}^N c_i c_k  K(\vx_i,\vx_k) > 0, \qquad \forall N\in\mathbb{N}, \  \vc \in\mathbb{R}^N, \ \vc \ne \vzero,  \ \Xdes \subset \Omega.
+\end{gather}
+\end{subequations}
+The inner product of arbitrary measures $\lambda, \nu \in \cm$ can be expressed in terms of a double integral of the kernel, $K$:
 \begin{equation} \label{ipMdef}
     \ip[\cm]{\lambda}{\nu} = \int_{\Omega \times \Omega} K(\vt,\vx) \, \lambda(\dif \vt) \nu(\dif \vx).
 \end{equation}
 This can be established directly from \eqref{kerDeltaDef} for $\cm_0$, the vector space spanned by all Dirac measures.  Letting $\cm$ be the closure of the pre-Hilbert space $\cm_0$ then yields \eqref{ipMdef}.
 
-The discrepancy of the design $\Xdes$ with respect to the target probability measure $\nu$ using the kernel $K$, can be defined as the norm of the difference between the target probability measure, $\nu$, and the empirical probability measure for $\Xdes$:
-\begin{subequations} \label{discDef}
+The discrepancy of the design $\Xdes$ with respect to the target probability measure $\nu$ using the kernel $K$ can be defined as the norm of the difference between the target probability measure, $\nu$, and the empirical probability measure for $\Xdes$:
+\begin{subequations} \label{eq:discDef}
 \begin{align} 
     D^2(\Xdes,\nu,K) & := \norm[\cm]{\nu - \nu_{\Xdes}}^2 \\
     \nonumber
     & = \int_{\Omega \times \Omega} K(\vt,\vx) \, (\nu - \nu_{\Xdes})(\dif \vt) (\nu - \nu_{\Xdes})(\dif \vx) \\
     \nonumber
-    & = \int_{\Omega \times \Omega} K(\vt,\vx) \, \nu(\dif \vt) \nu (\dif \vx)\\
-    & \qquad \qquad - \frac 2N \sum_{i=1}^N \int_{\Omega} K(\vt,\vx_i) \, \nu(\dif \vt) + \sum_{i,k=1}^N K(\vx_i,\vx_k).
+    & = \int_{\Omega \times \Omega} K(\vt,\vx) \, \nu(\dif \vt) \nu (\dif \vx) - \frac 2N \sum_{i=1}^N \int_{\Omega} K(\vt,\vx_i) \, \nu(\dif \vt)\\
+    & \qquad \qquad  + \frac{1}{N^2} \sum_{i,k=1}^N K(\vx_i,\vx_k).
 \end{align}
 The formula for the discrepancy may be written equivalently in terms of the probability distribution, $F$,  or the probability density, $\varrho$, corresponding to the target probability measure, $\nu$:
 \begin{align}
 \nonumber
-    D^2(\Xdes,F,K)  & = \int_{\Omega \times \Omega} K(\vt,\vx) \, \dif F( \vt) \dif F(\vx)\\
-    & \qquad \qquad - \frac 2N \sum_{i=1}^N \int_{\Omega} K(\vt,\vx_i)  \, \dif F(\vt) + \sum_{i,k=1}^N K(\vx_i,\vx_k), \\
+    D^2(\Xdes,F,K)  & = \int_{\Omega \times \Omega} K(\vt,\vx) \, \dif F( \vt) \dif F(\vx) - \frac 2N \sum_{i=1}^N \int_{\Omega} K(\vt,\vx_i)  \, \dif F(\vt) \\ &\qquad \qquad  + \frac{1}{N^2}  \sum_{i,k=1}^N K(\vx_i,\vx_k), \\
 \nonumber
-   & = \int_{\Omega \times \Omega} K(\vt,\vx) \, \varrho(\vt) \varrho (\vx) \, \dif \vt\dif \vx\\
-    & \qquad \qquad - \frac 2N \sum_{i=1}^N \int_{\Omega} K(\vt,\vx_i)  \, \varrho(\vt) \, \dif \vt + \sum_{i,k=1}^N K(\vx_i,\vx_k).
+   & = \int_{\Omega \times \Omega} K(\vt,\vx) \, \varrho(\vt) \varrho (\vx) \, \dif \vt\dif \vx - \frac 2N \sum_{i=1}^N \int_{\Omega} K(\vt,\vx_i)  \, \varrho(\vt) \, \dif \vt \\
+    & \qquad \qquad + \frac{1}{N^2}  \sum_{i,k=1}^N K(\vx_i,\vx_k).
 \end{align}
 \end{subequations}
-Here, and below we abuse the notation for discrepancy, but we always preserve the meaning of the first second and third arguments.  Thus,
-\[
-D(\Xdes,\nu,K), \ D(\Xdes,F,K), \ D(\Xdes,\varrho,K), \ D(\nu_{\Xdes},\nu,K), \text{ etc.} 
-\]
-are all equivalent.
 
-The equivalent formulas for the discrepancy in \eqref{discDef} depend inherently on the choice of $K$.  That is key to the answering our question \eqref{BigQ}.  A kernel often used is 
-\begin{equation} \label{OrigKernel}
-     K(\vt,\vx)  = \prod\limits_{j=1}^d\left[1+ |t_j|+ |x_j|- |x_j-t_j|\right].
+The formulas for the discrepancy in \eqref{eq:discDef} depend inherently on the choice of $K$.  That is key to answering our question \eqref{BigQ}.  An often used kernel is 
+\begin{equation} \label{eq:OrigKernel}
+     K(\vt,\vx)  = \prod\limits_{j=1}^d\left[1+ \frac 12 \left(|t_j|+ |x_j|- |x_j-t_j| \right)\right].
 \end{equation}
-This kernel is plotted in Figure \ref{fig:kernelpict} for $d=1$.  Note that for this kernel in one dimension the distance between two Dirac measures is 
+This kernel is plotted in Figure \ref{fig:kernelpict} for $d=1$.  Note that for this kernel in one dimension the distance between two Dirac measures by \eqref{distDelta} is 
 \begin{equation*}
     \norm[\cm]{\delta_{x} - \delta_{t}} = \sqrt{\abs{x-t}}.
 \end{equation*}
@@ -239,60 +251,232 @@ This kernel is plotted in Figure \ref{fig:kernelpict} for $d=1$.  Note that for 
     \centering
     \includegraphics[height = 4cm]{KernelPict.eps} \qquad
     \includegraphics[height = 4cm]{Kernel3DPict.eps}
-    \caption{The kernel defined in \eqref{OrigKernel} for $d=1$.}
+    \caption{The kernel defined in \eqref{eq:OrigKernel} for $d=1$.}
     \label{fig:kernelpict}
 \end{figure}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Definition in Terms of a Norm on a Hilbert Space of Measures}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-\section{A Discrepancy Defined for Normal Distribution}
-
-Consider any symmetric and positive semi-definite kernel function $K(\vx,\vt)$ on the experiment region $\Omega$. 
-In other words, the kernel function satisfies 
-\begin{align*}
-K(\vx, \vt) &= K(\vt, \vx), \,\,\,\forall \vt, \vx\in \Omega,\\
-\sum\limits_{i, k=1}^n c_ic_k & K(\vx_i,\vx_k)\geq 0, \,\,\,\forall n\in\mathbb{N^+}, c_i\in\mathbb{R}, \vx_i\in\Omega.
-\end{align*}
-The discrepancy of a design $P = \{\vx_i\}_{i=1}^N$ on $\Omega$ with respect to a distribution $\Ftar$ is then defined as
-\begin{equation}\label{eq:Disc}
-D(P) = \left\{\int_{\Omega\times\Omega} K(\vx,\vt)\dif [\Ftar(\vx)-F_{P}(\vx)]\dif [\Ftar(\vt)-F_{P}(\vt)]\right\}^{1/2},
-\end{equation}
-and thus, 
-\begin{align}\label{eq:Disc2}\nonumber
-[D(P)]^2  =& \int_{\Omega\times\Omega}  K(\vx,\vt)\dif F_{*}(\vx)\dif F_{*}(\vt) \\
-- &\frac{2}{N}\sum\limits_{\vx\in P}\int_{\Omega}K(\vx,\vt)\dif F_{*}(\vt) +\frac{1}{N^2}\sum\limits_{\vx,\vx'\in P}K(\vx,\vx')
+The discrepancy for the uniform distribution on the unit cube defined in terms of the above kernel is commonly called the $L^2$ discrepancy and is expressed as
+\begin{align} 
+\nonumber
+    D^2(\Udes,F_\unif,K)
+    & = \int_{(0,1)^d \times (0,1)^d} K(\vt,\vx) \, \dif \vt \dif \vx - \frac 2N \sum_{i=1}^N \int_{(0,1)^d} K(\vt,\vu_i) \, \dif \vt\\
+    \nonumber
+    & \qquad \qquad  + \frac{1}{N^2} \sum_{i,k=1}^N K(\vu_i,\vu_k) \\
+    \nonumber
+    & = \left( \frac 43 \right)^d 
+     - \frac 2N \sum_{i=1}^N \prod_{j=1}^d \left[1 + u_{ij} - \frac{u_{ij}^2}{2} \right] \\
+     & \qquad \qquad + \frac 1{N^2} \sum_{i,k=1}^N \prod_{j=1}^d \left[1+ \min(u_{ij},u_{ik})\right]
 \end{align}
-In \cite{Hic99a}, it is showed that, any discrepancy determined by a reproducing kernel function $K$ and a distribution $\Ftar$ is a goodness-of-fit statistic that measures how well the empirical distribution $F_P$ of design $P$ approximates the distribution $\Ftar$. 
-What's more, the order of computation for evaluating the discrepancy is at worst $\mathcal{O}(N^2)$. 
 
- Let $P = \{\vx_i\}_{i=1}^N$ be a design on $\Omega = \mathbb{R}^d$. 
- According to \eqref{eq:Disc2}, the squared discrepancy of the design $P$ with respect to the $d$-dimensional standard multivariate normal probability distribution $N({\bf 0}, {\bf I}_d)$ with cdf $\Phi$ is
-\begin{eqnarray}\label{eqn:discrepancy}\nonumber
-[D(P)]^2 &=& \int_{\Omega\times\Omega} K(\vx,\vt)\dif \Phi(\vx)\dif \Phi(\vt)\\
-&-&\frac{2}{N}\sum_{i=1}^N \int_{\Omega}K(\vx,\vx_i)\dif \Phi(\vx)+\frac{1}{N^2}\sum_{i,k=1}^N K(\vx_i,\vx_k).
-\end{eqnarray}
 
-We need to choose a kernel function that can facilitate the analytical derivation of the discrepancy for both standard normal and uniform distribution. 
-A commonly used discrepancy to measure for the uniform distribution on $[0,1]^d$ is the centered $L_2$ discrepancy \cite{Hic97a} defined as:
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Definition in Terms of a Deterministic Cubature Error Bound}
+\label{sec:DetermBound}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Now let $(\ch, \ip[\ch]{\cdot}{\cdot})$ be a reproducing kernel Hilbert space (RKHS) of functions \cite{Aro50}, $f: \Omega \rightarrow \mathbb{R}$, which appear as the integrand in \eqref{eq:integration}. By definition, the reproducing kernel, $K$, is the unique function defined on $\Omega \times \Omega$ with the properties that $K(\cdot, \vx)\in \ch$ for any $\vx \in \Omega$ and $f(\vx)=\ip[\ch]{K(\cdot,\vx)}{f}$.  This second property, implies that $K$ reproduces function values via the inner product. It can be verified that $K$ is symmetric in its arguments and positive definite as in \eqref{eq:sympd}.
+
+The integral $\mu = \int_{\Omega} f(\vx) \, \varrho(\vx) \, \dif \vx$, which was identified as $\Ex[f(\vX)]$ in \eqref{eq:integration}, can be approximated by a sample mean, 
+\begin{equation}\label{eq:cubature}
+\hat{\mu}=\frac{1}{N}\sum_{i=1}^N f(\vx_i).
+\end{equation}
+The quality of this approximation to the integral, or cubature, depends in part on how well the empirical distribution of the design, $\Xdes = \{\vx_i\}_{i=1}^N$, matches the target distribution $F$ associated with the density function $\varrho$. 
+
+Define the cubature error as  
+\begin{align}
+\nonumber 
+\err(f,\Xdes) & = \mu - \hat{\mu} = \int_{\Omega} f(\vx)\, \varrho(\vx) \dif \vx -\frac{1}{N}\sum_{i=1}^N f(\vx_i) \\
+& =\int_\Omega f(\vx) \, \dif[F(\vx)-F_{\Xdes}(\vx)]. \label{eq:err}
+\end{align}
+Under modest assumptions on the reproducing kernel,  $\err(\cdot, \Xdes)$ is a bounded, linear functional, so. 
+by the Riesz representation theorem, there exists a unique representer, $\xi \in \ch$, such that 
+\[
+\err(f, \Xdes)=\ip[\ch]{f}{\xi}, \quad \forall f\in \ch.
+\]
+The reproducing kernel allows us to write down an explicit formula for that representer, namely, $\xi(\vx)=\ip[\ch]{K(\cdot,\vx)}{\xi}=\err(K(\cdot,\vx),\Xdes)$.
+By the Cauchy-Schwarz inequality, there is a tight bound on the squared cubature error, namely
+\begin{equation}\label{eq:wcErrA}
+\abs{\err(f,\Xdes)}^2=\ip[\ch]{f}{\xi}^2\leq \norm[\ch]{f}^2 \norm[\ch]{\xi}^2.
+\end{equation}
+The first term on the right describes the contribution to the cubature error made by the nature of the integrand, while the second term describes the contribution made by the quality of the cubature rule.
+
+The square norm of the representer of the error functional is 
 \begin{align*}
-[D_2(P)]^2 =& \left(\frac{13}{12}\right)^d - \frac{2}{N}\sum\limits_{\vz\in P}\prod_{j=1}^d \left(1+\frac{1}{2}|z_j-1/2|-1/2|z_j-1/2|^2\right)\\
-\hspace{5ex}&+ \frac{1}{N^2}\sum\limits_{\vz,\vz'\in P}\prod_{j=1}^d\left[1+\frac{1}{2}|z_j-1/2|+\frac{1}{2}|z_j'-1/2|-\frac{1}{2}|z_j-z_j'|\right],    
+\norm[\ch]{\xi}^2& =\ip[\ch]{\xi}{\xi}=\err(\xi,\Xdes) \quad \text{since $\err(\cdot,\Xdes)$ represents the error functional}\\
+& = \err(\err(K(\cdot,\cdot \cdot),\Xdes),\Xdes) \quad \text{since } \xi(\vx)=\err(K(\cdot,\vx),\Xdes)\\
+& =\int_{\Omega\times \Omega} K(\vt,\vx)\dif[F(\vx)-F_{\Xdes}(\vx)] \, \dif[F(\vt)-F_{\Xdes}(\vt)].
+\end{align*}
+We can equate this formula for $\norm[\ch]{\xi}^2$ with the formula for $D^2(\Xdes,F,K)$ in  \eqref{eq:discDef}.  Thus, the tight, worst-case cubature error  bound in \eqref{eq:wcErrA} can be written as
+\begin{equation}\label{eq:wcErrB}
+\abs{\err(f,\Xdes)} \le \norm[\ch]{f} D(\Xdes,F,K).
+\end{equation}
+This implies our second interpretation of the discrepancy in Table \ref{tab:ThreeInterpTable}.
+
+We now identify the RKHS for the kernel $K$ defined in \eqref{eq:OrigKernel} Let $(\va,\vb)$ be some $d$ dimensional box containing the origin in the interior or on the boundary. For any $\fraku \subseteq \{1, \ldots, d\}$, define $\partial^\fraku f(\vx_\fraku) : = \partial^{|\fraku|}f(\vx_\fraku,\vzero)/\partial \vx_\fraku$, the mixed first-order partial derivative of $f$ with respect to the $x_j$ for $j\in \fraku$, while setting $x_j=0$ for all $j \notin \fraku$. Here, $\vx_{\fraku} = (x_j)_{j \in \fraku}$, and $|\fraku|$ denotes the cardinality of $\fraku$.  By convention, $\partial^{\emptyset}f := f(\vzero)$.  The inner product for the reproducing kernel $K$ defined in  \eqref{eq:OrigKernel} is defined as 
+\begin{align}\label{eq:inner}
+\langle f,g \rangle_{\ch} &:= \sum_{\fraku\subseteq \{1,...,d\}}\int_{(\va,\vb)}\partial^{\fraku}f(\vx_\fraku)\partial^{\fraku}g(\vx_\fraku) \, \dif \vx_\fraku \\
+\nonumber
+& = f(\vzero)g(\vzero)  + \int_{a_1}^{b_1} \partial^{\{1\}}f(x_1)\partial^{\{1\}}g(x_1) \, \dif x_1 \\
+\nonumber 
+& \qquad + \int_{a_2}^{b_2} \partial^{\{2\}}f(x_2)\partial^{\{2\}}g(x_2) \, \dif x_2 + \cdots \\
+\nonumber 
+& \qquad + \int_{a_2}^{b_2} \int_{a_1}^{b_1} \partial^{\{1,2\}}f(x_1,x_2)\partial^{\{1,2\}}g(x_1,x_2) \, \dif x_1 \dif x_2+ \cdots \\
+\nonumber 
+& \qquad + \int_{(\va,\vb)} \partial^{\{1,\ldots, d\}}f(\vx)\partial^{\{1, \ldots, d\}}g(\vx) \, \dif \vx. 
+\end{align}
+
+To establish that the inner product defined above corresponds to the reproducing kernel  $K$ defined in \eqref{eq:OrigKernel}, we note that
+\begin{align*}
+\partial^{\fraku} K((\vx_u,{\bf 0}),\vt) & =\prod_{j \in \fraku}\frac 12 \left[\sign(x_j) - \sign(x_j - t_j) \right] \\
+& =
+\prod\limits_{j \in \fraku}\sign(t_j) \bbone_{(\min(0,t_j),\max(0,t_j))}(x_j).
+\end{align*}
+Thus, $K(\cdot,\vt)$ possesses sufficient regularity to have finite $\ch$-norm.  Furthermore, $K$ exhibits the reproducing property for the above inner product because
+\begin{align*}
+\MoveEqLeft{\langle K(\cdot,\vt),f \rangle}_{\ch} \\
+&= \sum_{\fraku\subseteq \{1,...,d\}}\int_{(\va,\vb)} \partial^{\fraku}K((\vx_u,{\bf 0}),\vt)\partial^{\fraku}f(\vx_u,{\bf 0})  \, \dif \vx_u \\
+&= \sum_{\fraku\subseteq \{1,...,d\}}\int_{(\va,\vb)}  \prod\limits_{j \in \fraku}\sign(t_j) \bbone_{(\min(0,t_j),\max(0,t_j))}(x_j) \partial^{\fraku}f(\vx_u,{\bf 0})  \, \dif \vx_u \\
+& =     \sum_{\fraku\subseteq \{1,...,d\}}\sum_{\frakv\subseteq \fraku}(-1)^{|\fraku|-|\frakv|}f(\vt_\frakv,{\bf 0})= f(\vt).
+\end{align*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Definition in Terms of the Root Mean Squared Cubature Error}
+\label{sec:RandomBound}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Assume $\Omega$ is a measurable subset in $\mathbb{R}^d$ and $F$ is the target probability distribution defined on $\Omega$ as defined earlier. 
+Now, let $f: \Omega \rightarrow \mathbb{R}$ be a stochastic process with a constant pointwise mean, i.e., 
+\[
+\Ex_{f\in \mathcal{A}}[f(\vx)]=m, \qquad \forall \vx\in \Omega,
+\]
+where $\mathcal{A}$ is the sample space for this stochastic process. 
+Now we interpret $K$ as the \emph{covariance kernel} for the stocastic process:
+\[
+K(\vt,\vx):=\Ex_{f\in \mathcal{A}}\left( [f(\vt)-m][f(\vx)-m]\right)=\cov(f(\vt),f(\vx)),\qquad \forall \vt, \vx\in \Omega. 
+\]
+It is straightforward to see that the kernel function is symmetric and positive definite. 
+
+Define the error functional $\err(\cdot,\Xdes)$ in the same way as in \eqref{eq:err}.  Now, the mean squared error is 
+\begin{align*}
+&\Ex_{f\in\mathcal{A}}[(\err(f,\Xdes)]^2= \Ex_{f\in\mathcal{A}} \left\{\int_{\Omega}f(\vx)\dif F(\vx)-\frac{1}{N}\sum_{i=1}^N f(\vx_i) \right\}^2\\
+=&\Ex_{f\in\mathcal{A}}\left\{\int_{\Omega}(f(\vx)-m)\dif F(\vx)-\frac{1}{N}\sum_{i=1}^N (f(\vx_i)-m) \right\}^2\\
+=&\int_{\Omega^2}\Ex_{f\in \mathcal{A}}[ (f(\vt)-m)(f(\vx)-m)] \, \dif F(\vt)\dif F(\vx)\\
+&-\frac{2}{N}\sum_{i=1}^N \int_{\Omega} \Ex_{f\in\mathcal{A}}[(f(\vx)-m)(f(\vx_i)-m)]\,\dif F(\vx)\\
+&+\frac{1}{N^2}\sum_{i,k=1}^N\Ex_{f\in\mathcal{A}}[(f(\vx_i)-m)(f(\vx_k)-m)]\\
+=&\int_{\Omega^2}K(\vt,\vx) \, \dif F(\vt)\dif F(\vx)-\frac{2}{N}\sum_{i=1}^N \int_{\Omega} K(\vx, \vx_i)\dif F(\vx)+\frac{1}{N^2} \sum_{i,k=1}^N K(\vx_i,\vx_k). 
+\end{align*}
+Therefore, we can equate the discrepancy $D(\Xdes, F, K)$ defined in \eqref{eq:discDef} as the root mean squared error:
+\[
+D(\Xdes, F, K) =\sqrt{\Ex_{f\in\mathcal{A}}[(\err(f,\Xdes)]^2}=\sqrt{\Ex\abs{\int_{\Omega}f(\vx)\varrho(\vx)\dif \vx-\frac{1}{N}\sum_{i=1}^N f(\vx_i)}^2}.
+\]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{When Transformed Low Discrepancy Points Also Have Low Discrepancy}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Having motivated the definition of discrepancy in \eqref{eq:discDef} from three perspectives, we now turn our attention to the question posed in \eqref{BigQ}, namely, does a transformation of low discrepancy points with respect to the uniform distribution yield low discrepancy points with respect to the new target distribution. In this section, we show a positive result, yet recognize some qualifications.
+
+Consider some symmetric, positive definite kernel, $K_\unif : (0,1)^d \times (0,1)^d \to \reals$, some uniform design $\Udes$, some other domain, $\Omega$, some other target distribution, $F$, and some transformation $\vPsi:(0,1)^d \to \Omega$ as defined in \eqref{eq:transPts}. Then the squared discrepancy of the uniform design can be expressed according to \eqref{eq:discDef} as follows:
+\begin{align} 
+\nonumber
+    \MoveEqLeft{D^2(\Udes,F_{\unif},K_\unif)} \\
+    \nonumber
+    & = \int_{(0,1)^d \times (0,1)^d} K_\unif(\vu,\vv) \,  \dif \vu \dif \vv - \frac 2N \sum_{i=1}^N \int_{\Omega} K_\unif(\vu,\vu_i) \, \dif \vu\\
+    \nonumber
+    & \qquad \qquad  + \frac{1}{N^2} \sum_{i,k=1}^N K_\unif(\vu_i,\vu_k) \\
+    \nonumber
+    & = \int_{\Omega \times \Omega} K_\unif(\vPsi^{-1}(\vt),\vPsi^{-1}(\vx)) \, \abs{\frac{\partial \vPsi^{-1}(\vt)}{\partial \vt}} \abs{\frac{\partial \vPsi^{-1}(\vx)}{\partial \vx}} \,\dif \vt \dif \vx \\
+    \nonumber 
+    & \qquad \qquad  - \frac 2N \sum_{i=1}^N \int_{\Omega} K_\unif(\vPsi^{-1}(\vt),\vPsi^{-1}(\vx_i)) \, \abs{\frac{\partial \vPsi^{-1}(\vt)}{\partial \vt}} \, \dif \vt\\
+    \nonumber
+    & \qquad \qquad  + \frac{1}{N^2} \sum_{i,k=1}^N K_\unif(\vPsi^{-1}(\vx_i),\vPsi^{-1}(\vx_k)) \\
+    & = D^2(\Xdes,F,K)
+\end{align}
+where the kernel $K$ is defined as
+\begin{subequations} \label{eq:BigQYes}
+\begin{equation} \label{eq:BigQYesa}
+    K(\vt,\vx) = K_{\unif}(\vPsi^{-1}(\vt),\vPsi^{-1}(\vx))
+\end{equation}
+\emph{and provided that} the density, $\varrho$, corresponding to the target distribution, $F$, satisfies
+\begin{equation} \label{eq:BigQYesb}
+    \varrho(\vx) = \abs{\frac{\partial \vPsi^{-1}(\vx)}{\partial \vx}}
+\end{equation}
+\end{subequations}
+The above argument is summarized in the following theorem.
+
+\begin{theorem}
+Suppose that the design $\Xdes$ is constructed by transforming the design $\Udes$ according to the transformation \eqref{eq:transPts}.  Also suppose that conditions \eqref{eq:BigQYes} are satisfied.  Then $\Xdes$ has the same discrepancy with respect to the target distribution, $F$, defined by the kernel $K$ as does the original design $\Udes$ with respect to the uniform distribution and defined by the kernel $K_\unif$.  That is,
+\begin{equation}
+     D(\Xdes,F,K) = D(\Udes,F_{\unif},K_\unif)
+\end{equation}
+As a consequence, under conditions \eqref{eq:BigQYes}, question \eqref{BigQ} has a positive answer.
+\end{theorem}
+
+Condition \eqref{eq:BigQYesb} may be easy to satisfy.  For example, it is automatically satisfied by the inverse cumulative distribution transform \eqref{eq:inverse}.  Condition \eqref{eq:BigQYesa} is simply a matter of definition of the kernel, $K$, but it is definition with consequences.  From the perspective of Section \ref{sec:HilbertMeasures}, changing the kernel means changing the definition of the distance between two Dirac measures.  From the perspective of Section \ref{sec:DetermBound}, changing the kernel means changing the definition of the Hilbert space of integrands, $f$, in \eqref{eq:integration}.   From the perspective of Section \ref{sec:RandomBound}, changing the kernel means changing the definition of the covariance kernel for the integrands, $f$, in \eqref{eq:integration}.
+
+To illustrate this point, consider a cousin of the kernel in \eqref{eq:OrigKernel}, which places the reference point at $\boldsymbol{0.5} = (0.5, \ldots, 0.5)$, the center of the unit cube $(0,1)^d$:
+\begin{align}
+\label{eq:L2kernel}
+    K_{\unif}(\vu,\vv) &= \prod_{j=1}^d\left[1+\frac{1}{2}|u_j-0.5|+\frac{1}{2}|v_j-0.5|-\frac{1}{2}|u_j-v_j|\right] \\
+    \nonumber
+    & = K(\vu - \boldsymbol{0.5}, \vv - \boldsymbol{0.5}) \qquad \text{for $K$ defined in \eqref{eq:OrigKernel}}. 
+\end{align}
+This kernel defines the centered $L^2$-discrepancy \cite{Hic97a}.
+Consider the standard multivariate normal distribution, $F_\normal$, and choose the inverse normal distribution,
+\begin{equation*}
+    \vPsi(\vu) = (\Phi^{-1}(u_1), \ldots, \Phi^{-1}(u_d)),
+\end{equation*}
+where $\Phi$ denotes the standard normal distribution function.  Then condition \eqref{eq:BigQYesb} is automatically satisfied, and condition \eqref{eq:BigQYesa} is  satisfied by defining
+\begin{align}
+\nonumber
+     K(\vt,\vx) &= K_{\unif}(\vPsi^{-1}(\vt),\vPsi^{-1}(\vx)) \\
+     \nonumber
+      &= \prod_{j=1}^d\left[1+\frac{1}{2}|\Phi^{-1}(t_j)-0.5|+\frac{1}{2}|\Phi^{-1}(x_j)-0.5| \right . \\
+      & \qquad \qquad \left . -\frac{1}{2}|\Phi^{-1}(t_j)-\Phi^{-1}(x_j)|\right].
+\end{align}
+In one dimension, the distance between two Dirac measures defined using the kernel $K_\unif$ above is $\norm{\delta_{x} - \delta_{t}} = \sqrt{x-t}$, whereas the distance defined using the kernel $K$ above is $\norm{\delta_{x} - \delta_{t}} = \sqrt{\Phi^{-1}(x)-\Phi^{-1}(t)}$.  Under kernel $K$, the distance between two Dirac measures can never be greater than one.  Such an assumption may be unpalatable.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Do Transformed Low Discrepancy Points Have Low Discrepancy More Generally}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+From the discussion above, it appears that condition \eqref{eq:BigQYesa} can be too restrictive.  We would like to compare the discrepancies of designs under kernels that do not satisfy that restriction.  In particular, we consider the centered $L^2$-discrepancy for designs on $(0,1)^d$ defined by the kernel in \eqref{eq:L2kernel}:
+\begin{align*}
+\MoveEqLeft{D^2(\Udes, F_\unif, K_\unif)} \\
+& = \left(\frac{13}{12}\right)^d - \frac{2}{N}\sum_{i=1}^N \prod_{j=1}^d \left(1+\frac{1}{2}|u_{ij}-1/2|-\frac12|u_{ij}-1/2|^2\right)\\
+& \qquad + \frac{1}{N^2}\sum_{i,k=1}^N\prod_{j=1}^d\left[1+\frac{1}{2}|u_{ij}-1/2|+\frac{1}{2}|u_{kj}-1/2|-\frac{1}{2}|u_{ij}-u_{kj}|\right],    
+\end{align*}
+We also consider the discrepancy for designs defined with respect to the standard normal distribution defined by the kernel \eqref{eq:OrigKernel}.  We choose this kernel because it has a more realistic interpretation in terms of the distance between two Dirac measures.  This discrepancy is 
+\begin{align}\label{eq:DisNormald>1}
+\nonumber
+\MoveEqLeft{D^2(\Xdes, F_\normal, K) = \left(1+\sqrt{\frac{2}{\pi}}\right)^d}\\
+\nonumber
+  & - \frac{2}{N}\sum\limits_{\vx\in \Xdes} \prod\limits_{j=1}^d\left[ 1+\frac{1}{\sqrt{2\pi}}+\frac{1}{2}|x_j|-x_j[\Phi(x_j)-1/2]-\phi(x_j)\right]\\
+  &+\frac{1}{N^2}\sum_{\vx,\vt\in \Xdes}\prod_{j=1}^d \left[1+\frac{1}{2}|x_j|+\frac{1}{2}|t_j|-\frac{1}{2}|x_j-t_j|\right]. 
+\end{align}
+When $d=1$, the discrepancy \eqref{eq:DisNormald>1} can be further simplified to
+\begin{align}\label{eq:DisNormald=1}\nonumber
+D^2(\Xdes, \Phi_1, K)=& -\frac{2}{N}\sum_{i=1}^N \left[\max(x_i,0)-x_i\Phi_1(x_i)-\phi(x_i)\right]\\
++&\frac{1}{N}\sum_{i=1}^N|x_i|-\frac{1}{2N^2}\sum_{i,j=1}^N|x_i-x_j|. 
+\end{align}
+In both \eqref{eq:DisNormald=1} and \eqref{eq:DisNormald>1}, $\phi(\cdot)$ is the pdf of $N(0,1)$. 
+The derivations are in the Appendix. 
+
+
+
+The discrepancy for the uniform distribution on unit cube $(0,1)^d$ we adapt in this work is the centered $L_2$-discrepancy \cite{Hic97a} defined as:
+\begin{align*}
+[D_2(\Udes, F_\unif, K_2)]^2 =& \left(\frac{13}{12}\right)^d - \frac{2}{N}\sum\limits_{\vu\in \Udes}\prod_{j=1}^d \left(1+\frac{1}{2}|u_j-1/2|-1/2|u_j-1/2|^2\right)\\
+\hspace{5ex}&+ \frac{1}{N^2}\sum\limits_{\vu,\vu'\in \Udes}\prod_{j=1}^d\left[1+\frac{1}{2}|u_j-1/2|+\frac{1}{2}|u_j'-1/2|-\frac{1}{2}|u_j-u_j'|\right],    
 \end{align*}
 with the reproducing kernel:
 \begin{equation}\label{eqn:oril2kernel}
-K_2(\vx,\vt) = \prod\limits_{j=1}^s\left[1+\frac{1}{2}|x_j-1/2|+\frac{1}{2}|t_j-1/2|-\frac{1}{2}|x_j-t_j|\right].
+K_2(\vx,\vt) = \prod\limits_{j=1}^d\left[1+\frac{1}{2}|x_j-1/2|+\frac{1}{2}|t_j-1/2|-\frac{1}{2}|x_j-t_j|\right],
 \end{equation}
-Shifting experimental region to $[-1/2,1/2]^d$, the reproducing kernel in \eqref{eqn:oril2kernel} becomes
-\begin{align}\label{eqn:l2kernel}
-K(\vx,\vt) & = \prod\limits_{j=1}^d\left[1+\frac{1}{2}|x_j|+\frac{1}{2}|t_j|-\frac{1}{2}|x_j-t_j|\right].  
-\end{align}
-Next we extend the domain of this kernel function to $\mathbb{R}^d$, and show that this kernel function is a reproducing kernel with a proper defined inner product. 
+which is the same as \eqref{eq:OrigKernel}, except it is anchored to the center $(1/2,\cdots,1/2)$ of the cube but not the origin. The centered $L_2$-discrepancy is invariant under reflections of $\Udes$ about any plane $x_j = 1/2$. 
 
-We define an inner product as follows. 
+With the kernel in \eqref{eq:OrigKernel}, now we define a discrepancy for multivariate standard normal distribution on $\mathbb{R}^d$ that also refers to the center of the experimental region, $(0,\cdots,0)$. Firstly, we show that this kernel function is a reproducing kernel with a properly defined inner product as follows. 
 \begin{equation}\label{eq:inner}
 \langle f,g \rangle = \sum_{u\subseteq \{1,...,d\}}\int_{\mathbb{R}^{|u|}}\frac{\partial^{|u|}}{\partial \vx_u}f(\vx_u,{\bf 0})\frac{\partial^{|u|}}{\partial \vx_u}g(\vx_u,{\bf 0})\dif \vx_u,
 \end{equation}
@@ -301,9 +485,13 @@ Using the following operators,
 $$\partial \vx_u = \prod\limits_{k\in u}\partial x_k \text{ and } \dif \vx_u = \prod\limits_{k\in u}\dif x_k , $$
 the $|u|$-th order partial derivative in \eqref{eq:inner} is with respective to $\vx_{u}$, the subset of variables indexed by $u$, and the integration is also with respect to the same subset of variables. 
 The vector $(\vx_u,{\bf 0})$ is a $d$-dimensional vector with the dimension indexed by $u$ denoted as $\vx_u$ and the rest are set to be ${\bf 0}$. 
-In particular, for $u = \{1,...,d\}$, we have $(\vx_u,{\bf 0}) = \vx$; for $u=\emptyset$, we have $(\vx_u,{\bf 0}) = {\bf 0}$.
+In particular, for $u = \{1,...,d\}$, we have $(\vx_u,{\bf 0}) = \vx$; for $u=\emptyset$, we have $(\vx_u,{\bf 0}) = {\bf 0}$. In particular, when $d=1$,
+\begin{equation*}
+\langle f,g \rangle = f(0)g(0)+\int_{\mathbb{R}}f'(x)g'(x)\dif x.
+\end{equation*}
 
-With the inner product \eqref{eq:inner}, it is easy to see that above kernel function in \eqref{eqn:l2kernel} is symmetric and positive semi-definite on $\Omega = \mathbb{R}^d$, i.e., the domain of the $d$-dim multivariate normal distribution. 
+
+With the inner product \eqref{eq:inner}, it is easy to see that above kernel function in \eqref{eq:OrigKernel} is symmetric and positive semi-definite on $\Omega = \mathbb{R}^d$, i.e., the domain of the $d$-dim multivariate normal distribution. 
 Note that $K({\bf 0},\vt) = 1$ and
 \begin{align*}
 \frac{\partial^{|u|} K((\vx_u,{\bf 0}),\vt)}{\partial \vx_u}& =\prod_{i\in u}\frac 12 \left[\sign(x_i) - \sign(x_i - t_i) \right] \\
@@ -318,55 +506,132 @@ Thus, $\langle K(\cdot,\vt), K(\cdot,\vt) \rangle < \infty $, and
 & =     \sum_{u\subseteq \{1,...,d\}}\sum_{v\subseteq u}(-1)^{|u|-|v|}f(\vt_v,{\bf 0})\\
 & = f(\vt)
 \end{align*}
-With the reproducing kernel \eqref{eqn:l2kernel}, we can analytically derive the  squared discrepancy for the standard normal distribution. 
-For univariate standard normal distribution $N(0,1)$ 
-\begin{align}\label{eq:DisNormald=1}\nonumber
-[D(P)]^2=& -\frac{2}{N}\sum_{n=1}^N \left[\max(x_n,0)-x_n\Phi(x_n)-\phi(x_n)\right]\\
-+&\frac{1}{N}\sum_{n=1}^N|x_n|-\frac{1}{2N^2}\sum_{n,m=1}^N|x_n-x_m|. 
-\end{align}
-For multivariate standard normal distribution $N({\bf 0}, {\bf I}_d)$, 
+With the reproducing kernel \eqref{eq:OrigKernel}, we can analytically derive the discrepancy for the standard normal distribution. 
+
+Let $\Xdes = \{\vx_i\}_{i=1}^N$ be a design on $\Omega = \mathbb{R}^d$. 
+The squared discrepancy of the design $\Xdes$ with respect to the $d$-dimensional standard multivariate normal probability distribution $N({\bf 0}, {\bf I}_d)$ with cdf $\Phi$ is
+\begin{eqnarray}\label{eqn:discrepancy}\nonumber
+D^2(\Xdes, \Phi, K) &=& \int_{\Omega\times\Omega} K(\vx,\vt)\dif \Phi(\vx)\dif \Phi(\vt)\\
+&-&\frac{2}{N}\sum_{i=1}^N \int_{\Omega}K(\vx,\vx_i)\dif \Phi(\vx)+\frac{1}{N^2}\sum_{i,k=1}^N K(\vx_i,\vx_k).
+\end{eqnarray}
+The cdf $\Phi(\vx)=\prod_{j=1}^d \Phi_1(x_j)$, where $\Phi_1(\cdot)$ is the cdf of $N(0,1)$. 
+With simple calculation, the squared discrepancy \eqref{eqn:discrepancy} can be  computed explicitly as
 \begin{align}\label{eq:DisNormald>1}\nonumber
-&[D(P)]^2\\\nonumber
-  &= \left(1+\sqrt{\frac{2}{\pi}}\right)^d - \frac{2}{N}\sum\limits_{\vx\in P} \prod\limits_{j=1}^d\left[ 1+\frac{1}{\sqrt{2\pi}}+\frac{1}{2}|x_j|-x_j[\Phi(x_j)-1/2]-\phi(x_j)\right]\\
-  &+\frac{1}{N^2}\sum_{\vx,\vt\in P}\prod_{j=1}^d \left[1+\frac{1}{2}|x_j|+\frac{1}{2}|t_j|-\frac{1}{2}|x_j-t_j|\right]. 
+&D^2(\Xdes, \Phi, K)\\\nonumber
+  &= \left(1+\sqrt{\frac{2}{\pi}}\right)^d - \frac{2}{N}\sum\limits_{\vx\in \Xdes} \prod\limits_{j=1}^d\left[ 1+\frac{1}{\sqrt{2\pi}}+\frac{1}{2}|x_j|-x_j[\Phi_1(x_j)-1/2]-\phi(x_j)\right]\\
+  &+\frac{1}{N^2}\sum_{\vx,\vt\in \Xdes}\prod_{j=1}^d \left[1+\frac{1}{2}|x_j|+\frac{1}{2}|t_j|-\frac{1}{2}|x_j-t_j|\right]. 
 \end{align}
-In both \eqref{eq:DisNormald=1} and \eqref{eq:DisNormald>1}, $\phi(\cdot)$ and $\Phi(\cdot)$ are the pdf and cdf for the univeriate standard normal distribution $N(0,1)$, respectively. 
-The derivations are in Appendix. 
+When $d=1$, the discrepancy \eqref{eq:DisNormald>1} can be further simplified to
+\begin{align}\label{eq:DisNormald=1}\nonumber
+D^2(\Xdes, \Phi_1, K)=& -\frac{2}{N}\sum_{i=1}^N \left[\max(x_i,0)-x_i\Phi_1(x_i)-\phi(x_i)\right]\\
++&\frac{1}{N}\sum_{i=1}^N|x_i|-\frac{1}{2N^2}\sum_{i,j=1}^N|x_i-x_j|. 
+\end{align}
+In both \eqref{eq:DisNormald=1} and \eqref{eq:DisNormald>1}, $\phi(\cdot)$ is the pdf of $N(0,1)$. 
+The derivations are in the Appendix. 
 
 \section{Inconsistency in Discrepancy}\label{sec:inconsistency}
+Using the inverse transformation method, we can generate the standard multivariate normal distribution $N({\bf 0},{\bf I}_d)$ by applying $x_{i,j}=\Phi^{-1}_j(u_{i,j})$ for $j=1,\ldots,d$ and $i=1,\ldots, N$. 
+However, the inverse transformation would lead to inconsistency between the discrepancy before and after the transformation. 
+Although $\Udes = \{\vu_i\}_{i=1}^N$ is the low-discrepancy points for the uniform distribution in $[0,1]^d$, the following examples shows that it is not necessarily so that $\Xdes=\{\vx_i\}_{i=1}^N$ is also low-discrepancy. 
+In other words, for two uniform designs, $\Udes_1$ and $\Udes_2$, the fact that $D(\Udes_1,F_\unif, K)\leq D(\Udes_2,F_\unif, K)$ does not imply that the inverse transformed normal design $\Xdes_1$ and $\Xdes_2$ also have $D(\Xdes_1,\Phi, K)\leq D(\Xdes_2,\Phi, K)$. 
+Note that the two discrepancies $D(\Udes, F_\unif, K)$ and $D(\Xdes, \Phi, K)$ are based on the same kernel, hence the inconsistency is only due to the inverse transformation. 
 
-Let $\mathcal{H}$ be a reproducing kernel Hilbert space associated with the reproducing kernel function $K$: $\mathbb{R}\times \mathbb{R}\rightarrow\mathbb{R}$. 
-One fundamental problem in mathematics and statistics is to compute the mean value $\mu$ of any given function $g\in \mathcal{H}$. 
-\[
-\mu=\mathbb{E}(g(X))=\int_{\mathbb{R}}g(x)\phi(x)dx=\int_{\mathbb{R}} g(x)d\Phi(x), 
-\]
-where $\phi(\cdot)$ and $\Phi(\cdot)$ are the pdf and cdf functions of the standard normal distribution $N(0,1)$. 
-When 
+Let $d=5$ and $n=50$. 
+We generate $B=20$ samples from uniform distribution in $[0,1]^5$ and then use the inverse distribution transformation to obtain samples following $N({\bf 0}, {\bf I}_5)$. 
+The discrepancy for uniform distribution is the $L_2$-discrepancy $D_2(\Udes,F_\unif,K_2)$ and for the standard normal distribution is \eqref{eq:DisNormald>1}. 
+Figure \ref{fig:UniVsNormDisc} plots the discrepancy for normal distribution against the $L_2$-discrepancy for each of the $B=20$ samples. 
+If the inverse transformation makes the design consistent in terms of the discrepancy, the points in \ref{fig:UniVsNormDisc} should be approximately aligned on a straight line. 
+Clearly, some samples with low uniform discrepancy turn out to have large normal discrepancy after inverse transformation.
+Thus, inverse transformation cannot ensure the consistency of the design in terms of the discrepancy. 
 
-To illustrate the inconsistency in discrepancy before and after inverse distribution transformation, we consider a toy example with $s=5$ and $n=50$. 20 randomly generated uniform random samples are adapted to generate samples from standard multivariate normal distribution using inverse distribution transformation. The following figure \ref{fig:UniVsNormDisc} shows that a sample with low uniform discrepancy may not guarantee a sample with low normal discrepancy after inverse distribution transformation.
-
-\begin{figure}[H]
-\label{fig:UniVsNormDisc}
-\centering
-{\includegraphics[width=8cm]{d5n50UniVsNormDisc2.pdf}}
-\caption{Uniform Discrepancy Vs. Normal Discrepancy after Inverse Transformation}
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=8cm]{d5n50.eps}
+\caption{Uniform Discrepancy Vs. Normal Discrepancy. \label{fig:UniVsNormDisc}}
+\end{center}
 \end{figure}
 
-We further investigate the correlation between uniform discrepancy and the normal discrepancy after the inverse distribution transformation. For different variable dimension from $s=1$ to $s=10$, the sample correlation coefficients between the uniform discrepancies of 1000 uniform random samples of size 50 and the normal discrepancies of the corresponding normal random samples generated using inverse distribution transformation are calculated. From figure \ref{fig:UniVsNormDisc}, it can be seen that the phenomenon of inconsistency in discrepancy becomes more pronounced as the sample becomes more sparse.
+We further investigate the relationship between the uniform discrepancy of a design and the normal discrepancy of the same design after inverse transformation.
+Varying the dimension $d$ from 1 to 10, we calculate the sample correlation coefficients between the two discrepancies of the $B=500$ uniform designs of size $N=50$ and corresponding normal designs after inverse transformation, and plot the correlations against $d$ in \ref{fig:UniVsNormDisc}. 
+It can be seen that the phenomenon of inconsistency in discrepancies becomes more pronounced as $d$ increases.
 
-\begin{figure}[htbp]
+\begin{figure}[ht]
 \label{fig:DimVsDisc}
 \centering
-{\includegraphics[width=8cm]{dimVsdisc.pdf}}
+{\includegraphics[width=8cm]{dimVsdisc.eps}}
 \caption{Correlation between Uniform Discrepancy and Normal Discrepancy with Different Variable Dimensions}
 \end{figure}
 
-\section{Improvement by the Coordinate-Exchange Algorithm}
-The common practice to generate $d-$dim standard normal random numbers is inverse distribution transformation. However, as discussed in section \ref{sec:inconsistency}, a random sequence with low uniform discrepancy doesn't guarantee a low normal discrepancy sequence after inverse distribution transformation. We propose an efficient algorithm that assures low normal discrepancy of the generated $d$-dim standard normal random numbers.
+The root cause of this inconsistency can be revealed as follows. 
+For simplicity, let $d=1$. 
+Taking the inverse transformation $x_{i}=\Phi^{-1}_1(u_{i})$ in the normal discrepancy \eqref{eqn:discrepancy}, 
+\begin{align*}
+&D^2(\Xdes, \Phi_1, K) = \int_{[0,1]^2} K(\Phi^{-1}_1(u),\Phi^{-1}_1(u'))\dif \Phi(\Phi^{-1}_1(u))\dif \Phi(\Phi^{-1}_1(u'))\\
+&-\frac{2}{N}\sum_{i=1}^N \int_0^1 K(\Phi^{-1}_1(u),\Phi^{-1}_1(u_i))\dif \Phi(\Phi^{-1}_1(u))+\frac{1}{N^2}\sum_{i,k=1}^N K(\Phi^{-1}_1(u_i), \Phi^{-1}_1(u_j))\\
+&=\int_{[0,1]^2} K(\Phi^{-1}_1(u),\Phi^{-1}_1(u'))\dif u\dif u'\\
+&-\frac{2}{N}\sum_{i=1}^N \int_0^1 K(\Phi^{-1}_1(u),\Phi^{-1}_1(u_i))\dif u+\frac{1}{N^2}\sum_{i,k=1}^N K(\Phi^{-1}_1(u_i), \Phi^{-1}_1(u_j))\\
+&=D^2(\Udes,F_\unif,\tilde{K}),
+\end{align*}
+where $\tilde{K}(\cdot,\cdot)=K(\Phi^{-1}_1(\cdot), \Phi^{-1}_1(\cdot)): [0, 1]\rightarrow \mathbb{R}_{+}$. 
+Although $\tilde{K}(\cdot,\cdot)$ is still a valid kernel function for the uniform distribution, the resulting discrepancy $D(\Udes,F_\unif, \tilde{K})$ is no longer the same as $D_2(\Udes, F_\unif, K_2)$, and their difference only increases as the dimension $d$ becomes higher due to the effect of the product in $D_2(\Udes, F_\unif, K_2)$. 
+The difference in kernel $K_2$ and $\tilde{K}$ also leads to different RKHS of integrand functions. 
 
-In this section, to better illustrate the coordinate exchange method, we represent a $N$ points $d$-dim design $\{\vx_i\}_{i=1}^N$ with a design matrix $$\mX = \left(\begin{array}{c}\vx_1^T\\ \vdots\\\vx_N^T\end{array}\right).$$ We propose using the coordinate exchange method to optimize the normal discrepancy of a current design. The coordinate exchange method was first proposed by Meyer and Nachtsheim \cite{meyer1995coordinate}, and it rapidly becomes a widely used algorithm to construct exact optimal designs in experimental design community. The coordinate exchange method searches for the ``worst" coordinate $x_{ij}$ of the current design, and replace it with a better coordinate that improves the current design criterion. With only one coordinate $x_{ij}$  changeable, optimizing the design criterion becomes essentially a univariate optimization problem that can be solve easily and efficiently. In general, with a current design $\mX^{(0)}$ the coordinate exchange method functions as follows:
+\section{Improvement by the Coordinate-Exchange Method}\label{sec:CoordEx}
+
+In this section, we propose an efficient algorithm that improves the design's quality in terms of the discrepancy for the target standard normal distribution. 
+We start with a low-discrepancy uniform design, such as a Sobol sequence, and apply the inverse transformation to the design so that the transformed design approximates the target distribution, which is the standard normal distribution in this work. 
+Following the optimal design approach, we consider the discrepancy of the normal design as the design criterion and apply a certain optimization algorithm to further improve the design, until the discrepancy reaches the minimum.
+
+The optimization algorithm we choose is the coordinate-exchange algorithm, which was firstly introduced in \cite{meyer1995coordinate}, and then applied widely to construct various kinds of optimal design \cite{sambo2014coordinate,overstall2017bayesian,kang2018stochastic}. 
+The coordinate-exchange algorithm is an iterative optimization method.
+It finds the ``worst" coordinate $x_{ij}$ of the current design, and replace it with a better coordinate that improves the current design criterion. 
+The most appealing advantage of the coordinate-exchange algorithm is that it renders the $N\times d$ dimension of the decision variables of the original optimal design problem to just one dimension as it changes one coordinate at a time. 
+This greatly reduces the difficulty of the optimization problem. 
+
+We format the $N$ points of $d$-dim design points $\{\vx_i\}_{i=1}^N$ into a design matrix  $\mX^\top =[\vx_1,\ldots, \vx_N]$, and $x_{ij}$ refers to the $(i,j)$-th element of $\mX$, and it also refers to the $j$-th dimension of the $i$-th sample point. 
+To find the ``worst'' coordinate, we use row and column deletion function, as in \cite{kang2018stochastic}.
+Define the row deletion function of the $i$-th row as follows. 
+\begin{eqnarray}\label{eq:rowdeletion}
+&& d_r(i) = D^2(\Xdes)-D^2(\Xdes\backslash \vx_i)\nonumber\\
+&=& -2\prod\limits_{s=1}^dc(x_{is}) + \frac{1}{N-1}\left(2\sum_{j=1}^N\prod_{s=1}^d h(x_{is},x_{js})-\prod_{s=1}^d h(x_{is},x_{is})\right). 
+\end{eqnarray}
+We use $D(\Xdes)$ as a simplified notation for the discrepancy as the target design is always standard normal distribution and the kernel function is \eqref{eq:OrigKernel}. 
+The notation $\Xdes\backslash \vx_i$ means that the design $\Xdes$ without the $i$-th point $\vx_i$. 
+Here $c(x)$ and $h(x,y)$ are 
+\begin{align*}
+c(x) &= 1+\frac{1}{\sqrt{2\pi}}+\frac{1}{2}|x|-x[\Phi_1(x)-1/2]-\phi(x),\\
+h(x,y) &= 1+\frac{1}{2}|x|+\frac{1}{2}|y|-\frac{1}{2}|x-y|.
+\end{align*}
+The definition of $d_r(i)$ represents the change in $D^2(\Xdes)$ when $\vx_i$ is removed from the design. 
+If $d_r(i)\geq 0$, it means that removing $\vx_i$ would lead to a smaller discrepancy. 
+Thus, it is reasonable to assume $\vx_i$ has the potential to be updated and leads to a smaller discrepancy. 
+Among all the design points that $d_r(i)\geq 0$, we should pick the $i_0$ that has largest $d_r(i)$, because removing $\vx_i$ leads to the biggest improvement, so we consider this row has the biggest potential. 
+On the other hand, if $d_r(i)< 0$, it means that removing $\vx_i$ would make the discrepancy bigger, and thus make the design worse, so we should keep $\vx_i$ in the design. 
+However, if $d_r(\vx_i)\leq 0$ for $i=1,\ldots, N$, and we must pick a row index, then we should pick the $i_0$ that has the smallest $\abs{d_r(\vx_i)}$ because removing $\vx_{i_0}$ would make the design worse with the least degree compared to other indices. 
+Combining both scenarios, we should pick the row index by 
+\[
+i^*=\argmax_{i=1,\ldots,N} d_r(i).
+\]
+Similarly, we define the column deletion function as follows. 
+\begin{eqnarray}\label{eq:coldeletion}
+d_c(j) &=& -\frac{2}{N}\sum_{i=1}^N(c(x_{ij})-1)\prod\limits_{\substack{s=1,\\ s\neq j}}^dc(x_{is})\nonumber\\ 
+&&+\frac{1}{N^2}\sum_{\substack{i=1,\\ r=1}}^N\left(h(x_{ij},x_{rj})-1\right)\prod_{\substack{s=1\\s\neq j}}^d h(x_{is},x_{rs}).
+\end{eqnarray}
+We pick the column index by 
+\[
+j^*=\argmax_{j=1,\ldots,d} d_c(j).
+\]
+Once the $(i^*, j^*)$-th coordinate is identified to be changed, we compute the delta function $\Delta(x_{i^*j^*},x)$, which represents the decrease in $D^2(\Xdes)$, if $x_{i^*j^*}$ is replaced by $x \in \mathbb{R}$. 
+The delta function can be computed as follows. 
+\begin{eqnarray}\label{eq:deltafunction}
+&&\Delta(x_{{i^*j^*}}, x)\nonumber\\
+&=& -\frac{2}{N}\left(c(x_{i^*j^*})-c(x)\right)\prod\limits_{\substack{j=1,\\j\neq j^*}}^dc(x_{i^*j})\nonumber\\
+&&+\frac{1}{N^2}\left(2\sum_{\substack{i=1,\\i\neq i^*}}^N(h(x_{i^*j^*},x_{ij^*})-h(x,x_{ij^*}))\prod_{\substack{j=1,\\j\neq j^*}}^dh(x_{i^*j},x_{ij})\right.\nonumber\\
+&&\left.+(|x_{i^*j^*}|-|x|)\prod_{\substack{j=1,\\j\neq j^*}}^d[1+|x_{i^*j}|]\right)
+\end{eqnarray} 
+We summarize the coordinate-exchange algorithm in Algorithm 1. 
 \begin{algorithm}[ht]
-\begin{algorithmic}[1]
+\begin{algorithmic}[1]\label{alg:coorex}
 \caption{Coordinate exchange method}
 \State Set $k=0$.
 \State Compute the row deletion function $d_r(i)$ ($i=1,...,N$) for $N$ rows of $\mX^{(k)}$ and choose the row $i^*$ with the largest row deletion value, i,e, $i^* = \argmax_{i} d_r(i)$. 
@@ -375,7 +640,7 @@ In this section, to better illustrate the coordinate exchange method, we represe
 $$\max_{x} \Delta(x_{i^*j^*},x),\,\,\,\,\text{s.t.} x\in \mathbb{R},$$
 and denote the optimal solution as $x^*$.
 \If{$\Delta(x_{i^*j^*},x^*)>0$} 
-\State {replace $x_{i^*j^*}$ with $x^*$ and the denote the new design as $\mX^{(k+1)}$.}
+\State {replace $x_{i^*j^*}$ with $x^*$ and the define the new design as $\mX^{(k+1)}$.}
 \State {$k=k+1$.}
 \Else 
 \State{terminate the algorithm and conclude the current design is optimal.} 
@@ -383,76 +648,113 @@ and denote the optimal solution as $x^*$.
 \end{algorithmic}
 \end{algorithm}
 
-
-
-\begin{algorithm}[ht]
-\begin{algorithmic}[2]
-\caption{Generate a $d$-dim low normal discrepancy sequence}
-\State Start with a $d$-dim low uniform discrepancy design $\{\vu_i\}_{i=1}^N$, e.g., Sobol sequence.
-\State Perform inverse distribution transformation on $\{\vu_i\}_{i=1}^N$ to generate $d$-dim standard normal design $\{\vx_i\}_{i=1}^N$.
-\State Improve the design $\{\vx_i\}_{i=1}^N$ with coordinate exchange algorithm by minimizing its the normal discrepancy.
-\end{algorithmic}
-\end{algorithm}
-
+It's worth pointing out that although the three functions, $d_r, d_c$ and $\Delta$ need to computed in each iteration for multiple times, most evaluations only involve $c(x_{ij})$ and $h(x_{ij},x_{rs})$, $i,r = 1,...,N, j,s=1,...,d$, which only need to be computed once before the design is updated. 
+The maximization of $\Delta$ function is a one-dimension unconstrained optimization and can be easily solved by any unconstrained nonlinear optimization methods. 
 
 \section{Simulation}
 
-\section{Conclusion}
+To demonstrate the performance of the $d$-dim standard normal design proposed in Section \ref{sec:CoordEx}, we compare three algorithms: (1) Randn: embedded normal random number generator `randn' from MATLAB;  (2) NG1: inverse transformed Sobol sequence; (3) NG2: improved NG1 with proposed Algorithm 1.  
+We have tried different combinations of dimension and sample size, and let the sample size become larger as the dimension becomes higher. 
+Using each algorithm we generate 500 designs, and for each design, we compute the discrepancy \eqref{eq:DisNormald>1} and compare the distribution of discrepancies from different algorithms as shown in Figure \ref{fig:comparison}. 
+We summarize the observations as follows. 
+\begin{enumerate}
+\item
+NG1 and NG2 both outperform Randn by a great margin.
+\item 
+When the sample is relatively dense, i.e., $N/d$ ratio is large, NG1 and NG2 have similar performance, but the proposed NG2 is slightly better, as it takes the extra step to improve the relative high discrepancy via Algorithm 1.  
+\item
+As the sample becomes more sparse, i.e., $N/d$ ratio is smaller, the proposed NG2 becomes much superior to NG1.
+\end{enumerate}
+Therefore, the inverse transformation of low-discrepancy uniform designs, such as Sobol sequences is still preferable when the sample size is large relative to the dimension, and we recommend using the proposed remedy approach to further improve the inverse transformed Sobol sequences when the sample size is small or moderate. 
+
+
+\begin{figure}[ht]\label{fig:comparison}
+\centering
+{\subfigure[$d=2,N=30$] {\includegraphics[width=5.5cm]{boxplot_d2n30.eps}}}
+\quad
+{\subfigure [$d=3, N=50$]
+{\includegraphics[width=5.5cm]{boxplot_d3n50.eps}}}
+\quad
+{\subfigure[$d=4, N=70$] {\includegraphics[width=5.5cm]{boxplot_d4n70.eps}}}
+\quad
+{\subfigure[$d=5, N=90$] {\includegraphics[width=5.5cm]{boxplot_d5n90.eps}}}
+\quad
+{\subfigure[$d=6, N=110$] {\includegraphics[width=5.5cm]{boxplot_d6n110.eps}}}
+\quad
+{\subfigure[$d=7, N=130$] {\includegraphics[width=5.5cm]{boxplot_d7n130.eps}}}
+\caption{Performance Comparison of Three Generators}\label{fig:generatorcomp}
+\end{figure}
+
+\section{Discussion}
+In this chapter, we summarize the three interpretations of the discrepancy. 
+It is a measure on how well the empirical distribution of a design approximates the target distribution or a tight upper bound of some quadrature of an integral approximation, or the root mean squared cubature error of an integral approximation when the integrand is a stochastic process. 
+Then, we point out a flaw of the inverse transformation method, which is used to generate random samples (or designs) following any non-uniform distribution. 
+The flaw is that any low-discrepancy uniform designs do not necessarily lead to low-discrepancy for the inverse transformed designs. 
+To explain this issue, we choose the standard normal distribution as an example for non-uniform distributions. 
+We show that the low-discrepancy uniform design may not preserve the low-discrepancy after inverse distribution transformation into a standard normal distribution. 
+As a remedy approach, we propose a coordinate-exchange algorithm to further minimize the $L_2$-discrepancy of the design from the inverse transformation of the low-discrepancy uniform design. 
+
+It's worth pointing out that the discrepancy defined in \eqref{eq:discDef} can be generalized to any $d$-dim distribution $\varrho$ with mean $\boldsymbol{\mu} = (\mu_1,\cdots,\mu_d)$. The centered reproducing kernel in \eqref{eq:OrigKernel} should be 
+\begin{equation} \label{ExtKernel}
+     K(\vt,\vx)  = \prod\limits_{j=1}^d\left[1+ \frac 12 \left(|t_j-\mu_j|+ |x_j-\mu_j|- |x_j-t_j| \right)\right].
+\end{equation}
+Then the discrepancy $D(\Xdes,\Ftar,K)$ can be computed using \eqref{eq:discDef}, and the two integrals in \eqref{eq:discDef} may require numerical approximations for some target distribution. 
+If the analytic formula of $D(\Xdes,\Ftar,K)$ can be derived, the coordinate-exchange algorithms can be applied in a similar fashion to improve the inverse transformation method. 
+
 
 \section*{Appendix}
 Derivation of \eqref{eq:DisNormald=1} and \eqref{eq:DisNormald>1}. 
 \begin{proof}
-We first derive $[D(p)]^2$ for $d=1$ case. 
+We first derive $D^2(\Xdes,\Phi_1,K)$ for $d=1$ case. 
 To compute the discrepancy, we first integrate the kernel once:
 \begin{align*}
-\MoveEqLeft{\int_{-\infty}^\infty K(x,t) \, \dif \Phi(x)}\\
+\MoveEqLeft{\int_{-\infty}^\infty K(x,t) \, \dif \Phi_1(x)}\\
 =&\int_{-\infty}^{\infty} \left(1+\frac{1}{2}|x|+\frac{1}{2}|t|-\frac{1}{2}|x-t|\right)\phi(x) \, \dif x\\
 =& 1+ \frac{1}{\sqrt{2\pi}} + \frac{1}{2}|t|-\frac{1}{2}\left[\int_{-\infty}^{t}(t-x)\phi(x) \, \dif x+\int_{t}^{\infty} (x-t)\phi(x) \, \dif x\right]\\
-=& 1+ \frac{1}{\sqrt{2\pi}} + \frac{1}{2}|t| - t [\Phi(t)-1/2] - \phi(t) .
+=& 1+ \frac{1}{\sqrt{2\pi}} + \frac{1}{2}|t| - t [\Phi_1(t)-1/2] - \phi(t) .
 \end{align*}
 Then we integrate again:
 \begin{align*}
-\MoveEqLeft{\int_{-\infty}^\infty \int_{-\infty}^\infty K(x,t) \, \dif \Phi(x) \dif \Phi(t)}\\
-& =  \int_{-\infty}^{\infty} \left( 1+\frac{1}{\sqrt{2\pi}} + \frac{1}{2}|t| - t [\Phi(t)-1/2] + \phi(t)\right)\phi(t) \, \dif t\\
-&= 1+ \sqrt{\frac{2}{\pi}} + \int_{-\infty}^{\infty} \{ - t \Phi(t)\phi(t)  +  [\phi(t)]^2 \} \, \dif t\\
+\MoveEqLeft{\int_{-\infty}^\infty \int_{-\infty}^\infty K(x,t) \, \dif \Phi_1(x) \dif \Phi_1(t)}\\
+& =  \int_{-\infty}^{\infty} \left( 1+\frac{1}{\sqrt{2\pi}} + \frac{1}{2}|t| - t [\Phi_1(t)-1/2] + \phi(t)\right)\phi(t) \, \dif t\\
+&= 1+ \sqrt{\frac{2}{\pi}} + \int_{-\infty}^{\infty} \{ - t \Phi_1(t)\phi(t)  +  [\phi(t)]^2 \} \, \dif t\\
 &= 1+\sqrt{\frac{2}{\pi}}-\frac{1}{\sqrt{4\pi}}+\int_{-\infty}^{\infty}\frac{1}{2\pi}e^{-t^2}\dif t\\
 &= 1+\sqrt{\frac{2}{\pi}}-\frac{1}{\sqrt{4\pi}}+\frac{\frac{1}{\sqrt{2}}}{\sqrt{2\pi}}\int_{-\infty}^{\infty}\frac{1}{\sqrt{2\pi}\left(\frac{1}{\sqrt{2}}\right)}e^{-\frac{t^2}{2\left(\frac{1}{\sqrt{2}}\right)^2}}\dif t\\
 &=1+\sqrt{\frac{2}{\pi}}. 
 \end{align*}
-Notice that $\int_{-\infty}^{\infty} t\Phi(t)\phi(t)\dif t = \frac{1}{\sqrt{4\pi}}$ and 
+Notice that $\int_{-\infty}^{\infty} t\Phi_1(t)\phi(t)\dif t = \frac{1}{\sqrt{4\pi}}$ and 
 \begin{eqnarray*}
-&&\int_{\Omega}K(x,x_n)\dif \Phi(x)\\
+&&\int_{\Omega}K(x,x_n)\dif \Phi_1(x)\\
 &=& \int_{-\infty}^{\infty} \left(1+\frac{1}{2}|x|+\frac{1}{2}|x_n|-\frac{1}{2}|x-x_n|\right)\phi(x)\dif x\\
 &=& 1+\frac{1}{2}\sqrt{\frac{2}{\pi}}+\frac{1}{2}|x_n|-\frac{1}{2}\left[\int_{-\infty}^{x_n}(x_n-x)\phi(x)\dif x+\int_{x_n}^{\infty} (x-x_n)\phi(x)\dif x\right]\\
 &=& 1+\sqrt{\frac{1}{2\pi}}+\frac{1}{2}|x_n|-\frac{1}{2}\left[\int_{-\infty}^{x_n}(x_n-x)\phi(x)\dif x+\int_{x_n}^{\infty} (x-x_n)\phi(x)\dif x\right]\\
-&=& 1+\sqrt{\frac{1}{2\pi}}+\frac{1}{2}|x_n|-\frac{1}{2}\left[2x_n\Phi(x_n)-x_n-2\int_{-\infty}^{x_n}x\phi(x)\dif x\right]\\
-&=& 1+\sqrt{\frac{1}{2\pi}}+\max(x_n,0)-x_n\Phi(x_n)-\frac{ e^{-x_n^2/2}}{\sqrt{2\pi}}. 
+&=& 1+\sqrt{\frac{1}{2\pi}}+\frac{1}{2}|x_n|-\frac{1}{2}\left[2x_n\Phi_1(x_n)-x_n-2\int_{-\infty}^{x_n}x\phi(x)\dif x\right]\\
+&=& 1+\sqrt{\frac{1}{2\pi}}+\max(x_n,0)-x_n\Phi_1(x_n)-\frac{ e^{-x_n^2/2}}{\sqrt{2\pi}}. 
 \end{eqnarray*}
 Thus, the discrepancy can be obtained as follows. 
 \begin{eqnarray*}
-&& [D(P)]^2\\
-&= &1+\sqrt{\frac{2}{\pi}}-\frac{2}{N}\sum_{n=1}^N \left[1+\sqrt{\frac{1}{2\pi}}+\max(x_n,0)-x_n\Phi(x_n)-\frac{ e^{-x_n^2/2}}{\sqrt{2\pi}}\right]\\
+&& D^2(\Xdes,\Phi_1,K)=1+\sqrt{\frac{2}{\pi}}-\frac{2}{N}\sum_{n=1}^N \left[1+\sqrt{\frac{1}{2\pi}}+\max(x_n,0)-x_n\Phi_1(x_n)-\frac{ e^{-x_n^2/2}}{\sqrt{2\pi}}\right]\\
 &&+\frac{1}{N^2}\sum_{n,m=1}^N \left[1+\frac{1}{2}|x_n|+\frac{1}{2}|x_m|-\frac{1}{2}|x_n-x_m|\right]\\
-&= &-\frac{2}{N}\sum_{n=1}^N \left[\max(x_n,0)-x_n\Phi(x_n)-\frac{ e^{-x_n^2/2}}{\sqrt{2\pi}}\right]+\frac{1}{N^2}\sum_{n,m=1}^N \left[\frac{1}{2}|x_n|+\frac{1}{2}|x_m|-\frac{1}{2}|x_n-x_m|\right]\\
-&=& -\frac{2}{N}\sum_{n=1}^N \left[\max(x_n,0)-x_n\Phi(x_n)-\phi(x_n)\right]+\frac{1}{N}\sum_{n=1}^N|x_n|-\frac{1}{2N^2}\sum_{n,m=1}^N|x_n-x_m|.\\
+&= &-\frac{2}{N}\sum_{n=1}^N \left[\max(x_n,0)-x_n\Phi_1(x_n)-\frac{ e^{-x_n^2/2}}{\sqrt{2\pi}}\right]+\frac{1}{N^2}\sum_{n,m=1}^N \left[\frac{1}{2}|x_n|+\frac{1}{2}|x_m|-\frac{1}{2}|x_n-x_m|\right]\\
+&=& -\frac{2}{N}\sum_{n=1}^N \left[\max(x_n,0)-x_n\Phi_1(x_n)-\phi(x_n)\right]+\frac{1}{N}\sum_{n=1}^N|x_n|-\frac{1}{2N^2}\sum_{n,m=1}^N|x_n-x_m|.\\
 \end{eqnarray*}
 For the distribution $N({\bf 0}, {\bf I}_d)$, the joint pdf is $$\prod\limits_{j=1}^d\phi(x_j) = \prod\limits_{j=1}^d \frac{1}{\sqrt{2\pi}}e^{-x_j^2/2}.$$
-Here the cdf function $\Phi$ used interchangeably for $N({\bf 0}, {\bf I}_d)$ and $N(0, 1)$, depending if the variable is a vector or scalar. Thus, 
+Here the cdf function $\Phi(\vx)=\prod_{j=1}^d \Phi_1(x_j)$. Thus, 
 \begin{align*}
 \int_{\reals^d\times \reals^d} K(\vx,\vt)&\dif\Phi(\vx)\dif\Phi(\vt) = \left(1+\sqrt{\frac{2}{\pi}}\right)^d, \\
-\int_{\reals^d}K(\vx,\vx_n)\dif\Phi(\vx) = \prod\limits_{j=1}^s&\left[ 1+\frac{1}{\sqrt{2\pi}}+\frac{1}{2}|x_j|-x_j[\Phi(x_j)-1/2]-\phi(x_j)\right].
+\int_{\reals^d}K(\vx,\vx_n)\dif\Phi(\vx) = \prod\limits_{j=1}^d&\left[ 1+\frac{1}{\sqrt{2\pi}}+\frac{1}{2}|x_j|-x_j[\Phi(x_j)-1/2]-\phi(x_j)\right].
 \end{align*}
 The discrepancy can be obtained
 \begin{eqnarray*}
-&&[D(P)]^2\\
-&=& \left(1+\sqrt{\frac{2}{\pi}}\right)^d - \frac{2}{N}\sum\limits_{\vx\in P} \prod\limits_{j=1}^d\left[ 1+\frac{1}{\sqrt{2\pi}}+\frac{1}{2}|x_j|-x_j[\Phi(x_j)-1/2]-\phi(x_j)\right]\\
+&&D^2(\Xdes, \Phi, K)\\
+&=& \left(1+\sqrt{\frac{2}{\pi}}\right)^d - \frac{2}{N}\sum\limits_{\vx\in P} \prod\limits_{j=1}^d\left[ 1+\frac{1}{\sqrt{2\pi}}+\frac{1}{2}|x_j|-x_j[\Phi_1(x_j)-1/2]-\phi(x_j)\right]\\
 &&+\frac{1}{N^2}\sum_{\vx,\vt\in P}\prod_{j=1}^d \left[1+\frac{1}{2}|x_j|+\frac{1}{2}|t_j|-\frac{1}{2}|x_j-t_j|\right]. 
 \end{eqnarray*}       
 \end{proof}
 
 \bibliographystyle{amsplain}
 %\bibliography{FJH23,FJHown23}
-\bibliography{Ref.bib}
+\bibliography{Ref.bib,FJH23,FJHown23}
 
 \end{document}
 
