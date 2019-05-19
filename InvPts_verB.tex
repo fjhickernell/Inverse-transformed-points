@@ -418,22 +418,22 @@ Condition \eqref{eq:BigQYesb} may be easy to satisfy.  For example, it is automa
 To illustrate this point, consider a cousin of the kernel in \eqref{eq:OrigKernel}, which places the reference point at $\boldsymbol{0.5} = (0.5, \ldots, 0.5)$, the center of the unit cube $(0,1)^d$:
 \begin{align}
 \label{eq:L2kernel}
-    K_{\unif}(\vu,\vv) &= \prod_{j=1}^d\left[1+\frac{1}{2}|u_j-0.5|+\frac{1}{2}|v_j-0.5|-\frac{1}{2}|u_j-v_j|\right] \\
+    K_{\unif}(\vu,\vv) &= \prod_{j=1}^d\left[1+\frac{1}{2}\left(\left|u_j-1/2\right|+ \left|v_j- 1/2 \right|-\left |u_j-v_j \right| \right) \right] \\
     \nonumber
     & = K(\vu - \boldsymbol{0.5}, \vv - \boldsymbol{0.5}) \qquad \text{for $K$ defined in \eqref{eq:OrigKernel}}. 
 \end{align}
 This kernel defines the centered $L^2$-discrepancy \cite{Hic97a}.
 Consider the standard multivariate normal distribution, $F_\normal$, and choose the inverse normal distribution,
-\begin{equation*}
+\begin{equation} \label{eq:invNormTrans}
     \vPsi(\vu) = (\Phi^{-1}(u_1), \ldots, \Phi^{-1}(u_d)),
-\end{equation*}
+\end{equation}
 where $\Phi$ denotes the standard normal distribution function.  Then condition \eqref{eq:BigQYesb} is automatically satisfied, and condition \eqref{eq:BigQYesa} is  satisfied by defining
 \begin{align}
 \nonumber
      K(\vt,\vx) &= K_{\unif}(\vPsi^{-1}(\vt),\vPsi^{-1}(\vx)) \\
      \nonumber
-      &= \prod_{j=1}^d\left[1+\frac{1}{2}|\Phi^{-1}(t_j)-0.5|+\frac{1}{2}|\Phi^{-1}(x_j)-0.5| \right . \\
-      & \qquad \qquad \left . -\frac{1}{2}|\Phi^{-1}(t_j)-\Phi^{-1}(x_j)|\right].
+      &= \prod_{j=1}^d\left[1+\frac{1}{2}\left(\left|\Phi^{-1}(t_j)-1/2\right|+ \left|\Phi^{-1}(x_j)- 1/2 \right| \right . \right . \\
+      & \qquad \qquad \left.  \left . -\left|\Phi^{-1}(t_j)-\Phi^{-1}(x_j)\right|\right)\right].
 \end{align}
 In one dimension, the distance between two Dirac measures defined using the kernel $K_\unif$ above is $\norm{\delta_{x} - \delta_{t}} = \sqrt{x-t}$, whereas the distance defined using the kernel $K$ above is $\norm{\delta_{x} - \delta_{t}} = \sqrt{\Phi^{-1}(x)-\Phi^{-1}(t)}$.  Under kernel $K$, the distance between two Dirac measures can never be greater than one.  Such an assumption may be unpalatable.
 
@@ -441,101 +441,48 @@ In one dimension, the distance between two Dirac measures defined using the kern
 \section{Do Transformed Low Discrepancy Points Have Low Discrepancy More Generally}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-From the discussion above, it appears that condition \eqref{eq:BigQYesa} can be too restrictive.  We would like to compare the discrepancies of designs under kernels that do not satisfy that restriction.  In particular, we consider the centered $L^2$-discrepancy for designs on $(0,1)^d$ defined by the kernel in \eqref{eq:L2kernel}:
+From the discussion above indicates that condition \eqref{eq:BigQYesa} can be too restrictive.  We would like to compare the discrepancies of designs under kernels that do not satisfy that restriction.  In particular, we consider the centered $L^2$-discrepancy for uniform designs on $(0,1)^d$ defined by the kernel in \eqref{eq:L2kernel}:
 \begin{align*}
 \MoveEqLeft{D^2(\Udes, F_\unif, K_\unif)} \\
-& = \left(\frac{13}{12}\right)^d - \frac{2}{N}\sum_{i=1}^N \prod_{j=1}^d \left(1+\frac{1}{2}|u_{ij}-1/2|-\frac12|u_{ij}-1/2|^2\right)\\
-& \qquad + \frac{1}{N^2}\sum_{i,k=1}^N\prod_{j=1}^d\left[1+\frac{1}{2}|u_{ij}-1/2|+\frac{1}{2}|u_{kj}-1/2|-\frac{1}{2}|u_{ij}-u_{kj}|\right],    
+& = \left(\frac{13}{12}\right)^d - \frac{2}{N}\sum_{i=1}^N \prod_{j=1}^d \left[1+\frac{1}{2}\left(|u_{ij}-1/2|-|u_{ij}-1/2|^2\right) \right]\\
+& \qquad + \frac{1}{N^2}\sum_{i,k=1}^N\prod_{j=1}^d\left[1+\frac{1}{2}\left(|u_{ij}-1/2|+|u_{kj}-1/2|-|u_{ij}-u_{kj}| \right) \right],  
 \end{align*}
-We also consider the discrepancy for designs defined with respect to the standard normal distribution defined by the kernel \eqref{eq:OrigKernel}.  We choose this kernel because it has a more realistic interpretation in terms of the distance between two Dirac measures.  This discrepancy is 
+where again, $F_\unif$ denotes the uniform distribution on $(0,1)^d$, and $\Udes$ denotes a design on $(0,1)^d$
+
+Changing perspectives slightly, if $F_\unif'$ denotes the uniform distribution on the cube of volume one centered at the origin, $(-\boldsymbol{0.5},\boldsymbol{0.5})^d$, and the design $\Udes'$ is constructed by  subtracting $\boldsymbol{0.5}$ from each point in the design $\Udes$:
+\begin{equation} \label{eq:Updef}
+    \Udes' = \{\vu -\boldsymbol{0.5} : \vu \in \Udes \},
+\end{equation}
+then 
+\begin{equation} \label{eq:desEquiv}
+     D(\Udes',F'_\unif,K) = D(\Udes, F_\unif, K_\unif),
+\end{equation}
+where $K$ is the kernel defined above in \eqref{eq:OrigKernel}.  Recall that the origin is a special point in the definition of the inner product corresponding to this $K$ as a reproducing kernel in \eqref{eq:inner}.
+
+Therefore, this $K$ from \eqref{eq:OrigKernel} is an appropriate kernel to use to define the the discrepancy for designs defined with respect to the standard normal distribution, which is also centered at the origin.  Such a discrepancy is 
 \begin{align}\label{eq:DisNormald>1}
 \nonumber
 \MoveEqLeft{D^2(\Xdes, F_\normal, K) = \left(1+\sqrt{\frac{2}{\pi}}\right)^d}\\
 \nonumber
-  & - \frac{2}{N}\sum\limits_{\vx\in \Xdes} \prod\limits_{j=1}^d\left[ 1+\frac{1}{\sqrt{2\pi}}+\frac{1}{2}|x_j|-x_j[\Phi(x_j)-1/2]-\phi(x_j)\right]\\
-  &+\frac{1}{N^2}\sum_{\vx,\vt\in \Xdes}\prod_{j=1}^d \left[1+\frac{1}{2}|x_j|+\frac{1}{2}|t_j|-\frac{1}{2}|x_j-t_j|\right]. 
+  & - \frac{2}{N}\sum_{i=1}^N \prod\limits_{j=1}^d\left[ 1+\frac{1}{\sqrt{2\pi}}+\frac{1}{2}|x_{ij}|-x_{ij}\left(\Phi(x_{ij})-\frac 12 \right)-\phi(x_{ij})\right]\\
+  &+\frac{1}{N^2}\sum_{i,k=1}^N \prod_{j=1}^d \left[1+\frac{1}{2}\left(|x_{ij}|+|x_{kj}|-|x_{ij}-x_{kj}|\right)\right]. 
 \end{align}
-When $d=1$, the discrepancy \eqref{eq:DisNormald>1} can be further simplified to
-\begin{align}\label{eq:DisNormald=1}\nonumber
-D^2(\Xdes, \Phi_1, K)=& -\frac{2}{N}\sum_{i=1}^N \left[\max(x_i,0)-x_i\Phi_1(x_i)-\phi(x_i)\right]\\
-+&\frac{1}{N}\sum_{i=1}^N|x_i|-\frac{1}{2N^2}\sum_{i,j=1}^N|x_i-x_j|. 
-\end{align}
-In both \eqref{eq:DisNormald=1} and \eqref{eq:DisNormald>1}, $\phi(\cdot)$ is the pdf of $N(0,1)$. 
-The derivations are in the Appendix. 
+Here, $\phi$ is the standard normal probability density function. 
+The derivation of \eqref{eq:DisNormald>1} is given in the Appendix. 
 
-The discrepancy for the uniform distribution on unit cube $(0,1)^d$ we adapt in this work is the centered $L_2$-discrepancy \cite{Hic97a} defined as:
-\begin{align*}
-[D_2(\Udes, F_\unif, K_2)]^2 =& \left(\frac{13}{12}\right)^d - \frac{2}{N}\sum\limits_{\vu\in \Udes}\prod_{j=1}^d \left(1+\frac{1}{2}|u_j-1/2|-1/2|u_j-1/2|^2\right)\\
-\hspace{5ex}&+ \frac{1}{N^2}\sum\limits_{\vu,\vu'\in \Udes}\prod_{j=1}^d\left[1+\frac{1}{2}|u_j-1/2|+\frac{1}{2}|u_j'-1/2|-\frac{1}{2}|u_j-u_j'|\right],    
-\end{align*}
-with the reproducing kernel:
-\begin{equation}\label{eqn:oril2kernel}
-K_2(\vx,\vt) = \prod\limits_{j=1}^d\left[1+\frac{1}{2}|x_j-1/2|+\frac{1}{2}|t_j-1/2|-\frac{1}{2}|x_j-t_j|\right],
-\end{equation}
-which is the same as \eqref{eq:OrigKernel}, except it is anchored to the center $(1/2,\cdots,1/2)$ of the cube but not the origin. The centered $L_2$-discrepancy is invariant under reflections of $\Udes$ about any plane $x_j = 1/2$. 
+%\section{Inconsistency in Discrepancy}\label{sec:inconsistency}
+Now we numerically compare the discrepancy of a uniform design, $\Udes'$ given by \eqref{eq:Updef} and the discrepancy of a design constructed by the inverse normal transformation, i.e.,  $\Xdes = \vPsi(\Udes)$ for $\vPsi$ in \eqref{eq:invNormTrans}, where the $\Udes$ leading to both is identical.  We do not expect the magnitudes of the discrepancies to be the same, but we ask
+\begin{multline} \tag{Q'}
+    \text{does } D(\Udes'_1,F'_\unif, K)\leq D(\Udes_2',F_\unif', K) \\
+    \text{imply }
+     D(\vPsi(\Udes_1),F_\normal, K)\leq D(\vPsi(\Udes_2),F_\normal, K)?
+\end{multline}
+Again, $K$ is given by \eqref{eq:OrigKernel}.  So we are actually comparing discrepancies defined by the same kernels, but \emph{not kernels that satisfy \eqref{eq:BigQYesa}}.
 
-With the kernel in \eqref{eq:OrigKernel}, now we define a discrepancy for multivariate standard normal distribution on $\mathbb{R}^d$ that also refers to the center of the experimental region, $(0,\cdots,0)$. Firstly, we show that this kernel function is a reproducing kernel with a properly defined inner product as follows. 
-\begin{equation}\label{eq:inner}
-\langle f,g \rangle = \sum_{u\subseteq \{1,...,d\}}\int_{\mathbb{R}^{|u|}}\frac{\partial^{|u|}}{\partial \vx_u}f(\vx_u,{\bf 0})\frac{\partial^{|u|}}{\partial \vx_u}g(\vx_u,{\bf 0})\dif \vx_u,
-\end{equation}
-where $u$ is an index set and $u\subseteq \{1, \ldots, d\}$ and $|u|$ is the cardinality of $u$. 
-Using the following operators, 
-$$\partial \vx_u = \prod\limits_{k\in u}\partial x_k \text{ and } \dif \vx_u = \prod\limits_{k\in u}\dif x_k , $$
-the $|u|$-th order partial derivative in \eqref{eq:inner} is with respective to $\vx_{u}$, the subset of variables indexed by $u$, and the integration is also with respect to the same subset of variables. 
-The vector $(\vx_u,{\bf 0})$ is a $d$-dimensional vector with the dimension indexed by $u$ denoted as $\vx_u$ and the rest are set to be ${\bf 0}$. 
-In particular, for $u = \{1,...,d\}$, we have $(\vx_u,{\bf 0}) = \vx$; for $u=\emptyset$, we have $(\vx_u,{\bf 0}) = {\bf 0}$. In particular, when $d=1$,
-\begin{equation*}
-\langle f,g \rangle = f(0)g(0)+\int_{\mathbb{R}}f'(x)g'(x)\dif x.
-\end{equation*}
+\FJH{Fred got to here}
 
-
-With the inner product \eqref{eq:inner}, it is easy to see that above kernel function in \eqref{eq:OrigKernel} is symmetric and positive semi-definite on $\Omega = \mathbb{R}^d$, i.e., the domain of the $d$-dim multivariate normal distribution. 
-Note that $K({\bf 0},\vt) = 1$ and
-\begin{align*}
-\frac{\partial^{|u|} K((\vx_u,{\bf 0}),\vt)}{\partial \vx_u}& =\prod_{i\in u}\frac 12 \left[\sign(x_i) - \sign(x_i - t_i) \right] \\
-= &\begin{cases}
-\prod\limits_{i\in u}\sign(t_i), & \min(0,t_i) < x_i \leq \max(0,t_i), i\in u\\
-0, & \textrm{otherwise}.
-\end{cases}.
-\end{align*}
-Thus, $\langle K(\cdot,\vt), K(\cdot,\vt) \rangle < \infty $, and
-\begin{align*}
-\langle f, K(\cdot,\vt) \rangle &= \sum_{u\subseteq \{1,...,d\}}\int_{\mathbb{R}^{|u|}}\frac{\partial^{|u|}}{\partial \vx_u}f(\vx_u,{\bf 0})\frac{\partial^{|u|} K((\vx_u,{\bf 0}),\vt)}{\partial \vx_u}\dif \vx_u \\
-& =     \sum_{u\subseteq \{1,...,d\}}\sum_{v\subseteq u}(-1)^{|u|-|v|}f(\vt_v,{\bf 0})\\
-& = f(\vt)
-\end{align*}
-With the reproducing kernel \eqref{eq:OrigKernel}, we can analytically derive the discrepancy for the standard normal distribution. 
-
-Let $\Xdes = \{\vx_i\}_{i=1}^N$ be a design on $\Omega = \mathbb{R}^d$. 
-The squared discrepancy of the design $\Xdes$ with respect to the $d$-dimensional standard multivariate normal probability distribution $N({\bf 0}, {\bf I}_d)$ with cdf $\Phi$ is
-\begin{eqnarray}\label{eqn:discrepancy}\nonumber
-D^2(\Xdes, \Phi, K) &=& \int_{\Omega\times\Omega} K(\vx,\vt)\dif \Phi(\vx)\dif \Phi(\vt)\\
-&-&\frac{2}{N}\sum_{i=1}^N \int_{\Omega}K(\vx,\vx_i)\dif \Phi(\vx)+\frac{1}{N^2}\sum_{i,k=1}^N K(\vx_i,\vx_k).
-\end{eqnarray}
-The cdf $\Phi(\vx)=\prod_{j=1}^d \Phi_1(x_j)$, where $\Phi_1(\cdot)$ is the cdf of $N(0,1)$. 
-With simple calculation, the squared discrepancy \eqref{eqn:discrepancy} can be  computed explicitly as
-\begin{align}\label{eq:DisNormald>1}\nonumber
-&D^2(\Xdes, \Phi, K)\\\nonumber
-  &= \left(1+\sqrt{\frac{2}{\pi}}\right)^d - \frac{2}{N}\sum\limits_{\vx\in \Xdes} \prod\limits_{j=1}^d\left[ 1+\frac{1}{\sqrt{2\pi}}+\frac{1}{2}|x_j|-x_j[\Phi_1(x_j)-1/2]-\phi(x_j)\right]\\
-  &+\frac{1}{N^2}\sum_{\vx,\vt\in \Xdes}\prod_{j=1}^d \left[1+\frac{1}{2}|x_j|+\frac{1}{2}|t_j|-\frac{1}{2}|x_j-t_j|\right]. 
-\end{align}
-When $d=1$, the discrepancy \eqref{eq:DisNormald>1} can be further simplified to
-\begin{align}\label{eq:DisNormald=1}\nonumber
-D^2(\Xdes, \Phi_1, K)=& -\frac{2}{N}\sum_{i=1}^N \left[\max(x_i,0)-x_i\Phi_1(x_i)-\phi(x_i)\right]\\
-+&\frac{1}{N}\sum_{i=1}^N|x_i|-\frac{1}{2N^2}\sum_{i,j=1}^N|x_i-x_j|. 
-\end{align}
-In both \eqref{eq:DisNormald=1} and \eqref{eq:DisNormald>1}, $\phi(\cdot)$ is the pdf of $N(0,1)$. 
-The derivations are in the Appendix. 
-
-\section{Inconsistency in Discrepancy}\label{sec:inconsistency}
-Using the inverse transformation method, we can generate the standard multivariate normal distribution $N({\bf 0},{\bf I}_d)$ by applying $x_{i,j}=\Phi^{-1}_j(u_{i,j})$ for $j=1,\ldots,d$ and $i=1,\ldots, N$. 
-However, the inverse transformation would lead to inconsistency between the discrepancy before and after the transformation. 
-Although $\Udes = \{\vu_i\}_{i=1}^N$ is the low-discrepancy points for the uniform distribution in $[0,1]^d$, the following examples shows that it is not necessarily so that $\Xdes=\{\vx_i\}_{i=1}^N$ is also low-discrepancy. 
-In other words, for two uniform designs, $\Udes_1$ and $\Udes_2$, the fact that $D(\Udes_1,F_\unif, K)\leq D(\Udes_2,F_\unif, K)$ does not imply that the inverse transformed normal design $\Xdes_1$ and $\Xdes_2$ also have $D(\Xdes_1,\Phi, K)\leq D(\Xdes_2,\Phi, K)$. 
-Note that the two discrepancies $D(\Udes, F_\unif, K)$ and $D(\Xdes, \Phi, K)$ are based on the same kernel, hence the inconsistency is only due to the inverse transformation. 
-
-Let $d=5$ and $n=50$. 
-We generate $B=20$ samples from uniform distribution in $[0,1]^5$ and then use the inverse distribution transformation to obtain samples following $N({\bf 0}, {\bf I}_5)$. 
+Let $d=5$ and $N=50$. 
+We generate $B=20$ independent and identically distributed (IID) uniform designs with $50$ points on $(0,1)^5$ and then use the inverse distribution transformation to obtain samples following $N({\bf 0}, {\bf I}_5)$. 
 The discrepancy for uniform distribution is the $L_2$-discrepancy $D_2(\Udes,F_\unif,K_2)$ and for the standard normal distribution is \eqref{eq:DisNormald>1}. 
 Figure \ref{fig:UniVsNormDisc} plots the discrepancy for normal distribution against the $L_2$-discrepancy for each of the $B=20$ samples. 
 If the inverse transformation makes the design consistent in terms of the discrepancy, the points in \ref{fig:UniVsNormDisc} should be approximately aligned on a straight line. 
