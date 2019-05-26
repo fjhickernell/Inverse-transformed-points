@@ -92,6 +92,7 @@
 \newcommand{\frakd}{\mathfrak{d}}
 \newcommand{\tK}{\widetilde{K}}
 \newcommand{\tOmega}{\widetilde{\Omega}}
+\newcommand{\Order}{\mathcal{O}}
 
 \def\abs#1{\ensuremath{\left \lvert #1 \right \rvert}}
 
@@ -541,13 +542,13 @@ The most appealing advantage of the coordinate-exchange algorithm is that at eac
 
 First, we define the point deletion function, $\frakd_p$, as the change in square discrepancy resulting from removing the a point from the design:
 \begin{equation}\label{eq:rowdeletion}
-\frakd_p(i) = D^2(\Xdes)-D^2(\Xdes\backslash \{\vx_i\}).
+\frakd_p(i) = D^2(\Xdes)-\left(\frac{N-1}{N}\right)^2 D^2(\Xdes\backslash \{\vx_i\}).
 \end{equation}
 Here, the design $\Xdes\backslash \{\vx_i\}$ is the $N-1$ point design with the point $\{\vx_i\}$ removed. We suppress the choice of target distribution and kernel in the above discrepancy notation for simplicity. We then choose 
 \begin{equation} \label{eq:rowchoice}
     i^*=\argmax_{i=1,\ldots,N} \frakd_p(i).
 \end{equation}
-If $\frakd_p(i^*) > 0$, it means that the smaller design with $\vx_{i^*}$ removed has a smaller discrepancy. Thus, it is reasonable to assume that moving $\vx_{i^*}$ might lead to a smaller discrepancy. On the other hand, if $\frakd_p(i^*)< 0$, it means that removing any $\vx_i$ makes the discrepancy bigger, but removing $\vx_{i^*}$ does the least damage.  Again,  $\vx_{i^*}$ is a prime candidate for modification.
+The definition of $i^*$ means that removing $\vx_{i^*}$ from the design $\Xdes$ results in the smallest discrepancy among all possible deletions.  Thus, $\vx_{i^*}$ is helping the least, which makes it a prime candidate for modification.
 
 Next, we define a coordinate deletion function, $\frakd_{c}$, as the change in the square discrepancy resulting from removing a coordinate in our calculation of the discrepancy:
 \begin{equation}\label{eq:coorddeletion}
@@ -556,7 +557,7 @@ Next, we define a coordinate deletion function, $\frakd_{c}$, as the change in t
 Here, the design $\Xdes_{-k}$ still has $N$ points but now only $d$ dimensions, the $k^{\text{th}}$ coordinate having been removed.  For this calculation to be feasible, we need the target distribution to independent marginals defined on the domain.  Also, the kernel to be of product form.  To simplify the notation, we assume a somewhat stronger condition, namely that each term in the product defining the kernel is the same for every coordinate:
 \begin{equation}
     \label{eq:prodkernel}
-    \Omega = \tOmega \times \cdots \times \tOmega, \qquad K(\vt,\vx) = \prod_{k=1}^d \tK(t_k,x_k), \qquad \tK:\tOmega \times \tOmega \to \reals.
+    \Omega = \tOmega \times \cdots \times \tOmega, \qquad K(\vt,\vx) = \prod_{k=1}^d [1+ \tK(t_k,x_k)], \qquad \tK:\tOmega \times \tOmega \to \reals.
 \end{equation}
 where the term in the product is 
 We then choose 
@@ -592,17 +593,36 @@ x^* = \argmax_{x \in \Omega_k} \Delta(x).
 For kernels of product form, \eqref{eq:prodkernel}, and target distributions with independent marginals, the formula for the squared discrepancy in \eqref{eq:discDef} becomes
 \begin{align}
 \nonumber
-    D^2(\Xdes,\rho,K)  & = c^d  - \frac 2N \sum_{i=1}^N \prod_{k=1}^d h(x_{ik}) + \frac{1}{N^2}  \sum_{i,j=1}^N \prod_{k=1}^d \tK(x_{ik},x_{jk}),
+    D^2(\Xdes,\rho,K)  & = c^d  - \frac 2N \sum_{i=1}^N H(\vx_{i}) + \frac{1}{N^2}  \sum_{i,j=1}^N K(\vx_{i},x_{j}),
     \intertext{where}
     c & = \int_{\Omega_k \times \Omega_k} \tK_k(t_k,x_k) \, \varrho_k(t) \varrho_k (x) \, \dif t\dif x, \\
+    H(\vx) = \prod_{k=1}^d [1+ h(x_{k})]
     h(x) & = \int_{\Omega_k} \tK_k(t,x)  \, \varrho_k(t) \, \dif t.
 \end{align}
-Then the point deletion function becomes fred
-\begin{align}\label{eq:rowdeletionA}
+For a standard multivariate normal target distribution and the kernel defined in \eqref{eq:OrigKernel}, we have
+\begin{align*}
+c &= 1+\sqrt{\frac{2}{\pi}}, \\
+h(x) &= \frac{1}{\sqrt{2\pi}}+\frac{1}{2}|x|-x[\Phi(x)-1/2]-\phi(x),\\
+\tK(t,x) &= \frac{1}{2} (|t|+ |x|- |x-t|).
+\end{align*}
+
+The point deletion function defined in \eqref{eq:rowdeletion} then can be expressed as
+\begin{align}
+\nonumber
 \frakd_p(i) 
-&= \frac{2}{N}\biggl[ \frac{1}{N-1} \sum_{\substack{j=1 \\ j \ne i}}^N \prod_{k=1}^d h_k(x_{ik}) - \prod_{k=1}^d h_k(x_{ik})  \biggr] \\
-& \qquad \qquad + \frac{1}{N^2}\biggl[\frac{1-2N}{(N-1)^2}\sum_{\substack{j,m=1 \\ j,m \ne i}}^N \tK_k(x_{jk},x_{mk}) + \sum_{j=1}^N\prod_{s=1}^d h(x_{is},x_{js})-\prod_{s=1}^d h(x_{is},x_{is})\biggr]. 
+&= \frac{(2N-1)c^d}{N^2} - \frac{2}{N}\biggl[ \frac{1}{N} \sum_{j=1}^N  H(\vx_{j}) + \left(1 - \frac 1N \right) H(\vx_{i})  \biggr] \\
+\label{eq:rowdeletionA}
+& \qquad \qquad + \frac{1}{N^2}\biggl[2 \sum_{j=1}^N K(\vx_{i},\vx_{j})-\prod_{k=1}^d K(\vx_{i},\vx_{i})\biggr]. 
 \end{align}
+The computational cost for $\frakd_p(1), \ldots, \frakd_p(N)$ is then $\Order(dN^2)$, which is the same order as the cost of the discrepancy of a single design.
+
+
+
+
+
+
+
+
 We use $D(\Xdes)$ as a simplified notation for the discrepancy as the target design is always standard normal distribution and the kernel function is \eqref{eq:OrigKernel}. 
 The notation $\Xdes\backslash \vx_i$ means that the design $\Xdes$ without the $i$-th point $\vx_i$. 
 Here $c(x)$ and $h(x,y)$ are 
