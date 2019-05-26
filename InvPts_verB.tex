@@ -29,13 +29,20 @@
 \usepackage{psfrag,bbm,epsf}
 \usepackage{xspace,subfigure}
 \usepackage{amssymb, xcolor,enumerate,float,mathtools,algorithmicx}
-\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{algorithm, algorithmicx}
 \usepackage[numbers]{natbib}
 \usepackage{enumerate,multirow,booktabs}
 \usepackage{url}
-\usepackage{algpseudocode}
 \usepackage{natbib}
 \usepackage{showlabels}
+
+\algnewcommand\algorithmicparam{\textbf{Parameters:}}
+\algnewcommand\PARAM{\item[\algorithmicparam]}
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\INPUT{\item[\algorithmicinput]}
+%\algnewcommand\STATE{\item}
+\algnewcommand\RETURN{\State \textbf{Return }}
 
 \newcommand{\blind}{1}
 \newtheorem{lem}{Lemma}
@@ -64,7 +71,7 @@
 \newcommand{\vPsi}{\boldsymbol{\Psi}}
 \newcommand{\dif}{{\rm d}}
 \DeclareMathOperator{\sign}{sign}
-\DeclareMathOperator{\argmax}{argmax}
+\DeclareMathOperator*{\argmax}{argmax}
 \newcommand{\Udes}{\mathcal{U}}
 \newcommand{\Xdes}{\mathcal{X}}
 \newcommand{\FXdes}{F_{\Xdes}}
@@ -82,6 +89,9 @@
 \DeclareMathOperator{\err}{err}
 \newcommand{\unif}{\textup{unif}}
 \newcommand{\normal}{\textup{normal}}
+\newcommand{\frakd}{\mathfrak{d}}
+\newcommand{\tK}{\widetilde{K}}
+\newcommand{\tOmega}{\widetilde{Omega}}
 
 \def\abs#1{\ensuremath{\left \lvert #1 \right \rvert}}
 
@@ -90,6 +100,9 @@
 \newcommand{\FJH}[1]{{\color{blue}Fred: #1}}
 \newcommand{\LK}[1]{{\color{green}Lulu: #1}} %choose your color
 \newcommand{\YL}[1]{{\color{teal}Yiou: #1}} %choose your color
+
+
+
 
 % see the list of further useful packages
 % in the Reference Guide
@@ -249,8 +262,8 @@ This kernel is plotted in Figure \ref{fig:kernelpict} for $d=1$.  Note that for 
 
 \begin{figure}
     \centering
-    \includegraphics[height = 4cm]{KernelPict.eps} \qquad
-    \includegraphics[height = 4cm]{Kernel3DPict.eps}
+    \includegraphics[height = 4cm]{code/KernelPict.eps} \qquad
+    \includegraphics[height = 4cm]{code/Kernel3DPict.eps}
     \caption{The kernel defined in \eqref{eq:OrigKernel} for $d=1$.}
     \label{fig:kernelpict}
 \end{figure}
@@ -472,55 +485,49 @@ The derivation of \eqref{eq:DisNormald>1} is given in the Appendix.
 
 %\section{Inconsistency in Discrepancy}\label{sec:inconsistency}
 Now we numerically compare the discrepancy of a uniform design, $\Udes'$ given by \eqref{eq:Updef} and the discrepancy of a design constructed by the inverse normal transformation, i.e.,  $\Xdes = \vPsi(\Udes)$ for $\vPsi$ in \eqref{eq:invNormTrans}, where the $\Udes$ leading to both is identical.  We do not expect the magnitudes of the discrepancies to be the same, but we ask
-\begin{multline} \tag{Q'}
+\begin{multline} \tag{Q'} \label{eq:BigQPrime}
     \text{does } D(\Udes'_1,F'_\unif, K)\leq D(\Udes_2',F_\unif', K) \\
     \text{imply }
      D(\vPsi(\Udes_1),F_\normal, K)\leq D(\vPsi(\Udes_2),F_\normal, K)?
 \end{multline}
 Again, $K$ is given by \eqref{eq:OrigKernel}.  So we are actually comparing discrepancies defined by the same kernels, but \emph{not kernels that satisfy \eqref{eq:BigQYesa}}.
 
-\FJH{Fred got to here}
-
 Let $d=5$ and $N=50$. 
-We generate $B=20$ independent and identically distributed (IID) uniform designs with $50$ points on $(0,1)^5$ and then use the inverse distribution transformation to obtain samples following $N({\bf 0}, {\bf I}_5)$. 
-The discrepancy for uniform distribution is the $L_2$-discrepancy $D_2(\Udes,F_\unif,K_2)$ and for the standard normal distribution is \eqref{eq:DisNormald>1}. 
-Figure \ref{fig:UniVsNormDisc} plots the discrepancy for normal distribution against the $L_2$-discrepancy for each of the $B=20$ samples. 
-If the inverse transformation makes the design consistent in terms of the discrepancy, the points in \ref{fig:UniVsNormDisc} should be approximately aligned on a straight line. 
-Clearly, some samples with low uniform discrepancy turn out to have large normal discrepancy after inverse transformation.
-Thus, inverse transformation cannot ensure the consistency of the design in terms of the discrepancy. 
+We generate $B=20$ independent and identically distributed (IID) uniform designs, $\Udes$ with $N=50$ points on $(0,1)^5$ and then use the inverse distribution transformation to obtain IID random $N({\bf 0}, {\mathsf I}_5)$ designs, $\Xdes = \vPsi(\Udes)$. 
+Figure \ref{fig:UniVsNormDisc} plots the discrepancies for normal designs, $D(\vPsi(\Udes),F_\normal, K)$,  against the discrepancies for the uniform designs, $D(\Udes,F_\unif,K_\unif) = D(\Udes',F_\unif',K)$ for each of the $B=20$ designs. 
+Question \eqref{eq:BigQPrime} has a positive answer if and only if the lines passing through any two points on this plot should all have non-negative slope.  However, that is not the case.  Thus \eqref{eq:BigQPrime} is false.
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[width=8cm]{d5n50.eps}
+\includegraphics[width=8cm]{code/d5n50.eps}
 \caption{Uniform Discrepancy Vs. Normal Discrepancy. \label{fig:UniVsNormDisc}}
 \end{center}
 \end{figure}
 
-We further investigate the relationship between the uniform discrepancy of a design and the normal discrepancy of the same design after inverse transformation.
-Varying the dimension $d$ from 1 to 10, we calculate the sample correlation coefficients between the two discrepancies of the $B=500$ uniform designs of size $N=50$ and corresponding normal designs after inverse transformation, and plot the correlations against $d$ in \ref{fig:UniVsNormDisc}. 
-It can be seen that the phenomenon of inconsistency in discrepancies becomes more pronounced as $d$ increases.
+We further investigate the relationship between the discrepancy of a uniform design and the  discrepancy of the same design after inverse normal transformation.
+Varying the dimension $d$ from $1$ to $10$, we calculate the sample correlation between $D(\vPsi(\Udes),F_\normal, K)$ and $D(\Udes,F_\unif,K_\unif) = D(\Udes',F_\unif',K)$ for $B=500$ IID designs of size $N=50$.  Figure \ref{fig:UniVsNormDisc} displays the correlation as a function of $d$. Although the correlation is positive, it degrades with increasing $d$.
 
-\begin{figure}[ht]
-\label{fig:DimVsDisc}
-\centering
-{\includegraphics[width=8cm]{dimVsdisc.eps}}
-\caption{Correlation between Uniform Discrepancy and Normal Discrepancy with Different Variable Dimensions}
-\end{figure}
+\FJH{Fred does not understand this example.}
+A simple example of integral approximation below shows that a naively inverse transformed sequence $\Udes$ could result in ridiculous estimate even if $D(\Udes,F_\unif, \tilde{K})$ is small.
 
-The root cause of this inconsistency can be revealed as follows. 
-For simplicity, let $d=1$. 
-Taking the inverse transformation $x_{i}=\Phi^{-1}_1(u_{i})$ in the normal discrepancy \eqref{eqn:discrepancy}, 
-\begin{align*}
-&D^2(\Xdes, \Phi_1, K) = \int_{[0,1]^2} K(\Phi^{-1}_1(u),\Phi^{-1}_1(u'))\dif \Phi(\Phi^{-1}_1(u))\dif \Phi(\Phi^{-1}_1(u'))\\
-&-\frac{2}{N}\sum_{i=1}^N \int_0^1 K(\Phi^{-1}_1(u),\Phi^{-1}_1(u_i))\dif \Phi(\Phi^{-1}_1(u))+\frac{1}{N^2}\sum_{i,k=1}^N K(\Phi^{-1}_1(u_i), \Phi^{-1}_1(u_j))\\
-&=\int_{[0,1]^2} K(\Phi^{-1}_1(u),\Phi^{-1}_1(u'))\dif u\dif u'\\
-&-\frac{2}{N}\sum_{i=1}^N \int_0^1 K(\Phi^{-1}_1(u),\Phi^{-1}_1(u_i))\dif u+\frac{1}{N^2}\sum_{i,k=1}^N K(\Phi^{-1}_1(u_i), \Phi^{-1}_1(u_j))\\
-&=D^2(\Udes,F_\unif,\tilde{K}),
-\end{align*}
-where $\tilde{K}(\cdot,\cdot)=K(\Phi^{-1}_1(\cdot), \Phi^{-1}_1(\cdot)): [0, 1]\rightarrow \mathbb{R}_{+}$. 
-Although $\tilde{K}(\cdot,\cdot)$ is still a valid kernel function for the uniform distribution, the resulting discrepancy $D(\Udes,F_\unif, \tilde{K})$ is no longer the same as $D_2(\Udes, F_\unif, K_2)$, and their difference only increases as the dimension $d$ becomes higher due to the effect of the product in $D_2(\Udes, F_\unif, K_2)$. 
-The difference in kernel $K_2$ and $\tilde{K}$ also leads to different RKHS of integrand functions. 
+\emph{Example}: Consider estimating the integral $\int_{\mathbb{R}^d} e^{|x_1|+\cdots+|x_d|}\dif \Phi(\vx)$ using Monte Carlo method, with $d=10$ and $N=200$ points. 
 
+% Table generated by Excel2LaTeX from sheet 'Sheet1'
+\begin{table}[htbp]
+  \centering
+  \caption{Estimate}
+    \begin{tabular}{rcccc}
+    \hline
+   $\Udes$       & $D(\Udes,F_\unif, \tilde{K})$     & $D(\vPsi(\Udes),F_\normal, K)$     & Estimate \\
+    \hline
+    $x$     &   0.1754    &  18.61     & 198.68 \\
+    $y$     &  0.1800      &  286.35     & $1.54\times 10^{32}$ \\
+    \hline
+    \end{tabular}%
+  \label{tab:addlabel}%
+\end{table}%
+
+\FJH{Fred got to here}
 \section{Improvement by the Coordinate-Exchange Method}\label{sec:CoordEx}
 
 In this section, we propose an efficient algorithm that improves the design's quality in terms of the discrepancy for the target standard normal distribution. 
@@ -529,17 +536,73 @@ Following the optimal design approach, we consider the discrepancy of the normal
 
 The optimization algorithm we choose is the coordinate-exchange algorithm, which was firstly introduced in \cite{meyer1995coordinate}, and then applied widely to construct various kinds of optimal design \cite{sambo2014coordinate,overstall2017bayesian,kang2018stochastic}. 
 The coordinate-exchange algorithm is an iterative optimization method.
-It finds the ``worst" coordinate $x_{ij}$ of the current design, and replace it with a better coordinate that improves the current design criterion. 
-The most appealing advantage of the coordinate-exchange algorithm is that it renders the $N\times d$ dimension of the decision variables of the original optimal design problem to just one dimension as it changes one coordinate at a time. 
-This greatly reduces the difficulty of the optimization problem. 
+It finds the ``worst" coordinate $x_{ij}$ of the current design and replace it with a better coordinate that decreases the discrepancy. 
+The most appealing advantage of the coordinate-exchange algorithm is that at each step one need only solve a univariate optimization problem.
 
-We format the $N$ points of $d$-dim design points $\{\vx_i\}_{i=1}^N$ into a design matrix  $\mX^\top =[\vx_1,\ldots, \vx_N]$, and $x_{ij}$ refers to the $(i,j)$-th element of $\mX$, and it also refers to the $j$-th dimension of the $i$-th sample point. 
-To find the ``worst'' coordinate, we use row and column deletion function, as in \cite{kang2018stochastic}.
-Define the row deletion function of the $i$-th row as follows. 
-\begin{eqnarray}\label{eq:rowdeletion}
-&& d_r(i) = D^2(\Xdes)-D^2(\Xdes\backslash \vx_i)\nonumber\\
-&=& -2\prod\limits_{s=1}^dc(x_{is}) + \frac{1}{N-1}\left(2\sum_{j=1}^N\prod_{s=1}^d h(x_{is},x_{js})-\prod_{s=1}^d h(x_{is},x_{is})\right). 
-\end{eqnarray}
+First, we define the point deletion function, $\frakd_p$, as the change in square discrepancy resulting from removing the a point from the design:
+\begin{equation}\label{eq:rowdeletion}
+\frakd_p(i) = D^2(\Xdes)-D^2(\Xdes\backslash \{\vx_i\}).
+\end{equation}
+Here, the design $\Xdes\backslash \{\vx_i\}$ is the $N-1$ point design with the point $\{\vx_i\}$ removed. We suppress the choice of target distribution and kernel in the above discrepancy notation for simplicity. We then choose 
+\begin{equation} \label{eq:rowchoice}
+    i^*=\argmax_{i=1,\ldots,N} \frakd_p(i).
+\end{equation}
+If $\frakd_p(i^*) > 0$, it means that the smaller design with $\vx_{i^*}$ removed has a smaller discrepancy. Thus, it is reasonable to assume that moving $\vx_{i^*}$ might lead to a smaller discrepancy. On the other hand, if $\frakd_p(i^*)< 0$, it means that removing any $\vx_i$ makes the discrepancy bigger, but removing $\vx_{i^*}$ does the least damage.  Again,  $\vx_{i^*}$ is a prime candidate for modification.
+
+Next, we define a coordinate deletion function, $\frakd_{c}$, as the change in the square discrepancy resulting from removing a coordinate in our calculation of the discrepancy:
+\begin{equation}\label{eq:coorddeletion}
+\frakd_c(k) = D^2(\Xdes)-D^2(\Xdes_{-k}).
+\end{equation}
+Here, the design $\Xdes_{-k}$ still has $N$ points but now only $d$ dimensions, the $k^{\text{th}}$ coordinate having been removed.  For this calculation to be feasible, we need the target distribution to independent marginals defined on the domain.  Also, the kernel to be of product form.  To simplify the notation, we assume a somewhat stronger condition, namely that each term in the product defining the kernel is the same for every coordinate:
+\begin{equation}
+    \label{eq:prodkernel}
+    \Omega = \tOmega \times \cdots \times \tOmega, \qquad K(\vt,\vx) = \prod_{k=1}^d \tK(t_k,x_k), \qquad \tK:\tOmega \times \tOmega \to \reals.
+\end{equation}
+where the term in the product is 
+We then choose 
+\begin{equation} \label{eq:rowchoice}
+    k^*=\argmax_{k=1, \ldots, d} \frakd_c(k).
+\end{equation}
+For reasons analogous to those given above, the $k^{*\text{th}}$ coordinate seems the best candidate for change.
+
+Let $\Xdes^*(x)$ denote the design that results from replacing $x_{i^*k^*}$ by $x$.  We now define $\Delta(x)$ as improvement in the squared discrepancy resulting from replacing $\Xdes$ by $\Xdes^*(x)$:
+\begin{equation}\label{eq:deltafun}
+\Delta(x) = D^2(\Xdes)-D^2(\Xdes^*(x)).
+\end{equation}
+If we can find an $x$ for which $\Delta(x)$ is positive, then we can reduce the discrepancy.  This is the rationale for the coordinate-exchange algorithm given in  Algorithm \ref{alg:coorex}. 
+
+\begin{algorithm}[ht]
+\caption{Coordinate exchange method\label{alg:coorex}}
+\begin{algorithmic}[1]
+\INPUT An initial design $\Xdes$ on the domain $\Omega$, a target distribution, $F$, and a kernel, $K$ of the form \eqref{eq:prodkernel}.
+\State Compute the point deletion function $\frakd_p(1), \ldots, \frakd_p(N)$ for the design $\Xdes$, and choose the row $i^*$ with the largest row deletion value, i.e. $i^* = \argmax_{i} \frakd_p(i)$. 
+\State Compute the coordinate deletion function $\frakd_c(1), \ldots, \frakd_c(d)$ and choose the column $j^*$ with the largest column deletion value, i.e., $k^* = \argmax_{k} \frakd_c(k)$. 
+\State Choose the replacement value for $x_{i^*k^*}$ by solving the univariate nonlinear optimization problem
+\[
+x^* = \argmax_{x \in \Omega_k} \Delta(x).
+\]
+\If{$\Delta(x^*>0$} 
+\State {Replace $x_{i^*k^*}$ with $x^*$ in the design $\Xdes$, i.e., let  $\Xdes(x^*)$ replace the old $\Xdes$.}
+\Else 
+\State{Terminate the algorithm and the design $\Xdes$.} 
+\EndIf
+\end{algorithmic}
+\end{algorithm}
+
+For kernels of product form, \eqref{eq:prodkernel}, and target distributions with independent marginals, the formula for the squared discrepancy in \eqref{eq:discDef} becomes
+\begin{align}
+\nonumber
+    D^2(\Xdes,\rho,K)  & = \prod_{k=1}^d c_k  - \frac 2N \sum_{i=1}^N \prod_{k=1}^d h_k(x_{ik}) + \frac{1}{N^2}  \sum_{i,j=1}^N \prod_{k=1}^d K_k(x_{ik},x_{jk}),
+    \intertext{where}
+    c_k & = \int_{\Omega_k \times \Omega_k} \tK_k(t_k,x_k) \, \varrho_k(t) \varrho_k (x) \, \dif t\dif x, \\
+    h_k(x) & = \int_{\Omega_k} \tK_k(t,x)  \, \varrho_k(t) \, \dif t.
+\end{align}
+Then the point deletion function becomes fred
+\begin{align}\label{eq:rowdeletionA}
+\frakd_p(i) 
+&= \frac{2}{N}\biggl[ \frac{1}{N-1} \sum_{\substack{j=1 \\ j \ne i}}^N \prod_{k=1}^d h_k(x_{ik}) - \prod_{k=1}^d h_k(x_{ik})  \biggr] \\
+& \qquad \qquad + \frac{1}{N^2}\biggl[\frac{1-2N}{(N-1)^2}\sum_{\substack{j,m=1 \\ j,m \ne i}}^N \tK_k(x_{jk},x_{mk}) + \sum_{j=1}^N\prod_{s=1}^d h(x_{is},x_{js})-\prod_{s=1}^d h(x_{is},x_{is})\biggr]. 
+\end{align}
 We use $D(\Xdes)$ as a simplified notation for the discrepancy as the target design is always standard normal distribution and the kernel function is \eqref{eq:OrigKernel}. 
 The notation $\Xdes\backslash \vx_i$ means that the design $\Xdes$ without the $i$-th point $\vx_i$. 
 Here $c(x)$ and $h(x,y)$ are 
@@ -576,7 +639,7 @@ The delta function can be computed as follows.
 \end{eqnarray} 
 We summarize the coordinate-exchange algorithm in Algorithm 1. 
 \begin{algorithm}[ht]
-\begin{algorithmic}[1]\label{alg:coorex}
+\begin{algorithmic}[1]%\label{alg:coorex}
 \caption{Coordinate exchange method}
 \State Set $k=0$.
 \State Compute the row deletion function $d_r(i)$ ($i=1,...,N$) for $N$ rows of $\mX^{(k)}$ and choose the row $i^*$ with the largest row deletion value, i,e, $i^* = \argmax_{i} d_r(i)$. 
@@ -615,18 +678,18 @@ Therefore, the inverse transformation of low-discrepancy uniform designs, such a
 
 \begin{figure}[ht]\label{fig:comparison}
 \centering
-{\subfigure[$d=2,N=30$] {\includegraphics[width=5.5cm]{boxplot_d2n30.eps}}}
+{\subfigure[$d=2,N=30$] {\includegraphics[width=5.5cm]{code/boxplot_d2n30.eps}}}
 \quad
 {\subfigure [$d=3, N=50$]
-{\includegraphics[width=5.5cm]{boxplot_d3n50.eps}}}
+{\includegraphics[width=5.5cm]{code/boxplot_d3n50.eps}}}
 \quad
-{\subfigure[$d=4, N=70$] {\includegraphics[width=5.5cm]{boxplot_d4n70.eps}}}
+{\subfigure[$d=4, N=70$] {\includegraphics[width=5.5cm]{code/boxplot_d4n70.eps}}}
 \quad
-{\subfigure[$d=5, N=90$] {\includegraphics[width=5.5cm]{boxplot_d5n90.eps}}}
+{\subfigure[$d=5, N=90$] {\includegraphics[width=5.5cm]{code/boxplot_d5n90.eps}}}
 \quad
-{\subfigure[$d=6, N=110$] {\includegraphics[width=5.5cm]{boxplot_d6n110.eps}}}
+{\subfigure[$d=6, N=110$] {\includegraphics[width=5.5cm]{code/boxplot_d6n110.eps}}}
 \quad
-{\subfigure[$d=7, N=130$] {\includegraphics[width=5.5cm]{boxplot_d7n130.eps}}}
+{\subfigure[$d=7, N=130$] {\includegraphics[width=5.5cm]{code/boxplot_d7n130.eps}}}
 \caption{Performance Comparison of Three Generators}\label{fig:generatorcomp}
 \end{figure}
 
