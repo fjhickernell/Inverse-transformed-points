@@ -92,6 +92,7 @@
 \newcommand{\frakd}{\mathfrak{d}}
 \newcommand{\tK}{\widetilde{K}}
 \newcommand{\tOmega}{\widetilde{\Omega}}
+\newcommand{\tvarrho}{\widetilde{\varrho}}
 
 \def\abs#1{\ensuremath{\left \lvert #1 \right \rvert}}
 
@@ -589,19 +590,22 @@ x^* = \argmax_{x \in \Omega_k} \Delta(x).
 \end{algorithmic}
 \end{algorithm}
 
-For kernels of product form, \eqref{eq:prodkernel}, and target distributions with independent marginals, the formula for the squared discrepancy in \eqref{eq:discDef} becomes
+For kernels of product form, \eqref{eq:prodkernel}, and target distributions with independent and identical marginals, the formula for the squared discrepancy in \eqref{eq:discDef} becomes
 \begin{align}
 \nonumber
     D^2(\Xdes,\rho,K)  & = c^d  - \frac 2N \sum_{i=1}^N \prod_{k=1}^d h(x_{ik}) + \frac{1}{N^2}  \sum_{i,j=1}^N \prod_{k=1}^d \tK(x_{ik},x_{jk}),
     \intertext{where}
-    c & = \int_{\Omega_k \times \Omega_k} \tK_k(t_k,x_k) \, \varrho_k(t) \varrho_k (x) \, \dif t\dif x, \\
-    h(x) & = \int_{\Omega_k} \tK_k(t,x)  \, \varrho_k(t) \, \dif t.
+    c & = \int_{\tOmega \times \tOmega} \tK(t_k,x_k) \, \tvarrho(t) \tvarrho (x) \, \dif t\dif x, \\
+    h(x) & = \int_{\tOmega} \tK_k(t,x)  \, \tvarrho(t) \, \dif t.
 \end{align}
-Then the point deletion function becomes fred
-\begin{align}\label{eq:rowdeletionA}
+Then the point deletion function becomes 
+\begin{align}
+\nonumber
 \frakd_p(i) 
-&= \frac{2}{N}\biggl[ \frac{1}{N-1} \sum_{\substack{j=1 \\ j \ne i}}^N \prod_{k=1}^d h_k(x_{ik}) - \prod_{k=1}^d h_k(x_{ik})  \biggr] \\
-& \qquad \qquad + \frac{1}{N^2}\biggl[\frac{1-2N}{(N-1)^2}\sum_{\substack{j,m=1 \\ j,m \ne i}}^N \tK_k(x_{jk},x_{mk}) + \sum_{j=1}^N\prod_{s=1}^d h(x_{is},x_{js})-\prod_{s=1}^d h(x_{is},x_{is})\biggr]. 
+&= \frac{2}{N}\biggl[ \frac{1}{N-1} \sum_{\substack{j=1 \\ j \ne i}}^N \prod_{k=1}^d h(x_{ik}) - \prod_{k=1}^d h(x_{ik})  \biggr] \\
+\nonumber
+& \qquad \qquad + \frac{1}{N^2}\biggl[\frac{1-2N}{(N-1)^2}\sum_{\substack{j,m=1 \\ j,m \ne i}}^N \prod_{k=1}^d \tK(x_{jk},x_{mk}) + 2 \sum_{\substack{j=1 \\ j \ne i}}^N\prod_{k=1}^d \tK(x_{ik},x_{jk}) \\
+& \qquad \qquad + \prod_{k=1}^d \tK(x_{ik},x_{ik})\biggr].  \label{eq:rowdeletionA}
 \end{align}
 We use $D(\Xdes)$ as a simplified notation for the discrepancy as the target design is always standard normal distribution and the kernel function is \eqref{eq:OrigKernel}. 
 The notation $\Xdes\backslash \vx_i$ means that the design $\Xdes$ without the $i$-th point $\vx_i$. 
