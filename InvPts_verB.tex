@@ -91,7 +91,7 @@
 \newcommand{\normal}{\textup{normal}}
 \newcommand{\frakd}{\mathfrak{d}}
 \newcommand{\tK}{\widetilde{K}}
-\newcommand{\tOmega}{\widetilde{Omega}}
+\newcommand{\tOmega}{\widetilde{\Omega}}
 
 \def\abs#1{\ensuremath{\left \lvert #1 \right \rvert}}
 
@@ -592,10 +592,10 @@ x^* = \argmax_{x \in \Omega_k} \Delta(x).
 For kernels of product form, \eqref{eq:prodkernel}, and target distributions with independent marginals, the formula for the squared discrepancy in \eqref{eq:discDef} becomes
 \begin{align}
 \nonumber
-    D^2(\Xdes,\rho,K)  & = \prod_{k=1}^d c_k  - \frac 2N \sum_{i=1}^N \prod_{k=1}^d h_k(x_{ik}) + \frac{1}{N^2}  \sum_{i,j=1}^N \prod_{k=1}^d K_k(x_{ik},x_{jk}),
+    D^2(\Xdes,\rho,K)  & = c^d  - \frac 2N \sum_{i=1}^N \prod_{k=1}^d h(x_{ik}) + \frac{1}{N^2}  \sum_{i,j=1}^N \prod_{k=1}^d \tK(x_{ik},x_{jk}),
     \intertext{where}
-    c_k & = \int_{\Omega_k \times \Omega_k} \tK_k(t_k,x_k) \, \varrho_k(t) \varrho_k (x) \, \dif t\dif x, \\
-    h_k(x) & = \int_{\Omega_k} \tK_k(t,x)  \, \varrho_k(t) \, \dif t.
+    c & = \int_{\Omega_k \times \Omega_k} \tK_k(t_k,x_k) \, \varrho_k(t) \varrho_k (x) \, \dif t\dif x, \\
+    h(x) & = \int_{\Omega_k} \tK_k(t,x)  \, \varrho_k(t) \, \dif t.
 \end{align}
 Then the point deletion function becomes fred
 \begin{align}\label{eq:rowdeletionA}
