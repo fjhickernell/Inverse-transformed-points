@@ -594,17 +594,16 @@ x^* = \argmax_{x \in \Omega_k} \Delta(x).
 For kernels of product form, \eqref{eq:prodkernel}, and target distributions with independent and identical marginals, the formula for the squared discrepancy in \eqref{eq:discDef} becomes
 \begin{align}
 \nonumber
-    D^2(\Xdes,\rho,K)  & = c^d  - \frac 2N \sum_{i=1}^N H(\vx_{i}) + \frac{1}{N^2}  \sum_{i,j=1}^N K(\vx_{i},x_{j}),
+    D^2(\Xdes,\rho,K)  & = (1+c)^d  - \frac 2N \sum_{i=1}^N H(\vx_{i}) + \frac{1}{N^2}  \sum_{i,j=1}^N K(\vx_{i},x_{j}),
     \intertext{where}
-    c & = \int_{\tOmega \times \tOmega} \tK(t_k,x_k) \, \tvarrho(t) \tvarrho (x) \, \dif t\dif x, \\
-    h(x) & = \int_{\tOmega} \tK_k(t,x)  \, \tvarrho(t) \, \dif t.
-    c & = \int_{\Omega_k \times \Omega_k} \tK_k(t_k,x_k) \, \varrho_k(t) \varrho_k (x) \, \dif t\dif x, \\
-    H(\vx) = \prod_{k=1}^d [1+ h(x_{k})]
-    h(x) & = \int_{\Omega_k} \tK_k(t,x)  \, \varrho_k(t) \, \dif t.
+    h(x) & = \int_{\tOmega} \tK_k(t,x)  \, \tvarrho(t) \, \dif t, \\
+    c & = \int_{\tOmega \times \tOmega} \tK(t_k,x_k) \, \tvarrho(t) \tvarrho (x) \, \dif t\dif x = \int_{\tOmega} h(x) \, \tvarrho(x) \, \dif x, \\
+    H(\vx) &= \prod_{k=1}^d [1+ h(x_{k})].
 \end{align}
+We note that an evaluation of $h(x)$ and $\tK(t,x)$ require $\Order(1)$ operations, while an evaluation of $H(\vx)$ and $K(\vt,\vx)$ require $\Order(d)$ operations.  The computation of $D(\Xdes,\rho,K)$ requires $\Order(dN^2)$ operations because of the double sum.
 For a standard multivariate normal target distribution and the kernel defined in \eqref{eq:OrigKernel}, we have
 \begin{align*}
-c &= 1+\sqrt{\frac{2}{\pi}}, \\
+c &= \sqrt{\frac{2}{\pi}}, \\
 h(x) &= \frac{1}{\sqrt{2\pi}}+\frac{1}{2}|x|-x[\Phi(x)-1/2]-\phi(x),\\
 \tK(t,x) &= \frac{1}{2} (|t|+ |x|- |x-t|).
 \end{align*}
@@ -613,74 +612,42 @@ The point deletion function defined in \eqref{eq:rowdeletion} then can be expres
 \begin{align}
 \nonumber
 \frakd_p(i) 
-&= \frac{(2N-1)c^d}{N^2} - \frac{2}{N}\biggl[ \frac{1}{N} \sum_{j=1}^N  H(\vx_{j}) + \left(1 - \frac 1N \right) H(\vx_{i})  \biggr] \\
+&= \frac{(2N-1)(1+c)^d}{N^2} - \frac{2}{N}\biggl[ \frac{1}{N} \sum_{j=1}^N  H(\vx_{j}) + \left(1 - \frac 1N \right) H(\vx_{i})  \biggr] \\
 \label{eq:rowdeletionA}
-& \qquad \qquad + \frac{1}{N^2}\biggl[2 \sum_{j=1}^N K(\vx_{i},\vx_{j})-\prod_{k=1}^d K(\vx_{i},\vx_{i})\biggr]. 
+& \qquad \qquad + \frac{1}{N^2}\biggl[2 \sum_{j=1}^N K(\vx_{i},\vx_{j})- K(\vx_{i},\vx_{i})\biggr]. 
 \end{align}
 The computational cost for $\frakd_p(1), \ldots, \frakd_p(N)$ is then $\Order(dN^2)$, which is the same order as the cost of the discrepancy of a single design.
 
+The coordinate deletion function defined in \eqref{eq:coorddeletion} can be be expressed as
+\begin{multline}\label{eq:coldeletionA}
+\frakd_c(k) = (c-1)c^{d-1} -\frac{2}{N}\sum_{i=1}^N \frac{h(x_{ik})H(\vx_i)}{1+h(x_{ik})}  \\
++\frac{1}{N^2}\sum_{i,j=1}^N \frac{\tK(x_{ik},x_{jk}) K(\vx_i,\vx_j)}{1+\tK(x_{ik},x_{jk})}  .
+\end{multline}
+The computational cost for $\frakd_c(1), \ldots, \frakd_p(d)$ is also $\Order(dN^2)$, which is the same order as the cost of the discrepancy of a single design.
 
 
+Finally, the  function $\Delta$ defined in \eqref{eq:deltafun} is given by
+\begin{align}\label{eq:deltafunction}
+\nonumber
+\Delta(x)
+&= -\frac{2\left[  h(x_{i^*k^*})-h(x)    \right]H(\vx_{i^*})}{N[1 + h(x_{i^*k^*})]}   \\
+\nonumber
+& \qquad \qquad +\frac{1}{N^2}\left(2\sum_{i=1}^N  \frac{[\tK(x_{i^*k^*},x_{ik^*})-\tK(x,x_{ik^*})] K(\vx_{i^*},\vx_i)} {1 + \tK(x_{i^*k^*},x_{ik^*})} \right . \\
+& \qquad \qquad \left . - \frac{[\tK(x_{i^*k^*},x_{i^*k^*})-\tK(x,x)] K(\vx_{i^*},\vx_{i^*})} {1 + \tK(x_{i^*k^*},x_{i^*k^*})} \right )
+\end{align} 
+If we drop the terms that are independent of $x$, then we can maximize the function
+\begin{equation}\label{eq:deltapfunction}
+\Delta'(x) = Ah(x)  - \frac{1}{N}\sum_{i=1}^N B_i \tK(x,x_{ik^*}) + C \tK(x,x)
+\end{equation}
+where
+\begin{equation*}
+A = \frac{2H(\vx_{i^*})}{1 + h(x_{i^*k^*})}, \quad
+B_i  = \frac{2K(\vx_{i^*},\vx_i)} {1 + \tK(x_{i^*k^*},x_{ik^*})}, \quad
+C  = \frac{K(\vx_{i^*},\vx_{i^*})} {N[1 + \tK(x_{i^*k^*},x_{i^*k^*})]}.
+\end{equation*}
+Note that $A, B_1, \ldots, B_N, C$ only need to be computed once for each iteration of the coordinate exchange algorithm.
 
 
-
-
-
-We use $D(\Xdes)$ as a simplified notation for the discrepancy as the target design is always standard normal distribution and the kernel function is \eqref{eq:OrigKernel}. 
-The notation $\Xdes\backslash \vx_i$ means that the design $\Xdes$ without the $i$-th point $\vx_i$. 
-Here $c(x)$ and $h(x,y)$ are 
-\begin{align*}
-c(x) &= 1+\frac{1}{\sqrt{2\pi}}+\frac{1}{2}|x|-x[\Phi_1(x)-1/2]-\phi(x),\\
-h(x,y) &= 1+\frac{1}{2}|x|+\frac{1}{2}|y|-\frac{1}{2}|x-y|.
-\end{align*}
-The definition of $d_r(i)$ represents the change in $D^2(\Xdes)$ when $\vx_i$ is removed from the design. 
-If $d_r(i)\geq 0$, it means that removing $\vx_i$ would lead to a smaller discrepancy. 
-Thus, it is reasonable to assume $\vx_i$ has the potential to be updated and leads to a smaller discrepancy. 
-Among all the design points that $d_r(i)\geq 0$, we should pick the $i_0$ that has largest $d_r(i)$, because removing $\vx_i$ leads to the biggest improvement, so we consider this row has the biggest potential. 
-On the other hand, if $d_r(i)< 0$, it means that removing $\vx_i$ would make the discrepancy bigger, and thus make the design worse, so we should keep $\vx_i$ in the design. 
-However, if $d_r(\vx_i)\leq 0$ for $i=1,\ldots, N$, and we must pick a row index, then we should pick the $i_0$ that has the smallest $\abs{d_r(\vx_i)}$ because removing $\vx_{i_0}$ would make the design worse with the least degree compared to other indices. 
-Combining both scenarios, we should pick the row index by 
-\[
-i^*=\argmax_{i=1,\ldots,N} d_r(i).
-\]
-Similarly, we define the column deletion function as follows. 
-\begin{eqnarray}\label{eq:coldeletion}
-d_c(j) &=& -\frac{2}{N}\sum_{i=1}^N(c(x_{ij})-1)\prod\limits_{\substack{s=1,\\ s\neq j}}^dc(x_{is})\nonumber\\ 
-&&+\frac{1}{N^2}\sum_{\substack{i=1,\\ r=1}}^N\left(h(x_{ij},x_{rj})-1\right)\prod_{\substack{s=1\\s\neq j}}^d h(x_{is},x_{rs}).
-\end{eqnarray}
-We pick the column index by 
-\[
-j^*=\argmax_{j=1,\ldots,d} d_c(j).
-\]
-Once the $(i^*, j^*)$-th coordinate is identified to be changed, we compute the delta function $\Delta(x_{i^*j^*},x)$, which represents the decrease in $D^2(\Xdes)$, if $x_{i^*j^*}$ is replaced by $x \in \mathbb{R}$. 
-The delta function can be computed as follows. 
-\begin{eqnarray}\label{eq:deltafunction}
-&&\Delta(x_{{i^*j^*}}, x)\nonumber\\
-&=& -\frac{2}{N}\left(c(x_{i^*j^*})-c(x)\right)\prod\limits_{\substack{j=1,\\j\neq j^*}}^dc(x_{i^*j})\nonumber\\
-&&+\frac{1}{N^2}\left(2\sum_{\substack{i=1,\\i\neq i^*}}^N(h(x_{i^*j^*},x_{ij^*})-h(x,x_{ij^*}))\prod_{\substack{j=1,\\j\neq j^*}}^dh(x_{i^*j},x_{ij})\right.\nonumber\\
-&&\left.+(|x_{i^*j^*}|-|x|)\prod_{\substack{j=1,\\j\neq j^*}}^d[1+|x_{i^*j}|]\right)
-\end{eqnarray} 
-We summarize the coordinate-exchange algorithm in Algorithm 1. 
-\begin{algorithm}[ht]
-\begin{algorithmic}[1]%\label{alg:coorex}
-\caption{Coordinate exchange method}
-\State Set $k=0$.
-\State Compute the row deletion function $d_r(i)$ ($i=1,...,N$) for $N$ rows of $\mX^{(k)}$ and choose the row $i^*$ with the largest row deletion value, i,e, $i^* = \argmax_{i} d_r(i)$. 
-\State Compute the column deletion function $d_c(j)$ ($j=1,...,d$) for $d$ columns of $\mX^{k}$ and choose the column $j^*$ with the largest column deletion value, i.e., $j^* = \argmax_{j} d_c(j)$. 
-\State Solve the univariate nonlinear optimization problem
-$$\max_{x} \Delta(x_{i^*j^*},x),\,\,\,\,\text{s.t.} x\in \mathbb{R},$$
-and denote the optimal solution as $x^*$.
-\If{$\Delta(x_{i^*j^*},x^*)>0$} 
-\State {replace $x_{i^*j^*}$ with $x^*$ and the define the new design as $\mX^{(k+1)}$.}
-\State {$k=k+1$.}
-\Else 
-\State{terminate the algorithm and conclude the current design is optimal.} 
-\EndIf
-\end{algorithmic}
-\end{algorithm}
-
-It's worth pointing out that although the three functions, $d_r, d_c$ and $\Delta$ need to computed in each iteration for multiple times, most evaluations only involve $c(x_{ij})$ and $h(x_{ij},x_{rs})$, $i,r = 1,...,N, j,s=1,...,d$, which only need to be computed once before the design is updated. 
-The maximization of $\Delta$ function is a one-dimension unconstrained optimization and can be easily solved by any unconstrained nonlinear optimization methods. 
 
 \section{Simulation}
 
