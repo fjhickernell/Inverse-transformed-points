@@ -1,7 +1,7 @@
 function [error_bad, error] = bad_example
 
-N =512;
-d=10;
+N = 512;
+d = 10;
 
 %generate 2-d uniform random numbers
 p = sobolset(d);
@@ -37,13 +37,43 @@ disc_normaly
 % error_invx = abs(est_invx-true)/true
 % error_invy = abs(est_invy-true)/true
 
-integrand =@(z) 1./(1+1e-8*sum(z.^2,2));
+c = 1e-4;
+integrand1 =@(z) sum(z,2)./(1+c^2*sum(z.^2,2)); trueIntegral1 = 0
+integrand2 =@(z) sum(z.^2,2)./(1+c^2*sum(z.^2,2)); 
+trueIntegral23 = ...
+(2*c^3*(-1 + c^2) + exp(1/(2*c^2))*sqrt(2*pi)*erfc(1/(sqrt(2)*c)))/(2*c^5)
+trueIntegral2 = ...
+   2^(-1-d/2) * c^(-2-d) * d * exp(1/(2*c^2)) * WGamma(-d/2, 1/(2*c^2))
 
-est_invx = mean(integrand(normal_x))
-est_invy = mean(integrand(normal_y))
+
+est_invx1 = mean(integrand1(normal_x))
+est_invy1 = mean(integrand1(normal_y))
+est_invx2 = mean(integrand2(normal_x))
+est_invy2 = mean(integrand2(normal_y))
 
 
 
 
 
 end
+
+function y = WGamma(a,x)
+%Wolfram's definition of Gamma(a,x) = gammainc(x,a,'upper')*gamma(a)
+%Since gamma(x,a) only works for a>0 we need to use the 
+a1 = mod(a,1) + 1;
+a2 = a - a1;
+if a2 >= 0
+   y = gammainc(x,a,'upper')*gamma(a);
+else 
+   y = gammainc(x,a1,'upper')*gamma(a1);
+   for aa = a1-1:-1:a
+      y = (y - x.^aa * exp(-x))/aa;
+   end
+end
+
+
+
+end
+
+
+
