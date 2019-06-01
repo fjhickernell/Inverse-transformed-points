@@ -28,7 +28,7 @@
 
 \usepackage{psfrag,bbm,epsf}
 \usepackage{xspace,subfigure}
-\usepackage{amssymb, xcolor,enumerate,float,mathtools,algorithmicx}
+\usepackage{amssymb, xcolor,enumerate,float,mathtools}
 \usepackage{algpseudocode}
 \usepackage{algorithm, algorithmicx}
 \usepackage[numbers]{natbib}
@@ -41,6 +41,8 @@
 \algnewcommand\PARAM{\item[\algorithmicparam]}
 \algnewcommand\algorithmicinput{\textbf{Input:}}
 \algnewcommand\INPUT{\item[\algorithmicinput]}
+\algnewcommand\algorithmicoutput{\textbf{Output:}}
+\algnewcommand\OUTPUT{\item[\algorithmicoutput]}
 %\algnewcommand\STATE{\item}
 \algnewcommand\RETURN{\State \textbf{Return }}
 
@@ -153,7 +155,7 @@ A natural transformation, $\vPsi(\vu)=[\Psi_1(u_1),\ldots,\Psi_d(u_d)]$, when $\
 \begin{equation}\label{eq:inverse}
 \Psi_j(u_j) = F_j^{-1}(u_j), \quad j =1, \ldots, d, \qquad \text{where } \Ftar(\vx) = F_1(u_1) \cdots F_d(u_d).
 \end{equation}
-A number of transformation methods for different distributions can be found in \cite{devroye2006nonuniform}. \FJH{How about Prof. Fang's books?}
+A number of transformation methods for different distributions can be found in \cite{devroye2006nonuniform} and Professor Fang's book \cite{FanWan94}.
 
 The question addressed in this chapter is whether the design $\Xdes$ resulting from transformation \eqref{eq:transPts} of a low discrepancy design, $\Udes$, is itself low discrepancy with respect to the target distribution $\Ftar$. 
 In other words, 
@@ -447,10 +449,10 @@ where $\Phi$ denotes the standard normal distribution function.  Then condition 
 \nonumber
      K(\vt,\vx) &= K_{\unif}(\vPsi^{-1}(\vt),\vPsi^{-1}(\vx)) \\
      \nonumber
-      &= \prod_{j=1}^d\left[1+\frac{1}{2}\left(\left|\Phi^{-1}(t_j)-1/2\right|+ \left|\Phi^{-1}(x_j)- 1/2 \right| \right . \right . \\
-      & \qquad \qquad \left.  \left . -\left|\Phi^{-1}(t_j)-\Phi^{-1}(x_j)\right|\right)\right].
+      &= \prod_{j=1}^d\left[1+\frac{1}{2}\left(\left|\Phi(t_j)-1/2\right|+ \left|\Phi(x_j)- 1/2 \right| \right . \right . \\
+      & \qquad \qquad \left.  \left . -\left|\Phi(t_j)-\Phi(x_j)\right|\right)\right].
 \end{align}
-In one dimension, the distance between two Dirac measures defined using the kernel $K_\unif$ above is $\norm{\delta_{x} - \delta_{t}} = \sqrt{x-t}$, whereas the distance defined using the kernel $K$ above is $\norm{\delta_{x} - \delta_{t}} = \sqrt{\Phi^{-1}(x)-\Phi^{-1}(t)}$.  Under kernel $K$, the distance between two Dirac measures can never be greater than one.  Such an assumption may be unpalatable.
+In one dimension, the distance between two Dirac measures defined using the kernel $K_\unif$ above is $\norm{\delta_{x} - \delta_{t}} = \sqrt{|x-t|}$, whereas the distance defined using the kernel $K$ above is $\norm{\delta_{x} - \delta_{t}} = \sqrt{|\Phi(x)-\Phi(t)|}$. Under kernel $K$, the distance between two Dirac measures can never be greater than one.  Such an assumption may be unpalatable.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Do Transformed Low Discrepancy Points Have Low Discrepancy More Generally}
@@ -507,29 +509,39 @@ Question \eqref{eq:BigQPrime} has a positive answer if and only if the lines pas
 \end{figure}
 
 We further investigate the relationship between the discrepancy of a uniform design and the  discrepancy of the same design after inverse normal transformation.
-Varying the dimension $d$ from $1$ to $10$, we calculate the sample correlation between $D(\vPsi(\Udes),F_\normal, K)$ and $D(\Udes,F_\unif,K_\unif) = D(\Udes',F_\unif',K)$ for $B=500$ IID designs of size $N=50$.  Figure \ref{fig:UniVsNormDisc} displays the correlation as a function of $d$. Although the correlation is positive, it degrades with increasing $d$.
+Varying the dimension $d$ from $1$ to $10$, we calculate the sample correlation between $D(\vPsi(\Udes),F_\normal, K)$ and $D(\Udes,F_\unif,K_\unif) = D(\Udes',F_\unif',K)$ for $B=500$ IID designs of size $N=50$.  Figure \ref{fig:DiscVsd} displays the correlation as a function of $d$. Although the correlation is positive, it degrades with increasing $d$.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=8cm]{code/dimVsdisc.eps}
+\caption{Correlation between Uniform Discrepancy and Normal Discrepancy with Different Variable Dimensions. \label{fig:DiscVsd}}
+\end{center}
+\end{figure}
 
 \FJH{Fred does not understand this example.}
-A simple example of integral approximation below shows that a naively inverse transformed sequence $\Udes$ could result in ridiculous estimate even if $D(\Udes,F_\unif, \tilde{K})$ is small.
+A simple example of integral approximation below shows that a naively inverse transformed sequence $\Udes$ could result in very misleading estimate even if $D(\Udes,F_\unif, K)$ is small.
 
-\emph{Example}: Consider estimating the integral $\int_{\mathbb{R}^d} e^{|x_1|+\cdots+|x_d|}\dif \Phi(\vx)$ using Monte Carlo method, with $d=10$ and $N=200$ points. 
+\emph{Example}: Consider estimating the integral
+\begin{align}\label{eq:badexample}
+\int_{\mathbb{R}^d} \frac{x_1+\cdots+x_d}{1+10^(-8)(x_1^2+\cdots+x_d^2)}\dif \Phi(\vx) & = \Ex(e^{|x_1+\cdots+x_d|}),\,\,\,\vx\sim N({\bf 0}, {\mathsf I}_d)
+\end{align}
+using Monte Carlo method, with $d=10$ and $N=2^{10}$ points. We start with two uniform random sequences. One is a Sobol sequence that has small uniform discrepancy, denoted as $\Udes_1$. Then we move the closest point to origin $0^d$ in $\Udes_1$ to $\left(10^{-15}\right)^d$, and denote the new sequence as $\Udes_2$. We compare the integral estimate with samples $\vPsi(\Udes_1)$ and $\vPsi(\Udes_2)$. Table \ref{tab:badexample} shows that the uniform discrepancies of $\Udes_1$ and $\Udes_2$ don't differ much, but the normal discrepancy of $\vPsi(\Udes_2)$ is far larger than that of $\vPsi(\Udes_1)$. What's more, the integral estimate using $\vPsi(\Udes_2)$ explodes while that of $\vPsi(\Udes_1)$ is reasonable. 
 
 % Table generated by Excel2LaTeX from sheet 'Sheet1'
 \begin{table}[htbp]
   \centering
-  \caption{Estimate}
-    \begin{tabular}{rcccc}
+  \caption{Comparison of Integral Estimate}
+    \begin{tabular}{ccccc}
     \hline
-   $\Udes$       & $D(\Udes,F_\unif, \tilde{K})$     & $D(\vPsi(\Udes),F_\normal, K)$     & Estimate \\
+   $\Udes$       & $D(\Udes,F_\unif, K)$     & $D(\vPsi(\Udes),F_\normal, K)$     & Estimate \\
     \hline
-    $x$     &   0.1754    &  18.61     & 198.68 \\
-    $y$     &  0.1800      &  286.35     & $1.54\times 10^{32}$ \\
+    $\Udes_1$     &   0.0286    &  18.57     & 251.33 \\
+    $\Udes_2$     &  0.0294      &  58.82     & $3.01\times 10^{31}$ \\
     \hline
     \end{tabular}%
-  \label{tab:addlabel}%
+  \label{tab:badexample}%
 \end{table}%
 
-\FJH{Fred got to here}
 \section{Improvement by the Coordinate-Exchange Method}\label{sec:CoordEx}
 
 In this section, we propose an efficient algorithm that improves the design's quality in terms of the discrepancy for the target standard normal distribution. 
@@ -574,33 +586,38 @@ Let $\Xdes^*(x)$ denote the design that results from replacing $x_{i^*k^*}$ by $
 If we can find an $x$ for which $\Delta(x)$ is positive, then we can reduce the discrepancy.  This is the rationale for the coordinate-exchange algorithm given in  Algorithm \ref{alg:coorex}. 
 
 \begin{algorithm}[ht]
-\caption{Coordinate exchange method\label{alg:coorex}}
+\caption{Coordinate Exchange Algorithm.\label{alg:coorex}}
 \begin{algorithmic}[1]
-\INPUT An initial design $\Xdes$ on the domain $\Omega$, a target distribution, $F$, and a kernel, $K$ of the form \eqref{eq:prodkernel}.
-\State Compute the point deletion function $\frakd_p(1), \ldots, \frakd_p(N)$ for the design $\Xdes$, and choose the row $i^*$ with the largest row deletion value, i.e. $i^* = \argmax_{i} \frakd_p(i)$. 
-\State Compute the coordinate deletion function $\frakd_c(1), \ldots, \frakd_c(d)$ and choose the column $j^*$ with the largest column deletion value, i.e., $k^* = \argmax_{k} \frakd_c(k)$. 
-\State Choose the replacement value for $x_{i^*k^*}$ by solving the univariate nonlinear optimization problem
+\INPUT An initial design $\Xdes$ on the domain $\Omega$, a target distribution, $F$, and a kernel, $K$ of the form \eqref{eq:prodkernel}, a small value $TOL$ to measure convergence of the algorithm, and the maximum allowed number of iterations, $I_{\max}$.
+\OUTPUT Low discrepancy design $\Xdes$. 
+\State Compute the squared discrepancy $D^2_0$ for the initial design $\Xdes$ and set the iteration index $i=0$.
+\For{$i=1,2,\ldots, I_{\max}$}
+\State Compute the point deletion function $\frakd_p(1), \ldots, \frakd_p(N)$. Choose the $i^*$-th point which has the largest point deletion value, i.e. $i^* = \argmax_{i} \frakd_p(i)$. 
+\State For the $i^*$-th point, Compute the coordinate deletion function $\frakd_c(1), \ldots, \frakd_c(d)$ and choose the $j^*$-th element which has the largest coordinate deletion value, i.e., $k^* = \argmax_{k} \frakd_c(k)$. 
+\State Replace the coordinate $x_{i^*k^*}$ by $x^*$ which is the solution of the univariate optimization
 \[
-x^* = \argmax_{x \in \Omega_k} \Delta(x).
+x^* = \argmax_{x \in \tOmega} \Delta(x).
 \]
-\If{$\Delta(x^*>0$} 
+\If{$\Delta(x^*)/D^2_{i-1}>TOL$} 
 \State {Replace $x_{i^*k^*}$ with $x^*$ in the design $\Xdes$, i.e., let  $\Xdes(x^*)$ replace the old $\Xdes$.}
+\State Update the squared discrepancy $D^2_{i}=D^2_{i-1}-\Delta(x^*)$. 
 \Else 
-\State{Terminate the algorithm and the design $\Xdes$.} 
+\State{Terminate the loop and return the design $\Xdes$.} 
 \EndIf
+\EndFor
 \end{algorithmic}
 \end{algorithm}
 
 For kernels of product form, \eqref{eq:prodkernel}, and target distributions with independent and identical marginals, the formula for the squared discrepancy in \eqref{eq:discDef} becomes
 \begin{align}
 \nonumber
-    D^2(\Xdes,\rho,K)  & = (1+c)^d  - \frac 2N \sum_{i=1}^N H(\vx_{i}) + \frac{1}{N^2}  \sum_{i,j=1}^N K(\vx_{i},x_{j}),
+    D^2(\Xdes,\rho,K)  & = (1+c)^d  - \frac 2N \sum_{i=1}^N H(\vx_{i}) + \frac{1}{N^2}  \sum_{i,j=1}^N K(\vx_{i},\vx_{j}),
     \intertext{where}
-    h(x) & = \int_{\tOmega} \tK_k(t,x)  \, \tvarrho(t) \, \dif t, \\
+    h(x) & = \int_{\tOmega} \tK(t,x)  \, \tvarrho(t) \, \dif t, \\
     c & = \int_{\tOmega \times \tOmega} \tK(t_k,x_k) \, \tvarrho(t) \tvarrho (x) \, \dif t\dif x = \int_{\tOmega} h(x) \, \tvarrho(x) \, \dif x, \\
     H(\vx) &= \prod_{k=1}^d [1+ h(x_{k})].
 \end{align}
-We note that an evaluation of $h(x)$ and $\tK(t,x)$ require $\Order(1)$ operations, while an evaluation of $H(\vx)$ and $K(\vt,\vx)$ require $\Order(d)$ operations.  The computation of $D(\Xdes,\rho,K)$ requires $\Order(dN^2)$ operations because of the double sum.
+An evaluation of $h(x)$ and $\tK(t,x)$ each require $\Order(1)$ operations, while an evaluation of $H(\vx)$ and $K(\vt,\vx)$ each require $\Order(d)$ operations.  The computation of $D(\Xdes,\rho,K)$ requires $\Order(dN^2)$ operations because of the double sum.
 For a standard multivariate normal target distribution and the kernel defined in \eqref{eq:OrigKernel}, we have
 \begin{align*}
 c &= \sqrt{\frac{2}{\pi}}, \\
@@ -632,12 +649,12 @@ Finally, the  function $\Delta$ defined in \eqref{eq:deltafun} is given by
 \Delta(x)
 &= -\frac{2\left[  h(x_{i^*k^*})-h(x)    \right]H(\vx_{i^*})}{N[1 + h(x_{i^*k^*})]}   \\
 \nonumber
-& \qquad \qquad +\frac{1}{N^2}\left(2\sum_{i=1}^N  \frac{[\tK(x_{i^*k^*},x_{ik^*})-\tK(x,x_{ik^*})] K(\vx_{i^*},\vx_i)} {1 + \tK(x_{i^*k^*},x_{ik^*})} \right . \\
-& \qquad \qquad \left . - \frac{[\tK(x_{i^*k^*},x_{i^*k^*})-\tK(x,x)] K(\vx_{i^*},\vx_{i^*})} {1 + \tK(x_{i^*k^*},x_{i^*k^*})} \right )
+& \qquad \qquad +\frac{1}{N^2}\left(2\sum_{\substack{i=1 \\ i \ne i^*}}^N  \frac{[\tK(x_{i^*k^*},x_{ik^*})-\tK(x,x_{ik^*})] K(\vx_{i^*},\vx_i)} {1 + \tK(x_{i^*k^*},x_{ik^*})} \right . \\
+& \qquad \qquad \left . + \frac{[\tK(x_{i^*k^*},x_{i^*k^*})-\tK(x,x)] K(\vx_{i^*},\vx_{i^*})} {1 + \tK(x_{i^*k^*},x_{i^*k^*})} \right )
 \end{align} 
 If we drop the terms that are independent of $x$, then we can maximize the function
 \begin{equation}\label{eq:deltapfunction}
-\Delta'(x) = Ah(x)  - \frac{1}{N}\sum_{i=1}^N B_i \tK(x,x_{ik^*}) + C \tK(x,x)
+\Delta'(x) = Ah(x)  - \frac{1}{N}\sum_{\substack{i=1 \\ i \ne i^*}}^N B_i \tK(x,x_{ik^*}) - C \tK(x,x)
 \end{equation}
 where
 \begin{equation*}
@@ -647,41 +664,94 @@ C  = \frac{K(\vx_{i^*},\vx_{i^*})} {N[1 + \tK(x_{i^*k^*},x_{i^*k^*})]}.
 \end{equation*}
 Note that $A, B_1, \ldots, B_N, C$ only need to be computed once for each iteration of the coordinate exchange algorithm.
 
+\FJH{Fred got to here}
 
 
 \section{Simulation}
 
-To demonstrate the performance of the $d$-dim standard normal design proposed in Section \ref{sec:CoordEx}, we compare three algorithms: (1) Randn: embedded normal random number generator `randn' from MATLAB;  (2) NG1: inverse transformed Sobol sequence; (3) NG2: improved NG1 with proposed Algorithm 1.  
+To demonstrate the performance of the $d$-dim standard normal design proposed in Section \ref{sec:CoordEx}, we compare three algorithms: (1) RAND: inverse transformed uniform random sequence;  (2) SOBOL: inverse transformed Sobol sequence; (3) E-SOBOL: inversed transformed scrambled Sobol sequence with uni-dimensional projection at $\left\{\frac{2i-1}{2N}\right\}_{i=1}^{2N}$; (4) CE: improved E-SOBOL with proposed Algorithm 1. 
 We have tried different combinations of dimension and sample size, and let the sample size become larger as the dimension becomes higher. 
 Using each algorithm we generate 500 designs, and for each design, we compute the discrepancy \eqref{eq:DisNormald>1} and compare the distribution of discrepancies from different algorithms as shown in Figure \ref{fig:comparison}. 
+
+Figure \ref{fig:SOBOLVsRAND} contains the boxplots of normal discrepancies corresponding to the four generators with $d=2$ and $N=32$. It shows that SOBOL, E-SOBOL and CE all outperform RAND by a great margin. To better present the comparison between the generators, in the follow figures, we exclude the boxplot from RAND.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=8cm]{code/boxplotall_d2n32.eps}
+\caption{Performance Comparison of Generators. \label{fig:SOBOLVsRAND}}
+\end{center}
+\end{figure}
+
 We summarize the observations as follows. 
 \begin{enumerate}
 \item
-NG1 and NG2 both outperform Randn by a great margin.
+Overall, E-SOBOL and CE outperform SOBOL. 
 \item 
-When the sample is relatively dense, i.e., $N/d$ ratio is large, NG1 and NG2 have similar performance, but the proposed NG2 is slightly better, as it takes the extra step to improve the relative high discrepancy via Algorithm 1.  
+When the sample is relatively dense, i.e., $N/d$ ratio is large, E-SOBOL and CE have similar performance. They both outperform SOBOL by a great margin
 \item
-As the sample becomes more sparse, i.e., $N/d$ ratio is smaller, the proposed NG2 becomes much superior to NG1.
+As the sample becomes more sparse, i.e., $N/d$ ratio is smaller, SOBOL and E-SOBOL have similar performance. The proposed CE becomes much superior to both of them.
 \end{enumerate}
-Therefore, the inverse transformation of low-discrepancy uniform designs, such as Sobol sequences is still preferable when the sample size is large relative to the dimension, and we recommend using the proposed remedy approach to further improve the inverse transformed Sobol sequences when the sample size is small or moderate. 
-
+Therefore, E-SOBOL sequences are preferable when the sample size is large relative to the dimension, and we recommend using the proposed remedy approach to further improve E-SOBOL when the sample size is small or moderate. 
 
 \begin{figure}[ht]\label{fig:comparison}
 \centering
-{\subfigure[$d=2,N=30$] {\includegraphics[width=5.5cm]{code/boxplot_d2n30.eps}}}
+{\subfigure[$d=2,N=32$] {\includegraphics[width=5.5cm]{code/boxplot_d2n32.eps}}}
 \quad
-{\subfigure [$d=3, N=50$]
-{\includegraphics[width=5.5cm]{code/boxplot_d3n50.eps}}}
+{\subfigure [$d=3, N=64$]
+{\includegraphics[width=5.5cm]{code/boxplot_d3n64.eps}}}
 \quad
-{\subfigure[$d=4, N=70$] {\includegraphics[width=5.5cm]{code/boxplot_d4n70.eps}}}
+{\subfigure[$d=4, N=64$] {\includegraphics[width=5.5cm]{code/boxplot_d4n64.eps}}}
 \quad
-{\subfigure[$d=5, N=90$] {\includegraphics[width=5.5cm]{code/boxplot_d5n90.eps}}}
+{\subfigure[$d=6, N=128$] {\includegraphics[width=5.5cm]{code/boxplot_d5n128.eps}}}
 \quad
-{\subfigure[$d=6, N=110$] {\includegraphics[width=5.5cm]{code/boxplot_d6n110.eps}}}
+{\subfigure[$d=8, N=256$] {\includegraphics[width=5.5cm]{code/boxplot_d8n256.eps}}}
 \quad
-{\subfigure[$d=7, N=130$] {\includegraphics[width=5.5cm]{code/boxplot_d7n130.eps}}}
-\caption{Performance Comparison of Three Generators}\label{fig:generatorcomp}
+{\subfigure[$d=10, N=512$] {\includegraphics[width=5.5cm]{code/boxplotall_d10n512.eps}}}
+\caption{Performance Comparison of Generators}
 \end{figure}
+
+We also report the average execution time of the four generators in Table \ref{tab:ExeTime}. All codes were run on a MacBook Pro with 2.4 GHz Intel Core i5 processor. Although CE requires the longest computational time compared to the other three generators, the execution time to achieve one sample is very reasonable. CE is quite computationally efficient and practical especially when the dimension is high and only a small sample is affordable.
+
+% Table generated by Excel2LaTeX from sheet 'Sheet1'
+\begin{table}[htbp]
+  \centering
+  \caption{Execution Time of Generators (in seconds)}
+    \begin{tabular}{ccccccc}
+    \hline
+          & $d=2,$   & $d=3,$   & $d=4,$   & $d=6,$   & $d=8,$   & $d=10,$ \\
+  & $N=32$   & $N=64$   & $N=64$   & $N=128$   & $N=256$   & $N =512$ \\
+    \hline
+    RAND  & $3.22\times 10^{-5}$      &  $5.21\times 10^{-5}$     & $5.27\times 10^{-5}$      &  $9.92\times 10^{-5}$     & $2.48\times 10^{-4}$      & $ 5.32\times 10^{-4}$ \\
+    SOBOL & $8.60\times 10^{-4}$      &  $0.10\times 10^{-2}$     &    $0.11\times 10^{-2}$   &  $0.16\times 10^{-2}$     & $0.21\times 10^{-2}$      &  $0.28\times 10^{-2}$\\
+    E-SOBOL & $8.71\times 10^{-4}$  & $0.11\times 10^{-2}$      &     $0.12\times 10^{-2}$  &  $0.16\times 10^{-2}$     &   $0.23\times 10^{-2}$    & $0.32\times 10^{-2}$  \\
+    CE    & $1.34\times 10^{-2}$      & $2.73\times 10^{-2}$      & $6.12\times 10^{-2}$      &   $0.24$    &   $1.04$    & $3.84$  \\
+    \hline
+    \end{tabular}%
+  \label{tab:ExeTime}%
+\end{table}%
+
+To further evaluate the performance of the normal random sequence generated by the four generators, we consider the integral approximation problem in \eqref{eq:badexample} with $d=10$. We use the Monte Carlo estimate with the sample generated by SOBOL of size $n = 2^{17}$ as an accurate estimate of the integral, and summarize the integral estimation error according to the four generators with simulation size $N=512$ in Figure \ref{fig:comparison_integral}. Not surprisingly, CE outperforms the other three generators and has no explosive relative error. It's interesting to see that SOBOL and E-SOBOL may perform even worse than RAND in several cases, and this aligns with our discussion in Section 4: the inverse transformed low uniform discrepancy sequence may not retain low normal discrepancy. When the sample size $N$ is small/moderate relative to dimension $d$, using CE would limit the potential danger of very inaccurate estimate caused by a sample with large normal discrepancy.
+
+
+
+\begin{figure}[ht]\label{fig:comparison_integral}
+\centering
+{\subfigure[$d=2,N=32$] {\includegraphics[width=5.5cm]{code/errorboxplot_d2n32.eps}}}
+\quad
+{\subfigure [$d=3, N=64$]
+{\includegraphics[width=5.5cm]{code/errorboxplot_d3n64.eps}}}
+\quad
+{\subfigure[$d=4, N=64$] {\includegraphics[width=5.5cm]{code/errorboxplot_d4n64.eps}}}
+\quad
+{\subfigure[$d=6, N=128$] {\includegraphics[width=5.5cm]{code/errorboxplot_d6n128.eps}}}
+\quad
+{\subfigure[$d=8, N=256$] {\includegraphics[width=5.5cm]{code/errorboxplot_d8n256.eps}}}
+\quad
+{\subfigure[$d=10, N=512$] {\includegraphics[width=5.5cm]{code/errorboxplot_d10n512.eps}}}
+\caption{Integral Approximate Performance Comparison of Generators}
+\end{figure}
+
+
 
 \section{Discussion}
 In this chapter, we summarize the three interpretations of the discrepancy. 
@@ -699,9 +769,11 @@ It's worth pointing out that the discrepancy defined in \eqref{eq:discDef} can b
 Then the discrepancy $D(\Xdes,\Ftar,K)$ can be computed using \eqref{eq:discDef}, and the two integrals in \eqref{eq:discDef} may require numerical approximations for some target distribution. 
 If the analytic formula of $D(\Xdes,\Ftar,K)$ can be derived, the coordinate-exchange algorithms can be applied in a similar fashion to improve the inverse transformation method. 
 
+\FJH{I should write about coordinate weights}
+
 
 \section*{Appendix}
-Derivation of \eqref{eq:DisNormald=1} and \eqref{eq:DisNormald>1}. 
+Derivation of \eqref{eq:DisNormald>1}. 
 \begin{proof}
 We first derive $D^2(\Xdes,\Phi_1,K)$ for $d=1$ case. 
 To compute the discrepancy, we first integrate the kernel once:

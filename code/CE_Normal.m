@@ -2,13 +2,14 @@
 
 function [low_discNormal,normaldisc] = CE_Normal(x)
 
-delta = 0.01;
-maxrun = 50;
+maxrun = 200;
 count = 0;
-opt_delta=-1;
+flag=1;
+delta = 1;
 
-while opt_delta< -1*10^(-10) && count<maxrun
-    [x,opt_delta] = coordinate_exchange(x);
+
+while delta>10^(-15) && count<200
+    [x,delta] = coordinate_exchange(x);
     count = count+1;
     normaldisc = normal_multidiscrepancy(x);
 end

@@ -1,55 +1,84 @@
-function [x,opt_delta] = coordinate_exchange(x)
+function [x,delta] = coordinate_exchange(x)
 
 N = size(x,1); %number of points
 d = size(x,2); %dimension
 
 temp_x = x';
 
-c = @(a) 1+1/sqrt(2*pi)+1/2*abs(a)-a*(normcdf(a)-1/2)-normpdf(a);
-h = @(a,b) 1+1/2*abs(a)+1/2*abs(b)-1/2*abs(a-b);
+c = sqrt(2/pi);
+h = @(a) 1/sqrt(2*pi)+1/2*abs(a)-a*(normcdf(a)-1/2)-normpdf(a);
+k = @(a,b) 1/2*(abs(a)+abs(b)-abs(a-b));
 
-c_mat = arrayfun(c,x); %function c evaluated all elements of x;
+h_vec = prod((1+arrayfun(h,x)),2); %vector H in the manuscript
 
-%[(h_mat)_1;(h_mat)_2;...;(h_mat)_N], with (h_mat)_i as a Nxd matrix = [h(x_i1,x_11),...,h(x_id,x_1d);....;h(x_i1,x_N1),...,h(x_id,x_Nd)]
-h_mat = zeros(N^2,d); %function h(x_ij,x_rj) for i,r=1,...,N,j=1,...,d.
+%k_tilde: N^2xd matrix, [k(x_1,x_j);k(x_2,x_j);....;k(x_N,x_j)]
+k_tilde = zeros(N^2,d); %matrix k_tilde in the manuscript
 D = zeros(N,N*d); %distance matrix
 
+%tic()
 for i = 1:N
     D(:,((i-1)*d+1): (i*d)) = abs(bsxfun(@minus, x(i,:), x));
 end
 
-h_mat = (reshape((1+1/2*abs(repmat((temp_x(:))',N,1))+ 1/2*abs(repmat(x,1,N))-1/2*abs(D))',d,N*N))';
+k_tilde = (reshape(1/2*(abs(repmat((temp_x(:))',N,1))+abs(repmat(x,1,N))-abs(D))',d,N*N))';
+%toc()
 
-row_deletion = -2*prod(c_mat,2)+(N-1)*(2*sum(reshape(prod(h_mat,2),N,N)',2)-prod((1+abs(x)),2));
+k_mat = reshape(prod(1+k_tilde,2),N,N); %NxN matrix, each row is prod(1+k_tilde) of x_i with other points
+
+%use the naive code to verify the above code
+% tic()
+% k_tilde1 = zeros(N^2,d);
+% for i = 1:N
+%     for j =1:N
+%         for p = 1:d
+%             k_tilde1((i-1)*N+j,p) = k(x(i,p),x(j,p));
+%         end
+%     end
+% end
+% toc()
+
+row_deletion = (2*N-1)*(1+c)^d/N-2*[1/N*sum(h_vec)+(1-1/N)*h_vec]+1/N*(2*sum(k_mat,2)-diag(k_mat));
 
 col_deletion = zeros(d,1);
 for j = 1:d
-    c_new = zeros(N,d);
-    h_new = zeros(N^2,d);
-    c_new = c_mat;
-    c_new(:,j) = c_mat(:,j)-1;
-    h_new = h_mat;
-    h_new(:,j) = h_mat(:,j)-1;
-    col_deletion(j) = -2*sum(prod(c_new,2))+1/N*sum(prod(h_new,2));
+    temp = arrayfun(h,x(:,j));
+    part1 = h_vec.*temp./(1+temp);
+    part2 = (k_tilde(:,j)./(1+k_tilde(:,j))).*reshape(k_mat,N^2,1);
+    col_deletion(j) = (c-1)*c^(d-1)-2/N*sum(part1)+1/N^2*sum(part2);
 end
 
 [opt_rowde,row_choice] = max(row_deletion);
 [opt_colde,col_choice] = max(col_deletion);
+change_point = x(row_choice,col_choice);
 
-change_row = x(row_choice,:);
-change_point = change_row(col_choice);
-change_col = x(:,col_choice);
-change_col(row_choice) = [];
-change_row(col_choice) = [];
-h_change = h_mat((row_choice-1)*N+2:row_choice*N,:);
-h_change(:,col_choice) = [];
+k_vec = (k_mat(row_choice,:))';
+k_vec(row_choice)=[];
+chosen_col = x(:,col_choice);
+chosen_col(row_choice)=[];
 
-h_prime = @(z) h(z,change_col);
-delta_function = @(y) 2*(c(change_point)-c(y))*prod(arrayfun(c,change_row))-1/N*(2*sum((h_prime(change_point)-h_prime(y)).*prod(h_change,2))+(abs(change_point)-abs(y))*prod(1+abs(change_row)));
+A = 2*h_vec(row_choice)/(1+h(change_point));
+B = 2*(k_vec./(1+k(change_point,chosen_col)));
+C = k_mat(row_choice,row_choice)/(N*(1+k(change_point,change_point)));
+
+const = -2*h(change_point)*h_vec(row_choice)/(1+h(change_point))+1/N*2*sum(k(change_point,chosen_col).*k_vec./(1+k(change_point,chosen_col)))+1/N*k_mat(row_choice,row_choice)*k(change_point,change_point)/(1+k(change_point,change_point));
+
+delta_function = @(y) -(A*h(y)-1/N*sum(B.*k(y,chosen_col))-C*k(y,y));
 [opt_value,opt_delta] = fminsearch(delta_function,change_point);
-if opt_delta< -1*10^(-10)
+delta = const-opt_delta;
+if delta>10^(-15)
     x(row_choice,col_choice) = opt_value;
 end
+
+
+
+
+
+
+
+
+
+
+
 
 
 
