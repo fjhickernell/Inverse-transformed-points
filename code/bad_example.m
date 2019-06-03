@@ -41,7 +41,8 @@ disc_normaly
 c = 1e-4;
 integrand1 =@(z) sum(z,2)./(1+c^2*sum(z.^2,2)); trueIntegral1 = 0
 integrand2 =@(z) sum(z.^2,2)./(1+c^2*sum(z.^2,2)); 
-trueIntegral2 = d
+trueIntegral2 = (2*pi^(d/2) / gamma(d/2)) * (2*pi)^(-d/2) ...
+   * integral(@(r) (r.^2./(1 + c.^2 * r.^2)) .* exp(-r.^2/2) .* r.^(d - 1), 0, Inf)
 
 est_invx1 = mean(integrand1(normal_x))
 est_invy1 = mean(integrand1(normal_y))
