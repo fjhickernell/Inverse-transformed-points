@@ -1,5 +1,6 @@
 function [error_bad, error] = bad_example
 
+rng(29)
 N = 512;
 d = 10;
 
@@ -40,16 +41,21 @@ disc_normaly
 c = 1e-4;
 integrand1 =@(z) sum(z,2)./(1+c^2*sum(z.^2,2)); trueIntegral1 = 0
 integrand2 =@(z) sum(z.^2,2)./(1+c^2*sum(z.^2,2)); 
-trueIntegral23 = ...
-(2*c^3*(-1 + c^2) + exp(1/(2*c^2))*sqrt(2*pi)*erfc(1/(sqrt(2)*c)))/(2*c^5)
-trueIntegral2 = ...
-   2^(-1-d/2) * c^(-2-d) * d * exp(1/(2*c^2)) * WGamma(-d/2, 1/(2*c^2))
-
+trueIntegral2 = d
 
 est_invx1 = mean(integrand1(normal_x))
 est_invy1 = mean(integrand1(normal_y))
 est_invx2 = mean(integrand2(normal_x))
 est_invy2 = mean(integrand2(normal_y))
+
+
+abs_err_invx1 = abs(trueIntegral1 - est_invx1)
+abs_err_invy1 = abs(trueIntegral1 - est_invy1)
+abs_err_invx2 = abs(trueIntegral2 - est_invx2)
+abs_err_invy2 = abs(trueIntegral2 - est_invy2)
+
+rel_err_invx2 = abs_err_invx2/abs(trueIntegral2)
+rel_err_invy2 = abs_err_invy2/abs(trueIntegral2)
 
 
 
