@@ -58,28 +58,9 @@ rel_err_invx2 = abs_err_invx2/abs(trueIntegral2)
 rel_err_invy2 = abs_err_invy2/abs(trueIntegral2)
 
 
-
-
-
-end
-
-function y = WGamma(a,x)
-%Wolfram's definition of Gamma(a,x) = gammainc(x,a,'upper')*gamma(a)
-%Since gamma(x,a) only works for a>0 we need to use the 
-a1 = mod(a,1) + 1;
-a2 = a - a1;
-if a2 >= 0
-   y = gammainc(x,a,'upper')*gamma(a);
-else 
-   y = gammainc(x,a1,'upper')*gamma(a1);
-   for aa = a1-1:-1:a
-      y = (y - x.^aa * exp(-x))/aa;
-   end
 end
 
 
-
-end
 
 
 
