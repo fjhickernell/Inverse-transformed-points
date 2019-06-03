@@ -137,15 +137,15 @@ Fred Hickernell \at Illinois Institute of Technology, 10 W 32nd Street, Chicago,
 %
 \maketitle
 
-\abstract{Write me later}
+\abstract{\FJH{Lulu or Yiou, please draft me.}}
 
 \section{Introduction}
 
-Professor Kai-Tai Fang and his collaborators have demonstrated the effectiveness of low discrepancy points as space filling designs \cite{FanWan94, FanLiSud06, FangHic07a}.  
-They promoted discrepancy as a quality measure for statistical experimental designs to the statistics, science, and engineering communities \cite{FanMaWin02, FanMuk00, FanMa01a, FanMa01b}. 
+Professor Kai-Tai Fang and his collaborators have demonstrated the effectiveness of low discrepancy points as space filling designs \cite{FangHic07a, FangEtal19a, FanLiSud06, FanWan94}.  
+They have promoted discrepancy as a quality measure for statistical experimental designs to the statistics, science, and engineering communities \cite{FanMa01b, FanMaWin02, FanMuk00, FanMa01a}. 
 
 Low discrepancy designs, $\Udes = \{\vu_i\}_{i=1}^N$, are typically constructed so that their empirical distribution, $F_\Udes$, approximates $F_\unif$, the uniform distribution on the unit cube, \cube.  
-The discrepancy measures how large $F_\unif-F_\Udes$ is.  
+The discrepancy measures the magnitude of $F_\unif-F_\Udes$.  
 
 When the target distribution for the design, $\Ftar$, defined over the experimental domain $\Omega$, is \emph{not} the uniform distribution on the unit cube, then one typically constructs the desired design, $\Xdes$, by transforming a low discrepancy uniform design, i.e., 
 \begin{equation} \label{eq:transPts}
@@ -156,28 +156,26 @@ A natural transformation, $\vPsi(\vu)=[\Psi_1(u_1),\ldots,\Psi_d(u_d)]$, when $\
 \begin{equation}\label{eq:inverse}
 \Psi_j(u_j) = F_j^{-1}(u_j), \quad j =1, \ldots, d, \qquad \text{where } \Ftar(\vx) = F_1(u_1) \cdots F_d(u_d).
 \end{equation}
-A number of transformation methods for different distributions can be found in \cite{devroye2006nonuniform} and Professor Fang's book \cite{FanWan94}.
+A number of transformation methods for different distributions can be found in \cite{devroye2006nonuniform} and  \cite[Chap.\ 1]{FanWan94}.
 
 The question addressed in this chapter is whether the design $\Xdes$ resulting from transformation \eqref{eq:transPts} of a low discrepancy design, $\Udes$, is itself low discrepancy with respect to the target distribution $\Ftar$. 
 In other words, 
-\begin{equation} \label{BigQ} \tag{Q}
+\begin{equation} \label{eq:BigQ} \tag{Q}
 \text{\emph{does small $F_\unif - F_\Udes$ imply small $\Ftar - F_\Xdes$?}}
 \end{equation}
-We demonstrate that the answer may be yes or no, depending on how the question is posed.  
+We demonstrate that the answer may be yes or no, depending on how the question is understood.  
 We discuss both cases.  
 For illustrative purposes, we consider the case where $\Ftar$ is the multivariate standard normal distribution.
 
-In the rest of this chapter, we first explain the discrepancy that measures how large $\Ftar - F_\Xdes$ is and motivate it from three different perspectives.  Next, we show how the inverse transformation can lead to does not always preserve the low discrepancy of a design.
-We also propose a remedy method to improve the design in terms of the discrepancy between $\Ftar$ and $F_\Xdes$. 
-Numerical examples are used to show the performance of the method. 
+In the next section of this chapter, we first explain the discrepancy that measures how large $\Ftar - F_\Xdes$ is and motivate it from three different perspectives.  In Section \ref{sec:WhenYes} we give simple condition under which the answer to \eqref{eq:BigQ} is yes.  But, if Section \ref{sec:DoTransformedPts} we show that under give a more practical condition the answer to \eqref{eq:BigQ} is no.  An example illustrates what can go wrong.  Section \ref{sec:CoordEx} provides a coordinate exchange algorithm that improves the discrepancy of an initial candidate design.  Simulation results illustrate the value of this algorithm.  We conclude with a brief discussion.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{The Discrepancy}
+\section{The Discrepancy} \label{sec:discrepancy}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Experimental design theory based on  discrepancy assumes an experimental region, $\Omega$, and a target probability distribution, $\Ftar:\Omega \to [0,1]$, which is known a priori. We assume that $\Ftar$ has a probability density, $\ftar$.  It is convenient to also work with measures, $\nu$, defined on $\Omega$.  If $\nu$ is a probability measure, the associated probability distribution is given by $F(\vx) = \nu((-\vinfty,\vx])$.  The Dirac measure, $\delta_{\vx}$ is the probability measure assigning unit measure to the point $\vx$.  A design, $\Xdes = \{\vx_i\}_{i=1}^N$, is a finite set of points that has an associated empirical distribution, $F_{\Xdes}  = N^{-1} \sum_{i=1}^N \bbone_{(-\vinfty,\vx_i]}$ as well as an associated empirical measure, $\nu_{\Xdes}  = N^{-1} \sum_{i=1}^N \delta_{\vx_i}$.
+Experimental design theory based on  discrepancy assumes an experimental region, $\Omega$, and a target probability distribution, $\Ftar:\Omega \to [0,1]$, which is known a priori. We assume that $\Ftar$ has a probability density, $\ftar$.  It is convenient to also work with measures, $\nu$, defined on $\Omega$.  If $\nu$ is a probability measure, the associated probability distribution is given by $F(\vx) = \nu((-\vinfty,\vx])$.  The Dirac measure, $\delta_{\vx}$ is the probability measure that assigns unit measure to the set $\{\vx\}$ and zero measure to sets not containing $\vx$.  A design, $\Xdes = \{\vx_i\}_{i=1}^N$, is a finite set of points that has an associated empirical distribution, $F_{\Xdes}  = N^{-1} \sum_{i=1}^N \bbone_{(-\vinfty,\vx_i]}$, as well as an associated empirical measure, $\nu_{\Xdes}  = N^{-1} \sum_{i=1}^N \delta_{\vx_i}$.
 
 Our notation for discrepancy takes the form of 
 \[
@@ -185,12 +183,12 @@ Our notation for discrepancy takes the form of
 \]
 all of which mean the same thing.  The first argument always refers to the design, the second argument always refers to the target, and the third argument is a symmetric, positive definite kernel, which is explained below.  We abuse the discrepancy notation because sometimes it is convenient to refer to the design as a set, $\Xdes$, other times by its empirical distribution, $F_{\Xdes}$, and other times by its empirical measure, $\nu_{\Xdes}$.  Likewise, sometimes it is convenient to refer the target as a probability measure,  $\nu$, other times by its distribution function, $F$, and other times by its density function, $\varrho$.
 
-In the remainder of this section we provide three interpretations of the discrepancy, summarized in Table \ref{tab:ThreeInterpTable}.  These results are derived previously in various places, including \cite{Hic99a}.  One interpretation is the norm of $\nu - \nu_{\Xdes}$.  The second and third interpretations consider the problem of evaluating the mean of a random variable $Y=f(\vX)$, or equivalently a multidimensional integral
+In the remainder of this section we provide three interpretations of the discrepancy, summarized in Table \ref{tab:ThreeInterpTable}.  These results are presented in various places, including \cite{Hic99a,Hic17a}.  One interpretation of discrepancy is the norm of $\nu - \nu_{\Xdes}$.  The second and third interpretations consider the problem of evaluating the mean of a random variable $Y=f(\vX)$, or equivalently a multidimensional integral
 \begin{equation}\label{eq:integration}
 \mu = \Ex(Y) = \Ex[f(\vX)] = \int_{\Omega} f(\vx) \, \varrho(\vx) \, \dif \vx,
 \end{equation}
 where $\vX$ is a random vector with density $\varrho$. The second
-interpretation is worst-case cubature error for integrands, $f$, in the unit ball of a Hilbert space.  The third interpretation is the root mean squared cubature error for integrands, $f$ which are realizations of a stochastic processes.
+interpretation of the discrepancy is worst-case cubature error for integrands, $f$, in the unit ball of a Hilbert space.  The third interpretation is the root mean squared cubature error for integrands, $f$, which are realizations of a stochastic processes.
 
 \begin{table}
 \centering
@@ -213,7 +211,7 @@ K(\vt,\vx) = \cov\bigl(f(\vt), f(\vx) \bigr) & \displaystyle \sqrt{\Ex \abs{\int
 \label{sec:HilbertMeasures}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Let $(\cm, \ip[\cm]{\cdot}{\cdot})$ be a Hilbert space of measures defined on the experimental region, $\Omega$.  Assume that $\cm$ includes all Dirac measures.  Define the function $K:\Omega \times \Omega \to \reals$ in terms of inner products of Dirac measures:
+Let $(\cm, \ip[\cm]{\cdot}{\cdot})$ be a Hilbert space of measures defined on the experimental region, $\Omega$.  Assume that $\cm$ includes all Dirac measures.  Define the kernel function $K:\Omega \times \Omega \to \reals$ in terms of inner products of Dirac measures:
 \begin{equation} \label{kerDeltaDef}
     K(\vt,\vx) := \ip[\cm]{\delta_{\vt}}{\delta_{\vx}}, \qquad \forall \vt, \vx \in \Omega.
 \end{equation}
@@ -256,7 +254,9 @@ The formula for the discrepancy may be written equivalently in terms of the prob
 \end{align}
 \end{subequations}
 
-The formulas for the discrepancy in \eqref{eq:discDef} depend inherently on the choice of $K$.  That is key to answering our question \eqref{BigQ}.  An often used kernel is 
+Typically the computational cost of evaluating $K(\vt,\vx)$ for any $(\vt,\vx) \in \Omega^2$ is $\Order(d)$, where $t$ is a $d$-vector.  Thus, assuming that the integrals above can be evaluated at a cost of $\Order(d)$, the computational cost of evaluating $D(\Xdes,\nu,K)$ is $\Order(dN^2)$.
+
+The formulas for the discrepancy in \eqref{eq:discDef} depend inherently on the choice of the kernel $K$.  That choice is key to answering our question \eqref{eq:BigQ}.  An often used kernel is 
 \begin{equation} \label{eq:OrigKernel}
      K(\vt,\vx)  = \prod\limits_{j=1}^d\left[1+ \frac 12 \left(|t_j|+ |x_j|- |x_j-t_j| \right)\right].
 \end{equation}
@@ -273,7 +273,7 @@ This kernel is plotted in Figure \ref{fig:kernelpict} for $d=1$.  Note that for 
     \label{fig:kernelpict}
 \end{figure}
 
-The discrepancy for the uniform distribution on the unit cube defined in terms of the above kernel is commonly called the $L^2$ discrepancy and is expressed as
+The discrepancy for the uniform distribution on the unit cube defined in terms of the above kernel is expressed as
 \begin{align} 
 \nonumber
     D^2(\Udes,F_\unif,K)
@@ -283,7 +283,7 @@ The discrepancy for the uniform distribution on the unit cube defined in terms o
     \nonumber
     & = \left( \frac 43 \right)^d 
      - \frac 2N \sum_{i=1}^N \prod_{j=1}^d \left[1 + u_{ij} - \frac{u_{ij}^2}{2} \right] \\
-     & \qquad \qquad + \frac 1{N^2} \sum_{i,k=1}^N \prod_{j=1}^d \left[1+ \min(u_{ij},u_{ik})\right]
+     & \qquad \qquad + \frac 1{N^2} \sum_{i,k=1}^N \prod_{j=1}^d \left[1+ \min(u_{ij},u_{ik})\right].
 \end{align}
 
 
@@ -299,7 +299,7 @@ The integral $\mu = \int_{\Omega} f(\vx) \, \varrho(\vx) \, \dif \vx$, which was
 \begin{equation}\label{eq:cubature}
 \hat{\mu}=\frac{1}{N}\sum_{i=1}^N f(\vx_i).
 \end{equation}
-The quality of this approximation to the integral, or cubature, depends in part on how well the empirical distribution of the design, $\Xdes = \{\vx_i\}_{i=1}^N$, matches the target distribution $F$ associated with the density function $\varrho$. 
+The quality of this approximation to the integral, i.e., this cubature, depends in part on how well the empirical distribution of the design, $\Xdes = \{\vx_i\}_{i=1}^N$, matches the target distribution $F$ associated with the density function $\varrho$. 
 
 Define the cubature error as  
 \begin{align}
@@ -321,7 +321,7 @@ The first term on the right describes the contribution to the cubature error mad
 
 The square norm of the representer of the error functional is 
 \begin{align*}
-\norm[\ch]{\xi}^2& =\ip[\ch]{\xi}{\xi}=\err(\xi,\Xdes) \quad \text{since $\err(\cdot,\Xdes)$ represents the error functional}\\
+\norm[\ch]{\xi}^2& =\ip[\ch]{\xi}{\xi}=\err(\xi,\Xdes) \quad \text{since $\xi$ represents the error functional}\\
 & = \err(\err(K(\cdot,\cdot \cdot),\Xdes),\Xdes) \quad \text{since } \xi(\vx)=\err(K(\cdot,\vx),\Xdes)\\
 & =\int_{\Omega\times \Omega} K(\vt,\vx)\dif[F(\vx)-F_{\Xdes}(\vx)] \, \dif[F(\vt)-F_{\Xdes}(\vt)].
 \end{align*}
@@ -374,7 +374,7 @@ Now we interpret $K$ as the \emph{covariance kernel} for the stocastic process:
 \[
 K(\vt,\vx):=\Ex_{f\in \mathcal{A}}\left( [f(\vt)-m][f(\vx)-m]\right)=\cov(f(\vt),f(\vx)),\qquad \forall \vt, \vx\in \Omega. 
 \]
-It is straightforward to see that the kernel function is symmetric and positive definite. 
+It is straightforward to show that the kernel function is symmetric and positive definite. 
 
 Define the error functional $\err(\cdot,\Xdes)$ in the same way as in \eqref{eq:err}.  Now, the mean squared error is 
 \begin{align*}
@@ -392,8 +392,9 @@ D(\Xdes, F, K) =\sqrt{\Ex_{f\in\mathcal{A}}[(\err(f,\Xdes)]^2}=\sqrt{\Ex\abs{\in
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{When Transformed Low Discrepancy Points Also Have Low Discrepancy}
+\label{sec:WhenYes}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Having motivated the definition of discrepancy in \eqref{eq:discDef} from three perspectives, we now turn our attention to the question posed in \eqref{BigQ}, namely, does a transformation of low discrepancy points with respect to the uniform distribution yield low discrepancy points with respect to the new target distribution. In this section, we show a positive result, yet recognize some qualifications.
+Having motivated the definition of discrepancy in \eqref{eq:discDef} from three perspectives, we now turn our attention to question \eqref{eq:BigQ}, namely, does a transformation of low discrepancy points with respect to the uniform distribution yield low discrepancy points with respect to the new target distribution. In this section, we show a positive result, yet recognize some qualifications.
 
 Consider some symmetric, positive definite kernel, $K_\unif : (0,1)^d \times (0,1)^d \to \reals$, some uniform design $\Udes$, some other domain, $\Omega$, some other target distribution, $F$, and some transformation $\vPsi:(0,1)^d \to \Omega$ as defined in \eqref{eq:transPts}. Then the squared discrepancy of the uniform design can be expressed according to \eqref{eq:discDef} as follows:
 \begin{align} 
@@ -414,24 +415,24 @@ Consider some symmetric, positive definite kernel, $K_\unif : (0,1)^d \times (0,
 where the kernel $K$ is defined as
 \begin{subequations} \label{eq:BigQYes}
 \begin{equation} \label{eq:BigQYesa}
-    K(\vt,\vx) = K_{\unif}(\vPsi^{-1}(\vt),\vPsi^{-1}(\vx))
+    K(\vt,\vx) = K_{\unif}(\vPsi^{-1}(\vt),\vPsi^{-1}(\vx)),
 \end{equation}
 \emph{and provided that} the density, $\varrho$, corresponding to the target distribution, $F$, satisfies
 \begin{equation} \label{eq:BigQYesb}
-    \varrho(\vx) = \abs{\frac{\partial \vPsi^{-1}(\vx)}{\partial \vx}}
+    \varrho(\vx) = \abs{\frac{\partial \vPsi^{-1}(\vx)}{\partial \vx}}.
 \end{equation}
 \end{subequations}
 The above argument is summarized in the following theorem.
 
 \begin{theorem}
 Suppose that the design $\Xdes$ is constructed by transforming the design $\Udes$ according to the transformation \eqref{eq:transPts}.  Also suppose that conditions \eqref{eq:BigQYes} are satisfied.  Then $\Xdes$ has the same discrepancy with respect to the target distribution, $F$, defined by the kernel $K$ as does the original design $\Udes$ with respect to the uniform distribution and defined by the kernel $K_\unif$.  That is,
-\begin{equation}
-     D(\Xdes,F,K) = D(\Udes,F_{\unif},K_\unif)
-\end{equation}
-As a consequence, under conditions \eqref{eq:BigQYes}, question \eqref{BigQ} has a positive answer.
+\begin{equation*}
+     D(\Xdes,F,K) = D(\Udes,F_{\unif},K_\unif).
+\end{equation*}
+As a consequence, under conditions \eqref{eq:BigQYes}, question \eqref{eq:BigQ} has a positive answer.
 \end{theorem}
 
-Condition \eqref{eq:BigQYesb} may be easy to satisfy.  For example, it is automatically satisfied by the inverse cumulative distribution transform \eqref{eq:inverse}.  Condition \eqref{eq:BigQYesa} is simply a matter of definition of the kernel, $K$, but it is definition with consequences.  From the perspective of Section \ref{sec:HilbertMeasures}, changing the kernel means changing the definition of the distance between two Dirac measures.  From the perspective of Section \ref{sec:DetermBound}, changing the kernel means changing the definition of the Hilbert space of integrands, $f$, in \eqref{eq:integration}.   From the perspective of Section \ref{sec:RandomBound}, changing the kernel means changing the definition of the covariance kernel for the integrands, $f$, in \eqref{eq:integration}.
+Condition \eqref{eq:BigQYesb} may be easily satisfied.  For example, it is automatically satisfied by the inverse cumulative distribution transform \eqref{eq:inverse}.  Condition \eqref{eq:BigQYesa} is simply a matter of definition of the kernel, $K$, but it is definition with consequences.  From the perspective of Section \ref{sec:HilbertMeasures}, changing the kernel from $K_\unif$ to $K$ means changing the definition of the distance between two Dirac measures.  From the perspective of Section \ref{sec:DetermBound}, changing the kernel from $K_\unif$ to $K$ means changing the definition of the Hilbert space of integrands, $f$, in \eqref{eq:integration}.   From the perspective of Section \ref{sec:RandomBound}, changing the kernel from $K_\unif$ to $K$ means changing the definition of the covariance kernel for the integrands, $f$, in \eqref{eq:integration}.
 
 To illustrate this point, consider a cousin of the kernel in \eqref{eq:OrigKernel}, which places the reference point at $\boldsymbol{0.5} = (0.5, \ldots, 0.5)$, the center of the unit cube $(0,1)^d$:
 \begin{align}
@@ -456,10 +457,10 @@ where $\Phi$ denotes the standard normal distribution function.  Then condition 
 In one dimension, the distance between two Dirac measures defined using the kernel $K_\unif$ above is $\norm{\delta_{x} - \delta_{t}} = \sqrt{|x-t|}$, whereas the distance defined using the kernel $K$ above is $\norm{\delta_{x} - \delta_{t}} = \sqrt{|\Phi(x)-\Phi(t)|}$. Under kernel $K$, the distance between two Dirac measures can never be greater than one.  Such an assumption may be unpalatable.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Do Transformed Low Discrepancy Points Have Low Discrepancy More Generally}
+\section{Do Transformed Low Discrepancy Points Have Low Discrepancy More Generally} \label{sec:DoTransformedPts}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-From the discussion above indicates that condition \eqref{eq:BigQYesa} can be too restrictive.  We would like to compare the discrepancies of designs under kernels that do not satisfy that restriction.  In particular, we consider the centered $L^2$-discrepancy for uniform designs on $(0,1)^d$ defined by the kernel in \eqref{eq:L2kernel}:
+The discussion above indicates that condition \eqref{eq:BigQYesa} can be too restrictive.  We would like to compare the discrepancies of designs under kernels that do not satisfy that restriction.  In particular, we consider the centered $L^2$-discrepancy for uniform designs on $(0,1)^d$ defined by the kernel in \eqref{eq:L2kernel}:
 \begin{align*}
 \MoveEqLeft{D^2(\Udes, F_\unif, K_\unif)} \\
 & = \left(\frac{13}{12}\right)^d - \frac{2}{N}\sum_{i=1}^N \prod_{j=1}^d \left[1+\frac{1}{2}\left(|u_{ij}-1/2|-|u_{ij}-1/2|^2\right) \right]\\
@@ -475,9 +476,9 @@ then
 \begin{equation} \label{eq:desEquiv}
      D(\Udes',F'_\unif,K) = D(\Udes, F_\unif, K_\unif),
 \end{equation}
-where $K$ is the kernel defined above in \eqref{eq:OrigKernel}.  Recall that the origin is a special point in the definition of the inner product corresponding to this $K$ as a reproducing kernel in \eqref{eq:inner}.
+where $K$ is the kernel defined above in \eqref{eq:OrigKernel}.  
 
-Therefore, this $K$ from \eqref{eq:OrigKernel} is an appropriate kernel to use to define the the discrepancy for designs defined with respect to the standard normal distribution, which is also centered at the origin.  Such a discrepancy is 
+Recall that the origin is a special point in the definition of the inner product for the Hilbert space with $K$ as its reproducing kernel in \eqref{eq:inner}.  Therefore, this $K$ from \eqref{eq:OrigKernel} is appropriate for defining the discrepancy for target distributions centered at the origin, such as the standard normal distribution, $F_\normal$.  Such a discrepancy is 
 \begin{align}\label{eq:DisNormald>1}
 \nonumber
 \MoveEqLeft{D^2(\Xdes, F_\normal, K) = \left(1+\sqrt{\frac{2}{\pi}}\right)^d}\\
@@ -488,10 +489,9 @@ Therefore, this $K$ from \eqref{eq:OrigKernel} is an appropriate kernel to use t
 Here, $\phi$ is the standard normal probability density function. 
 The derivation of \eqref{eq:DisNormald>1} is given in the Appendix. 
 
-%\section{Inconsistency in Discrepancy}\label{sec:inconsistency}
-Now we numerically compare the discrepancy of a uniform design, $\Udes'$ given by \eqref{eq:Updef} and the discrepancy of a design constructed by the inverse normal transformation, i.e.,  $\Xdes = \vPsi(\Udes)$ for $\vPsi$ in \eqref{eq:invNormTrans}, where the $\Udes$ leading to both is identical.  We do not expect the magnitudes of the discrepancies to be the same, but we ask
+We numerically compare the discrepancy of a uniform design, $\Udes'$ given by \eqref{eq:Updef} and the discrepancy of a design constructed by the inverse normal transformation, i.e.,  $\Xdes = \vPsi(\Udes)$ for $\vPsi$ in \eqref{eq:invNormTrans}, where the $\Udes$ leading to both $\Udes'$ and $\Xdes$ is identical.  We do not expect the magnitudes of the discrepancies to be the same, but we ask
 \begin{multline} \tag{Q'} \label{eq:BigQPrime}
-    \text{does } D(\Udes'_1,F'_\unif, K)\leq D(\Udes_2',F_\unif', K) \\
+    \text{Does } D(\Udes'_1,F'_\unif, K)\leq D(\Udes_2',F_\unif', K) \\
     \text{imply }
      D(\vPsi(\Udes_1),F_\normal, K)\leq D(\vPsi(\Udes_2),F_\normal, K)?
 \end{multline}
@@ -519,18 +519,17 @@ Varying the dimension $d$ from $1$ to $10$, we calculate the sample correlation 
 \end{center}
 \end{figure}
 
-\FJH{Changing example.}
-
 
 \begin{example} A simple cubature example illustrates that a naively inverse transformed low discrepancy design, $\Udes$, may yield a large $D(\vPsi(\Udes),F_\normal, K)$ and also a large cubature error. Consider the integration problem in \eqref{eq:integration} with
 \begin{subequations} \label{eq:badexample}
 \begin{gather}
 \vX \sim  N(\vzero, {\mathsf I}_d), \qquad f(\vx) = \frac{x_1^2+\cdots+x^2_d}{1+10^{-8}(x_1^2+\cdots+x_d^2)}, \qquad Y = f(\vX),\\
-\mu = \Ex(Y) = \int_{\reals^d} \frac{x_1^2+\cdots+x^2_d}{1+10^{-8}(x_1^2+\cdots+x_d^2)} \phi(\vx) \, \dif \vx
+\label{eq:badexampleb}
+\mu = \Ex(Y) = \int_{\reals^d} \frac{x_1^2+\cdots+x^2_d}{1+10^{-8}(x_1^2+\cdots+x_d^2)} \phi(\vx) \, \dif \vx,
 \end{gather}
 \end{subequations}
-where $\phi$ is the probability density function for the standard multivariate normal distribution.
-Since the integrand above is a function of $x_1^2 + \cdots + x_d^2$, $\mu$ can be written as a one dimensional integral.  For $d=10$, $\mu = 10$ to at least $15$ significant digits using quadrature.
+where $\phi$ is the probability density function for the standard multivariate normal distribution.  The function $f:\reals^d \to \reals$ is constructed to asymptote to a constant as $\norm[2]{\vx}$ tends to infinity to ensure that $f$ lies inside the Hilbert space corresponding to the kernel $K$ defined in \eqref{eq:OrigKernel}.
+Since the integrand in \eqref{eq:badexampleb} is a function of $\norm[2]{\vx}$, $\mu$ can be written as a one dimensional integral.  For $d=10$, $\mu = 10$ to at least $15$ significant digits using quadrature.
 
 We can also approximate the integral in \eqref{eq:badexample} using a $d=10$, $N=512$ cubature \eqref{eq:cubature}.  We compare cubatures using two designs.  The design $\Xdes_1$ is the inverse normal transformation of a scrambled Sobol' sequence, $\Udes_1$, which has low discrepancy with respect to the uniform distribution on the $d$-dimensional unit cube.  The design $\Udes_2$ takes the point in $\Udes_1$ that is closet to $\vzero$ and moves it to $\left(10^{-15}, \ldots, 10^{-15}\right)$, which is very close to $\vzero$.  As seen in Table \ref{tab:badexample}, the two uniform designs have quite similar, small discrepancies.  However, the transformed designs, $\Xdes_j = \vPsi(\Udes_j)$ for $j=1,2$, have much different discrepancies with respect to the normal distribution.  This is due to the point in $\Xdes_2$ that has large negative coordinates.  Furthermore, the cubatures, $\hat{\mu}$, based on these two designs have significantly different errors.  The first design has both a smaller discrepancy and a smaller error than the second.  This could not have been induced by looking at the discrepancies of the original uniform designs.
 
@@ -567,7 +566,9 @@ We can also approximate the integral in \eqref{eq:badexample} using a $d=10$, $N
 
 \end{example}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Improvement by the Coordinate-Exchange Method}\label{sec:CoordEx}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 In this section, we propose an efficient algorithm that improves the design's quality in terms of the discrepancy for the target standard normal distribution. 
 We start with a low-discrepancy uniform design, such as a Sobol sequence, and apply the inverse transformation to the design so that the transformed design approximates the target distribution, which is the standard normal distribution in this work. 
@@ -692,7 +693,9 @@ Note that $A, B_1, \ldots, B_N, C$ only need to be computed once for each iterat
 \FJH{Fred got to here}
 
 
-\section{Simulation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Simulation} \label{sec:Simulation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 To demonstrate the performance of the $d$-dim standard normal design proposed in Section \ref{sec:CoordEx}, we compare three algorithms: (1) RAND: inverse transformed uniform random sequence;  (2) SOBOL: inverse transformed Sobol sequence; (3) E-SOBOL: inversed transformed scrambled Sobol sequence with uni-dimensional projection at $\left\{\frac{2i-1}{2N}\right\}_{i=1}^{2N}$; (4) CE: improved E-SOBOL with proposed Algorithm 1. 
 We have tried different combinations of dimension and sample size, and let the sample size become larger as the dimension becomes higher. 
@@ -756,7 +759,7 @@ We also report the average execution time of the four generators in Table \ref{t
 \end{table}%
 
 \begin{comment}
-To further evaluate the performance of the normal random sequence generated by the four generators, we consider the integral approximation problem in \eqref{eq:badexample} with $d=10$. We use the Monte Carlo estimate with the sample generated by SOBOL of size $n = 2^{17}$ as an accurate estimate of the integral, and summarize the integral estimation error according to the four generators with simulation size $N=512$ in Figure \ref{fig:comparison_integral}. Not surprisingly, CE outperforms the other three generators and has no explosive relative error. It's interesting to see that SOBOL and E-SOBOL may perform even worse than RAND in several cases, and this aligns with our discussion in Section 4: the inverse transformed low uniform discrepancy sequence may not retain low normal discrepancy. When the sample size $N$ is small/moderate relative to dimension $d$, using CE would limit the potential danger of very inaccurate estimate caused by a sample with large normal discrepancy.
+To further evaluate the performance of the normal random sequence generated by the four generators, we consider the integral approximation problem in \eqref{eq:badexample} with $d=10$. We use the Monte Carlo estimate with the sample generated by SOBOL of size $n = 2^{17}$ as an accurate estimate of the integral, and summarize the integral estimation error according to the four generators with simulation size $N=512$ in Figure \ref{fig:comparison_integral}. Not surprisingly, CE outperforms the other three generators and has no explosive relative error. It's interesting to observe that SOBOL and E-SOBOL may perform even worse than RAND in several cases, and this aligns with our discussion in Section 4: the inverse transformed low uniform discrepancy sequence may not retain low normal discrepancy. When the sample size $N$ is small/moderate relative to dimension $d$, using CE would limit the potential danger of very inaccurate estimate caused by a sample with large normal discrepancy.
 
 
 
@@ -779,8 +782,10 @@ To further evaluate the performance of the normal random sequence generated by t
 \end{comment}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Discussion} \label{sec:discussion}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Discussion}
 In this chapter, we summarize the three interpretations of the discrepancy. 
 It is a measure on how well the empirical distribution of a design approximates the target distribution or a tight upper bound of some quadrature of an integral approximation, or the root mean squared cubature error of an integral approximation when the integrand is a stochastic process. 
 Then, we point out a flaw of the inverse transformation method, which is used to generate random samples (or designs) following any non-uniform distribution. 
@@ -849,6 +854,7 @@ The discrepancy can be obtained
 \end{eqnarray*}       
 \end{proof}
 
+\FJH{Lulu, could you please make the references consistent, i.e., all initials and not first names.  Also please use AMS standard abbreviations for the journals.}
 \bibliographystyle{amsplain}
 %\bibliography{FJH23,FJHown23}
 \bibliography{Ref.bib,FJH23,FJHown23}
