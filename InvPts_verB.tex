@@ -6,6 +6,13 @@
 %
 %%%%%%%%%%%%%%%% Springer %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%Needs FJH23.bib, FJHown23.bib, Ref.bib, KernelPict.eps, Kernel3DPict.eps,
+% d5n50.eps, dimVsdisc.eps, boxplotall_d2n32.eps, 
+% boxplot_d2n32.eps, boxplot_d3n64.eps, boxplot_d4n64.eps, boxplot_d5n128.eps, 
+% boxplot_d8n256.eps, boxplotall_d10n512.eps
+% errorboxplot_d2n32.eps, errorboxplot_d3n64.eps, errorboxplot_d4n64.eps, 
+% errorboxplot_d6n128.eps, errorboxplot_d8n256.eps, errorboxplot_d10n512.eps
+
 
 % RECOMMENDED %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \RequirePackage{amsmath}
@@ -100,6 +107,9 @@
 \newcommand{\vT}{\boldsymbol{T}}
 \newcommand{\vone}{\boldsymbol{1}}
 \newcommand{\vgamma}{\boldsymbol{\gamma}}
+\newcommand{\figdir}{code/} %internally
+%\newcommand{\figdir}{} %internally
+
 
 \def\abs#1{\ensuremath{\left \lvert #1 \right \rvert}}
 
@@ -221,11 +231,11 @@ interpretation of the discrepancy is worst-case cubature error for integrands, $
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Let $(\cm, \ip[\cm]{\cdot}{\cdot})$ be a Hilbert space of measures defined on the experimental region, $\Omega$.  Assume that $\cm$ includes all Dirac measures.  Define the kernel function $K:\Omega \times \Omega \to \reals$ in terms of inner products of Dirac measures:
-\begin{equation} \label{kerDeltaDef}
+\begin{equation} \label{eq:kerDeltaDef}
     K(\vt,\vx) := \ip[\cm]{\delta_{\vt}}{\delta_{\vx}}, \qquad \forall \vt, \vx \in \Omega.
 \end{equation}
 The squared distance between two Dirac measures in $\cm$ is then
-\begin{equation} \label{distDelta}
+\begin{equation} \label{eq:distDelta}
    \norm[\cm]{\delta_{\vx} - \delta_{\vt}}^2 = K(\vt,\vt) - 2K(\vt,\vx) + K(\vx,\vx), \qquad \forall \vt, \vx \in \Omega.
 \end{equation}
 
@@ -234,18 +244,19 @@ It is straightforward to show that $ K$ is symmetric in its arguments and positi
 \begin{subequations} \label{eq:sympd}
 \begin{gather}
 K(\vx, \vt) = K(\vt, \vx) \qquad \forall \vt, \vx\in \Omega,\\
-\sum\limits_{i, k=1}^N c_i c_k  K(\vx_i,\vx_k) > 0, \qquad \forall N\in\mathbb{N}, \  \vc \in\mathbb{R}^N, \ \vc \ne \vzero,  \ \Xdes \subset \Omega.
+\sum\limits_{i, k=1}^N c_i c_k  K(\vx_i,\vx_k) > 0, \qquad \forall N\in\mathbb{N}, \  \vc \in\mathbb{R}^N \setminus \{\vzero\},  \ \Xdes \subset \Omega.
 \end{gather}
 \end{subequations}
 The inner product of arbitrary measures $\lambda, \nu \in \cm$ can be expressed in terms of a double integral of the kernel, $K$:
-\begin{equation} \label{ipMdef}
+\begin{equation} \label{eq:ipMdef}
     \ip[\cm]{\lambda}{\nu} = \int_{\Omega \times \Omega} K(\vt,\vx) \, \lambda(\dif \vt) \nu(\dif \vx).
 \end{equation}
-This can be established directly from \eqref{kerDeltaDef} for $\cm_0$, the vector space spanned by all Dirac measures.  Letting $\cm$ be the closure of the pre-Hilbert space $\cm_0$ then yields \eqref{ipMdef}.
+This can be established directly from \eqref{eq:kerDeltaDef} for $\cm_0$, the vector space spanned by all Dirac measures.  Letting $\cm$ be the closure of the pre-Hilbert space $\cm_0$ then yields \eqref{eq:ipMdef}.
 
 The discrepancy of the design $\Xdes$ with respect to the target probability measure $\nu$ using the kernel $K$ can be defined as the norm of the difference between the target probability measure, $\nu$, and the empirical probability measure for $\Xdes$:
 \begin{subequations} \label{eq:discDef}
 \begin{align} 
+\nonumber
     D^2(\Xdes,\nu,K) & := \norm[\cm]{\nu - \nu_{\Xdes}}^2 \\
     \nonumber
     & = \int_{\Omega \times \Omega} K(\vt,\vx) \, (\nu - \nu_{\Xdes})(\dif \vt) (\nu - \nu_{\Xdes})(\dif \vx) \\
@@ -269,15 +280,15 @@ The formulas for the discrepancy in \eqref{eq:discDef} depend inherently on the 
 \begin{equation} \label{eq:OrigKernel}
      K(\vt,\vx)  = \prod\limits_{j=1}^d\left[1+ \frac 12 \left(|t_j|+ |x_j|- |x_j-t_j| \right)\right].
 \end{equation}
-This kernel is plotted in Figure \ref{fig:kernelpict} for $d=1$. The distance between two Dirac measures by \eqref{distDelta} for this kernel in one dimension is 
+This kernel is plotted in Figure \ref{fig:kernelpict} for $d=1$. The distance between two Dirac measures by \eqref{eq:distDelta} for this kernel in one dimension is 
 \begin{equation*}
     \norm[\cm]{\delta_{x} - \delta_{t}} = \sqrt{\abs{x-t}}.
 \end{equation*}
 
 \begin{figure}
     \centering
-    \includegraphics[height = 4cm]{code/KernelPict.eps} \qquad
-    \includegraphics[height = 4cm]{code/Kernel3DPict.eps}
+    \includegraphics[height = 4cm]{\figdir KernelPict.eps} \qquad
+    \includegraphics[height = 4cm]{\figdir Kernel3DPict.eps}
     \caption{The kernel defined in \eqref{eq:OrigKernel} for $d=1$.}
     \label{fig:kernelpict}
 \end{figure}
@@ -292,6 +303,7 @@ The discrepancy for the uniform distribution on the unit cube defined in terms o
     \nonumber
     & = \left( \frac 43 \right)^d 
      - \frac 2N \sum_{i=1}^N \prod_{j=1}^d \left[1 + u_{ij} - \frac{u_{ij}^2}{2} \right] \\
+     \nonumber
      & \qquad \qquad + \frac 1{N^2} \sum_{i,k=1}^N \prod_{j=1}^d \left[1+ \min(u_{ij},u_{ik})\right].
 \end{align}
 
@@ -334,14 +346,15 @@ The square norm of the representer of the error functional is
 & = \err(\err(K(\cdot,\cdot \cdot),\Xdes),\Xdes) \quad \text{since } \xi(\vx)=\err(K(\cdot,\vx),\Xdes)\\
 & =\int_{\Omega\times \Omega} K(\vt,\vx)\, \dif[F(\vt)-F_{\Xdes}(\vt)] \dif[F(\vx)-F_{\Xdes}(\vx)] .
 \end{align*}
-We can equate this formula for $\norm[\ch]{\xi}^2$ with the formula for $D^2(\Xdes,F,K)$ in  \eqref{eq:discDef}.  Thus, the tight, worst-case cubature error  bound in \eqref{eq:wcErrA} can be written as
-\begin{equation}\label{eq:wcErrB}
+We can equate this formula for $\norm[\ch]{\xi}^2$ with the formula for $D^2(\Xdes,F,K)$ in  \eqref{eq:discDef}.  Thus, the tight, worst-case cubature error  bound in \eqref{eq:wcErrA} can be written in terms of the discrepancy as
+\begin{equation*}\label{eq:wcErrB}
 \abs{\err(f,\Xdes)} \le \norm[\ch]{f} D(\Xdes,F,K).
-\end{equation}
+\end{equation*}
 This implies our second interpretation of the discrepancy in Table \ref{tab:ThreeInterpTable}.
 
 We now identify the RKHS for the kernel $K$ defined in \eqref{eq:OrigKernel} Let $(\va,\vb)$ be some $d$ dimensional box containing the origin in the interior or on the boundary. For any $\fraku \subseteq \{1, \ldots, d\}$, define $\partial^\fraku f(\vx_\fraku) : = \partial^{|\fraku|}f(\vx_\fraku,\vzero)/\partial \vx_\fraku$, the mixed first-order partial derivative of $f$ with respect to the $x_j$ for $j\in \fraku$, while setting $x_j=0$ for all $j \notin \fraku$. Here, $\vx_{\fraku} = (x_j)_{j \in \fraku}$, and $|\fraku|$ denotes the cardinality of $\fraku$.  By convention, $\partial^{\emptyset}f := f(\vzero)$.  The inner product for the reproducing kernel $K$ defined in  \eqref{eq:OrigKernel} is defined as 
-\begin{align}\label{eq:inner}
+\begin{align}
+\label{eq:inner}
 \langle f,g \rangle_{\ch} &:= \sum_{\fraku\subseteq \{1,...,d\}}\int_{(\va,\vb)}\partial^{\fraku}f(\vx_\fraku)\partial^{\fraku}g(\vx_\fraku) \, \dif \vx_\fraku \\
 \nonumber
 & = f(\vzero)g(\vzero)  + \int_{a_1}^{b_1} \partial^{\{1\}}f(x_1)\partial^{\{1\}}g(x_1) \, \dif x_1 \\
@@ -387,12 +400,13 @@ It is straightforward to show that the kernel function is symmetric and positive
 
 Define the error functional $\err(\cdot,\Xdes)$ in the same way as in \eqref{eq:err}.  Now, the mean squared error is 
 \begin{align*}
-&\Ex_{f\in\mathcal{A}}[(\err(f,\Xdes)]^2= \Ex_{f\in\mathcal{A}} \left\{\int_{\Omega}f(\vx) \,\dif F(\vx)-\frac{1}{N}\sum_{i=1}^N f(\vx_i) \right\}^2\\
-=&\Ex_{f\in\mathcal{A}}\left\{\int_{\Omega}(f(\vx)-m) \, \dif F(\vx)-\frac{1}{N}\sum_{i=1}^N (f(\vx_i)-m) \right\}^2\\
-=&\int_{\Omega^2}\Ex_{f\in \mathcal{A}}[ (f(\vt)-m)(f(\vx)-m)] \, \dif F(\vt)\dif F(\vx)\\
-&-\frac{2}{N}\sum_{i=1}^N \int_{\Omega} \Ex_{f\in\mathcal{A}}[(f(\vx)-m)(f(\vx_i)-m)]\,\dif F(\vx)\\
-&+\frac{1}{N^2}\sum_{i,k=1}^N\Ex_{f\in\mathcal{A}}[(f(\vx_i)-m)(f(\vx_k)-m)]\\
-=&\int_{\Omega^2}K(\vt,\vx) \, \dif F(\vt)\dif F(\vx)-\frac{2}{N}\sum_{i=1}^N \int_{\Omega} K(\vx, \vx_i)\, \dif F(\vx)+\frac{1}{N^2} \sum_{i,k=1}^N K(\vx_i,\vx_k). 
+\Ex_{f\in\mathcal{A}}[(\err(f,\Xdes)]^2 &= \Ex_{f\in\mathcal{A}} \left\{\int_{\Omega}f(\vx) \,\dif F(\vx)-\frac{1}{N}\sum_{i=1}^N f(\vx_i) \right\}^2\\
+&=\Ex_{f\in\mathcal{A}}\left\{\int_{\Omega}(f(\vx)-m) \, \dif F(\vx)-\frac{1}{N}\sum_{i=1}^N (f(\vx_i)-m) \right\}^2\\
+&=\int_{\Omega^2}\Ex_{f\in \mathcal{A}}[ (f(\vt)-m)(f(\vx)-m)] \, \dif F(\vt)\dif F(\vx)\\
+&\qquad  -\frac{2}{N}\sum_{i=1}^N \int_{\Omega} \Ex_{f\in\mathcal{A}}[(f(\vx)-m)(f(\vx_i)-m)]\,\dif F(\vx)\\
+&\qquad +\frac{1}{N^2}\sum_{i,k=1}^N\Ex_{f\in\mathcal{A}}[(f(\vx_i)-m)(f(\vx_k)-m)]\\
+&=\int_{\Omega^2}K(\vt,\vx) \, \dif F(\vt)\dif F(\vx)-\frac{2}{N}\sum_{i=1}^N \int_{\Omega} K(\vx, \vx_i)\, \dif F(\vx) \\
+& \qquad +\frac{1}{N^2} \sum_{i,k=1}^N K(\vx_i,\vx_k). 
 \end{align*}
 Therefore, we can equate the discrepancy $D(\Xdes, F, K)$ defined in \eqref{eq:discDef} as the root mean squared error:
 \[
@@ -419,6 +433,7 @@ Consider some symmetric, positive definite kernel, $K_\unif : (0,1)^d \times (0,
     & \qquad \qquad  - \frac 2N \sum_{i=1}^N \int_{\Omega} K_\unif(\vPsi^{-1}(\vt),\vPsi^{-1}(\vx_i)) \, \abs{\frac{\partial \vPsi^{-1}(\vt)}{\partial \vt}} \, \dif \vt\\
     \nonumber
     & \qquad \qquad  + \frac{1}{N^2} \sum_{i,k=1}^N K_\unif(\vPsi^{-1}(\vx_i),\vPsi^{-1}(\vx_k)) \\
+    \nonumber
     & = D^2(\Xdes,F,K)
 \end{align}
 where the kernel $K$ is defined as
@@ -461,6 +476,7 @@ where $\Phi$ denotes the standard normal distribution function.  Then condition 
      K(\vt,\vx) &= K_{\unif}(\vPsi^{-1}(\vt),\vPsi^{-1}(\vx)) \\
      \nonumber
       &= \prod_{j=1}^d\left[1+\frac{1}{2}\left(\left|\Phi(t_j)-1/2\right|+ \left|\Phi(x_j)- 1/2 \right| \right . \right . \\
+      \nonumber
       & \qquad \qquad \left.  \left . -\left|\Phi(t_j)-\Phi(x_j)\right|\right)\right].
 \end{align}
 In one dimension, the distance between two Dirac measures defined using the kernel $K_\unif$ above is $\norm{\delta_{x} - \delta_{t}} = \sqrt{|x-t|}$, whereas the distance defined using the kernel $K$ above is $\norm{\delta_{x} - \delta_{t}} = \sqrt{|\Phi(x)-\Phi(t)|}$. Under kernel $K$, the distance between two Dirac measures is bounded, even though the domain of the distribution is unbounded.  Such an assumption may be unpalatable.
@@ -482,18 +498,19 @@ Changing perspectives slightly, if $F_\unif'$ denotes the uniform distribution o
     \Udes' = \{\vu -\boldsymbol{0.5} : \vu \in \Udes \},
 \end{equation}
 then 
-\begin{equation} \label{eq:desEquiv}
+\begin{equation*} \label{eq:desEquiv}
      D(\Udes',F'_\unif,K) = D(\Udes, F_\unif, K_\unif),
-\end{equation}
+\end{equation*}
 where $K$ is the kernel defined in \eqref{eq:OrigKernel}.  
 
 Recall that the origin is a special point in the definition of the inner product for the Hilbert space with $K$ as its reproducing kernel in \eqref{eq:inner}.  Therefore, this $K$ from \eqref{eq:OrigKernel} is appropriate for defining the discrepancy for target distributions centered at the origin, such as the standard normal distribution, $F_\normal$.  Such a discrepancy is 
-\begin{align}\label{eq:DisNormald>1}
+\begin{align}
 \nonumber
 \MoveEqLeft{D^2(\Xdes, F_\normal, K) = \left(1+\sqrt{\frac{2}{\pi}}\right)^d}\\
 \nonumber
   & - \frac{2}{N}\sum_{i=1}^N \prod\limits_{j=1}^d\left[ 1+\frac{1}{\sqrt{2\pi}}+\frac{1}{2}|x_{ij}|-x_{ij}\left(\Phi(x_{ij})-\frac 12 \right)-\phi(x_{ij})\right]\\
   &+\frac{1}{N^2}\sum_{i,k=1}^N \prod_{j=1}^d \left[1+\frac{1}{2}\left(|x_{ij}|+|x_{kj}|-|x_{ij}-x_{kj}|\right)\right]. 
+  \label{eq:DisNormald>1}
 \end{align}
 Here, $\phi$ is the standard normal probability density function. 
 The derivation of \eqref{eq:DisNormald>1} is given in the Appendix. 
@@ -513,7 +530,7 @@ Question \eqref{eq:BigQPrime} has a positive answer if and only if the lines pas
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[width=8cm]{code/d5n50.eps}
+\includegraphics[width=8cm]{\figdir d5n50.eps}
 \caption{Normal discrepancy versus uniform discrepancy for transformed designs. \label{fig:UniVsNormDisc}}
 \end{center}
 \end{figure}
@@ -523,7 +540,7 @@ Varying the dimension $d$ from $1$ to $10$, we calculate the sample correlation 
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[width=8cm]{code/dimVsdisc.eps}
+\includegraphics[width=8cm]{\figdir dimVsdisc.eps}
 \caption{Correlation between the uniform and normal discrepancies for different dimensions. \label{fig:DiscVsd}}
 \end{center}
 \end{figure}
@@ -538,7 +555,7 @@ Varying the dimension $d$ from $1$ to $10$, we calculate the sample correlation 
 \end{gather}
 \end{subequations}
 where $\phi$ is the probability density function for the standard multivariate normal distribution.  The function $f:\reals^d \to \reals$ is constructed to asymptote to a constant as $\norm[2]{\vx}$ tends to infinity to ensure that $f$ lies inside the Hilbert space corresponding to the kernel $K$ defined in \eqref{eq:OrigKernel}.
-Since the integrand in \eqref{eq:badexampleb} is a function of $\norm[2]{\vx}$, $\mu$ can be written as a one dimensional integral.  For $d=10$, $\mu = 10$ to at least $15$ significant digits using quadrature.
+Since the integrand in \eqref{eq:badexample} is a function of $\norm[2]{\vx}$, $\mu$ can be written as a one dimensional integral.  For $d=10$, $\mu = 10$ to at least $15$ significant digits using quadrature.
 
 We can also approximate the integral in \eqref{eq:badexample} using a $d=10$, $N=512$ cubature \eqref{eq:cubature}.  We compare cubatures using two designs.  The design $\Xdes_1$ is the inverse normal transformation of a scrambled Sobol' sequence, $\Udes_1$, which has a low discrepancy with respect to the uniform distribution on the $d$-dimensional unit cube.  The design $\Udes_2$ takes the point in $\Udes_1$ that is closet to $\vzero$ and moves it to $\left(10^{-15}, \ldots, 10^{-15}\right)$, which is very close to $\vzero$.  As seen in Table \ref{tab:badexample}, the two uniform designs have quite similar, small discrepancies.  However, the transformed designs, $\Xdes_j = \vPsi(\Udes_j)$ for $j=1,2$, have much different discrepancies with respect to the normal distribution.  This is due to the point in $\Xdes_2$ that has large negative coordinates.  Furthermore, the cubatures, $\hat{\mu}$, based on these two designs have significantly different errors.  The first design has both a smaller discrepancy and a smaller cubature error than the second.  This could not have been inferred by looking at the discrepancies of the original uniform designs.
 
@@ -593,24 +610,24 @@ First, we define the point deletion function, $\frakd_p$, as the change in squar
 \frakd_p(i) = D^2(\Xdes)-\left(\frac{N-1}{N}\right)^2 D^2(\Xdes\backslash \{\vx_i\}).
 \end{equation}
 Here, the design $\Xdes\backslash \{\vx_i\}$ is the $N-1$ point design with the point $\{\vx_i\}$ removed. We suppress the choice of target distribution and kernel in the above discrepancy notation for simplicity. We then choose 
-\begin{equation} \label{eq:rowchoice}
+\begin{equation*} \label{eq:rowchoice}
     i^*=\argmax_{i=1,\ldots,N} \frakd_p(i).
-\end{equation}
+\end{equation*}
 The definition of $i^*$ means that removing $\vx_{i^*}$ from the design $\Xdes$ results in the smallest discrepancy among all possible deletions.  Thus, $\vx_{i^*}$ is helping the least, which makes it a prime candidate for modification.
 
 Next, we define a coordinate deletion function, $\frakd_{c}$, as the change in the square discrepancy resulting from removing a coordinate in our calculation of the discrepancy:
 \begin{equation}\label{eq:coorddeletion}
 \frakd_c(j) = D^2(\Xdes)-D^2(\Xdes_{-j}).
 \end{equation}
-Here, the design $\Xdes_{-j}$ still has $N$ points but now only $d$ dimensions, the $j^{\text{th}}$ coordinate having been removed.  For this calculation to be feasible, the target distribution must have independent marginals.  Also, the kernel to be of product form.  To simplify the derivation, we assume a somewhat stronger condition, namely that the marginals are identical and that each term in the product defining the kernel is the same for every coordinate:
+Here, the design $\Xdes_{-j}$ still has $N$ points but now only $d$ dimensions, the $j^{\text{th}}$ coordinate having been removed.  For this calculation to be feasible, the target distribution must have independent marginals.  Also, the kernel must be of product form.  To simplify the derivation, we assume a somewhat stronger condition, namely that the marginals are identical and that each term in the product defining the kernel is the same for every coordinate:
 \begin{equation}
     \label{eq:prodkernel}
     \Omega = \tOmega \times \cdots \times \tOmega, \qquad K(\vt,\vx) = \prod_{j=1}^d [1+ \tK(t_j,x_j)], \qquad \tK:\tOmega \times \tOmega \to \reals.
 \end{equation}
 We then choose 
-\begin{equation} \label{eq:columnchoice}
+\begin{equation*} \label{eq:columnchoice}
     j^*=\argmax_{j=1, \ldots, d} \frakd_c(j).
-\end{equation}
+\end{equation*}
 For reasons analogous to those given above, the $j^{*\text{th}}$ coordinate seems to be the best candidate for change.
 
 Let $\Xdes^*(x)$ denote the design that results from replacing $x_{i^*j^*}$ by $x$. 
@@ -623,7 +640,7 @@ The coordinate-exchange algorithm outlined in Algorithm \ref{alg:coorex} improve
 The algorithm terminates when it exhausts the maximum allowed number of iterations or the optimal improvement $\Delta(x^*)$ is so small that it becomes negligible ($\Delta(x^*)\leq \textrm{TOL}$). 
 Algorithm \ref{alg:coorex} is a greedy algorithm, and thus it can stop at a local optimal design. 
 We recommend multiple runs of the algorithm with different initial designs to obtain a design with the lowest discrepancy possible. 
-Alternatively, users can include stochastic scheme in choosing the coordinate that is to be exchanged, similarly as in \cite{kang2018stochastic}. 
+Alternatively, users can include stochasticity in the choice of the coordinate that is to be exchanged, similarly to \cite{kang2018stochastic}. 
 
 \begin{algorithm}[ht]
 \caption{Coordinate Exchange Algorithm.\label{alg:coorex}}
@@ -674,16 +691,17 @@ The point deletion function defined in \eqref{eq:rowdeletion} then can be expres
 \nonumber
 \frakd_p(i) 
 &= \frac{(2N-1)(1+c)^d}{N^2} - \frac{2}{N}\biggl[ \frac{1}{N} \sum_{k=1}^N  H(\vx_{k}) + \left(1 - \frac 1N \right) H(\vx_{i})  \biggr] \\
-\label{eq:rowdeletionA}
+\nonumber
+%\label{eq:rowdeletionA}
 & \qquad \qquad + \frac{1}{N^2}\biggl[2 \sum_{k=1}^N K(\vx_{i},\vx_{j})- K(\vx_{i},\vx_{i})\biggr]. 
 \end{align}
 The computational cost for $\frakd_p(1), \ldots, \frakd_p(N)$ is then $\Order(dN^2)$, which is the same order as the cost of the discrepancy of a single design.
 
 The coordinate deletion function defined in \eqref{eq:coorddeletion} can be be expressed as
-\begin{multline}\label{eq:coldeletionA}
+\begin{multline*}%\label{eq:coldeletionA}
 \frakd_c(j) = (c-1)c^{d-1} -\frac{2}{N}\sum_{i=1}^N \frac{h(x_{ij})H(\vx_i)}{1+h(x_{ij})}  \\
 +\frac{1}{N^2}\sum_{i,k=1}^N \frac{\tK(x_{ij},x_{kj}) K(\vx_i,\vx_j)}{1+\tK(x_{ij},x_{kj})}  .
-\end{multline}
+\end{multline*}
 The computational cost for $\frakd_c(1), \ldots, \frakd_p(d)$ is also $\Order(dN^2)$, which is the same order as the cost of the discrepancy of a single design.
 
 
@@ -694,12 +712,13 @@ Finally, the  function $\Delta$ defined in \eqref{eq:deltafun} is given by
 &= -\frac{2\left[  h(x_{i^*j^*})-h(x)    \right]H(\vx_{i^*})}{N[1 + h(x_{i^*j^*})]}   \\
 \nonumber
 & \qquad \qquad +\frac{1}{N^2}\left(2\sum_{\substack{i=1 \\ i \ne i^*}}^N  \frac{[\tK(x_{i^*j^*},x_{ij^*})-\tK(x,x_{ij^*})] K(\vx_{i^*},\vx_i)} {1 + \tK(x_{i^*j^*},x_{ij^*})} \right . \\
+\nonumber
 & \qquad \qquad \left . + \frac{[\tK(x_{i^*j^*},x_{i^*j^*})-\tK(x,x)] K(\vx_{i^*},\vx_{i^*})} {1 + \tK(x_{i^*j^*},x_{i^*j^*})} \right )
 \end{align} 
 If we drop the terms that are independent of $x$, then we can maximize the function
-\begin{equation}\label{eq:deltapfunction}
+\begin{equation*} %\label{eq:deltapfunction}
 \Delta'(x) = Ah(x)  - \frac{1}{N}\sum_{\substack{i=1 \\ i \ne i^*}}^N B_i \tK(x,x_{ij^*}) - C \tK(x,x)
-\end{equation}
+\end{equation*}
 where
 \begin{equation*}
 A = \frac{2H(\vx_{i^*})}{1 + h(x_{i^*j^*})}, \quad
@@ -719,12 +738,12 @@ For each $(d,N)$ and each algorithm we generate $500$ designs and compute their 
 
 Figure \ref{fig:SOBOLVsRAND} contains the boxplots of normal discrepancies corresponding to the four generators with $d=2$ and $N=32$. It shows that SOBOL, E-SOBOL, and CE all outperform RAND by a great margin. To better present the comparison between the better generators, in Figure \ref{fig:comparison} we mostly exclude RAND.
 
-We also report the average execution times for the four generators in Table \ref{tab:ExeTime}. All codes were run on a MacBook Pro with 2.4 GHz Intel Core i5 processor. The maximum iteration allowed is set to be $M_{\max} = 200$, and the Algorithm \ref{alg:coorex} converges within 20 iterations in all simulation examples.
+We also report the average execution times for the four generators in Table \ref{tab:ExeTime}. All codes were run on a MacBook Pro with 2.4 GHz Intel Core i5 processor. The maximum iteration allowed is set to be $M_{\max} = 200$, and  Algorithm \ref{alg:coorex} converges within 20 iterations in all simulation examples.
 
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[width=8cm]{code/boxplotall_d2n32.eps}
+\includegraphics[width=8cm]{\figdir boxplotall_d2n32.eps}
 \caption{Performance comparison of designs. \label{fig:SOBOLVsRAND}}
 \end{center}
 \end{figure}
@@ -743,18 +762,18 @@ When the design is more sparse, i.e., $N/d$ is smaller, SOBOL and E-SOBOL have s
 
 \begin{figure}[ht]
 \centering
-{\subfigure[$d=2,N=32$] {\includegraphics[width=5.5cm]{code/boxplot_d2n32.eps}}}
+{\subfigure[$d=2,N=32$] {\includegraphics[width=5.5cm]{\figdir boxplot_d2n32.eps}}}
 \quad
 {\subfigure [$d=3, N=64$]
-{\includegraphics[width=5.5cm]{code/boxplot_d3n64.eps}}}
+{\includegraphics[width=5.5cm]{\figdir boxplot_d3n64.eps}}}
 \quad
-{\subfigure[$d=4, N=64$] {\includegraphics[width=5.5cm]{code/boxplot_d4n64.eps}}}
+{\subfigure[$d=4, N=64$] {\includegraphics[width=5.5cm]{\figdir boxplot_d4n64.eps}}}
 \quad
-{\subfigure[$d=6, N=128$] {\includegraphics[width=5.5cm]{code/boxplot_d5n128.eps}}}
+{\subfigure[$d=6, N=128$] {\includegraphics[width=5.5cm]{\figdir boxplot_d5n128.eps}}}
 \quad
-{\subfigure[$d=8, N=256$] {\includegraphics[width=5.5cm]{code/boxplot_d8n256.eps}}}
+{\subfigure[$d=8, N=256$] {\includegraphics[width=5.5cm]{\figdir boxplot_d8n256.eps}}}
 \quad
-{\subfigure[$d=10, N=512$] {\includegraphics[width=5.5cm]{code/boxplotall_d10n512.eps}}}
+{\subfigure[$d=10, N=512$] {\includegraphics[width=5.5cm]{\figdir boxplotall_d10n512.eps}}}
 \caption{Performance comparison of designs \label{fig:comparison}}
 \end{figure}
 
@@ -804,18 +823,18 @@ To further evaluate the performance of the normal random sequence generated by t
 
 \begin{figure}[ht]
 \centering
-{\subfigure[$d=2,N=32$] {\includegraphics[width=5.5cm]{code/errorboxplot_d2n32.eps}}}
+{\subfigure[$d=2,N=32$] {\includegraphics[width=5.5cm]{\figdir errorboxplot_d2n32.eps}}}
 \quad
 {\subfigure [$d=3, N=64$]
-{\includegraphics[width=5.5cm]{code/errorboxplot_d3n64.eps}}}
+{\includegraphics[width=5.5cm]{\figdir errorboxplot_d3n64.eps}}}
 \quad
-{\subfigure[$d=4, N=64$] {\includegraphics[width=5.5cm]{code/errorboxplot_d4n64.eps}}}
+{\subfigure[$d=4, N=64$] {\includegraphics[width=5.5cm]{\figdir errorboxplot_d4n64.eps}}}
 \quad
-{\subfigure[$d=6, N=128$] {\includegraphics[width=5.5cm]{code/errorboxplot_d6n128.eps}}}
+{\subfigure[$d=6, N=128$] {\includegraphics[width=5.5cm]{\figdir errorboxplot_d6n128.eps}}}
 \quad
-{\subfigure[$d=8, N=256$] {\includegraphics[width=5.5cm]{code/errorboxplot_d8n256.eps}}}
+{\subfigure[$d=8, N=256$] {\includegraphics[width=5.5cm]{\figdir errorboxplot_d8n256.eps}}}
 \quad
-{\subfigure[$d=10, N=512$] {\includegraphics[width=5.5cm]{code/errorboxplot_d10n512.eps}}}
+{\subfigure[$d=10, N=512$] {\includegraphics[width=5.5cm]{\figdir errorboxplot_d10n512.eps}}}
 \caption{Integral Approximate Performance Comparison of Generators}
 \end{figure}
 \end{comment}
@@ -830,9 +849,9 @@ This chapter summarizes the three interpretations of the discrepancy. We show th
 While discrepancies can be defined for arbitrary kernels, we believe that the choice of kernel can be important, especially for small sample sizes.  If the distribution has a symmetry, e.g. $\varrho(\vT(\vx)) = \varrho(\vx)$ for some probability preserving bijection $\vT:\Omega \to \Omega$, then we would like our discrepancy to remain unchanged under such a bijection, i.e., $D(\vT(\Xdes),\varrho,K) = D(\Xdes,\varrho,K)$.  This can typically be ensured by choosing kernels satisfying $K(\vT(\vt),\vT(\vx)) = K(\vt,\vx)$.   The kernel $K_\unif$ defined in \eqref{eq:L2kernel} satisfies this assumption for the standard uniform distribution and the transformation $\vT(\vx) = \vone - \vx$.  The kernel $K$ defined in \eqref{eq:OrigKernel} satisfies this assumption for the standard normal distribution and the transformation $\vT(\vx) = -\vx$.
 
 For target distributions with independent marginals and kernels of product form as in \eqref{eq:prodkernel}, \emph{coordinate weights} \cite{DicEtal14a}*{Section 4} are used to determine which projections of the design, denoted by $\fraku \subseteq \{1, \ldots, d\}$, are more important.  The product form of the kernel given in \eqref{eq:prodkernel} can be generalized as 
-\begin{equation} \label{eq:prodKernelWts}
+\begin{equation*} %\label{eq:prodKernelWts}
      K_{\vgamma}(\vt,\vx)  = \prod_{j=1}^d\left[1+ \gamma_j \tK(t_j,x_j) \right].
-\end{equation}
+\end{equation*}
 Here the positive coordinate weights are $\vgamma = (\gamma_1, \ldots, \gamma_d)$.
 The squared discrepancy corresponding to this kernel may then be written as
 \begin{align*}
