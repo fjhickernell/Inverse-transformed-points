@@ -140,9 +140,9 @@
 % Use \authorrunning{Short Title} for an abbreviated version of
 % your contribution title if the original one is too long
 \institute{Yiou Li \at DePaul University, 2320 N. Kenmore Avenue, Chicago, IL 60614 \email{yli139@depaul.edu}
-\and Lulu Kang \at Illinois Institute of Technology, 10 W. 32nd Street, Chicago, IL 60616 \email{lkang2@iit.edu} 
+\and Lulu Kang \at Illinois Institute of Technology, RE 208, 10 W. 32nd Street, Chicago, IL 60616 \email{lkang2@iit.edu} 
 \and 
-Fred J. Hickernell \at Illinois Institute of Technology, 10 W. 32nd Street, Chicago, IL 60616 \email{hickernell@iit.edu}}
+Fred J. Hickernell \at Illinois Institute of Technology, RE 208, 10 W. 32nd Street, Chicago, IL 60616 \email{hickernell@iit.edu}}
 %
 % Use the package "url.sty" to avoid
 % problems with special characters
@@ -160,7 +160,7 @@ However, these conditions may be undesirable for practical reasons.
 In such a case, the transformation of a low discrepancy uniform design may yield a design with a large discrepancy. 
 We illustrate how this may occur.
 We also suggest some remedies. 
-One remedy is to ensure that the original uniform design has optimal one-dimensional projection, but this remedy works best if the design is dense, or in other words, the ratio of sample size divided by the dimension of the random variable is relatively large. 
+One remedy is to ensure that the original uniform design has optimal one-dimensional projection, but this remedy works best if the design is dense, or in other words, the ratio of sample size divided by the dimension of the random variable is relatively large. \FJH{How do we know that $N/d$ is the right quantity to be large?}
 Another remedy is to use the transformed design as the input to a coordinate-exchange algorithm that optimizes the desired discrepancy, and this works for both dense or sparse designs. 
 The effectiveness of these two remedies is illustrated via simulation.}
 
@@ -169,7 +169,7 @@ The effectiveness of these two remedies is illustrated via simulation.}
 Professor Kai-Tai Fang and his collaborators have demonstrated the effectiveness of low discrepancy points as space filling designs \cites{FangHic07a, FangEtal19a, FanLiSud06, FanWan94}. 
 They have promoted discrepancy as a quality measure for statistical experimental designs to the statistics, science, and engineering communities \cites{FanMa01b, FanMaWin02, FanMuk00, FanMa01a}. 
 
-Low discrepancy designs, $\Udes = \{\vu_i\}_{i=1}^N$, are typically constructed so that their empirical distributions, $F_\Udes$, approximate $F_\unif$, the uniform distribution on the unit cube, \cube.  
+Low discrepancy uniform designs, $\Udes = \{\vu_i\}_{i=1}^N$, are typically constructed so that their empirical distributions, $F_\Udes$, approximate $F_\unif$, the uniform distribution on the unit cube, \cube.  
 The discrepancy measures the magnitude of $F_\unif-F_\Udes$. 
 The uniform design is a commonly used space filling design for computer experiments \cite{FanLiSud06} and can be constructed using  JMP\textsuperscript{\textregistered} \cite{sall2012jmp}.
 
@@ -423,7 +423,7 @@ D(\Xdes, F, K) =\sqrt{\Ex_{f\in\mathcal{A}}[(\err(f,\Xdes)]^2}=\sqrt{\Ex\abs{\in
 \]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{When Transformed Low Discrepancy Design Also Has Low Discrepancy}
+\section{When a Transformed Low Discrepancy Design Also Has Low Discrepancy}
 \label{sec:WhenYes}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Having motivated the definition of discrepancy in \eqref{eq:discDef} from three perspectives, we now turn our attention to question \eqref{eq:BigQ}, namely, does a transformation of low discrepancy points with respect to the uniform distribution yield low discrepancy points with respect to the new target distribution. In this section, we show a positive result, yet recognize some qualifications.
@@ -738,12 +738,11 @@ Note that $A, B_1, \ldots, B_N, C$ only need to be computed once for each iterat
 
 Note that the coordinate-exchange algorithm we have developed is a greedy and deterministic algorithm. 
 The coordinate that we choose to make exchange is the one has the largest point and coordinate deletion function values, and we always make the exchange for new coordinate as long as the new optimal coordinate improves the objective function. 
-It is true that such deterministic and greedy algorithm is likely to return the design of the local minima. 
-To overcome this, we can either run the algorithms with multiple random initial designs, or we can combine the combine the coordinate-exchange with stochastic optimization algorithms, such as simulated annealing (SA) \cite{kirkpatrick1983optimization} or threshold accepting (TA) \cite{fang2003lower} methods. 
-For example, before making the exchange of the coordinates, we can incorporate a random scheme to accept the exchange or not. 
-The random scheme can follow the SA or TA method. 
+It is true that such deterministic and greedy algorithm is likely to return a design of whose discrepancy attains a \emph{local} minimum. 
+To overcome this, we can either run the algorithm with multiple random initial designs, or we can combine the combine coordinate-exchange with stochastic optimization algorithms, such as simulated annealing (SA) \cite{kirkpatrick1983optimization} or threshold accepting (TA) \cite{fang2003lower}. 
+For example, before making the exchange of the coordinates, we can incorporate a random decision to accept the exchange or not. 
+The random decision can follow the SA or TA method. 
 Tuning parameters must be carefully chosen to make the SA or TA method effective. 
-In this chapter, we omit the further investigation in this direction. 
 Interested readers can refer to \cite{winker1997application} to see how TA can be applied to evaluation of discrepancy. 
 
 % However, we eventually decided not to revise the algorithm and keep it in this greedy fashion. 
@@ -764,13 +763,13 @@ Interested readers can refer to \cite{winker1997application} to see how TA can b
 \section{Simulation} \label{sec:Simulation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-To demonstrate the performance of the $d$-dim standard normal design proposed in Section \ref{sec:CoordEx}, we compare three families of designs: (1) RAND: inverse transformed IID uniform random numbers;  (2) SOBOL: inverse transformed Sobol' set; (3) E-SOBOL: inverse transformed scrambled Sobol' set where the one dimensional projections of the Sobol' set have been adjusted to be  $\left\{1/(2N), 3/(2N), \ldots, (2N-1)/(2N) \right\}$; (4) CE: improved E-SOBOL via Algorithm \ref{alg:coorex}. 
+To demonstrate the performance of the $d$-dimensional standard normal design proposed in Section \ref{sec:CoordEx}, we compare three families of designs: (1) RAND: inverse transformed IID uniform random numbers;  (2) SOBOL: inverse transformed Sobol' set; (3) E-SOBOL: inverse transformed scrambled Sobol' set where the one dimensional projections of the Sobol' set have been adjusted to be  $\left\{1/(2N), 3/(2N), \ldots, (2N-1)/(2N) \right\}$; and (4) CE: improved E-SOBOL via Algorithm \ref{alg:coorex}. 
 We have tried different combinations of dimension, $d$, and sample size, $N$. 
 For each $(d,N)$ and each algorithm we generate $500$ designs and compute their discrepancies \eqref{eq:DisNormald>1}.  
 
-Figure \ref{fig:SOBOLVsRAND} contains the boxplots of normal discrepancies corresponding to the four generators with $d=2$ and $N=32$. It shows that SOBOL, E-SOBOL, and CE all outperform RAND by a great margin. To better present the comparison between the better generators, in Figure \ref{fig:comparison} we mostly exclude RAND.
+Figure \ref{fig:SOBOLVsRAND} contains the boxplots of normal discrepancies corresponding to the four generators with $d=2$ and $N=32$. It shows that SOBOL, E-SOBOL, and CE all outperform RAND by a large margin. To better present the comparison between the better generators, in Figure \ref{fig:comparison} we generally exclude RAND.
 
-We also report the average execution times for the four generators in Table \ref{tab:ExeTime}. All codes were run on a MacBook Pro with 2.4 GHz Intel Core i5 processor. The maximum iteration allowed is set to be $M_{\max} = 200$, and  Algorithm \ref{alg:coorex} converges within 20 iterations in all simulation examples.
+We also report the average execution times for the four generators in Table \ref{tab:ExeTime}. All codes were run on a MacBook Pro with 2.4 GHz Intel Core i5 processor. The maximum number of iterations allowed is $M_{\max} = 200$.  Algorithm \ref{alg:coorex} converges within 20 iterations in all simulation examples.
 
 
 \begin{figure}[ht]
@@ -884,13 +883,13 @@ For target distributions with independent marginals and kernels of product form 
 \begin{equation*} %\label{eq:prodKernelWts}
      K_{\vgamma}(\vt,\vx)  = \prod_{j=1}^d\left[1+ \gamma_j \tK(t_j,x_j) \right].
 \end{equation*}
-Here the positive coordinate weights are $\vgamma = (\gamma_1, \ldots, \gamma_d)$.
+Here, the positive coordinate weights are $\vgamma = (\gamma_1, \ldots, \gamma_d)$.
 The squared discrepancy corresponding to this kernel may then be written as
 \begin{align*}
       D^2(\Xdes,F,K_{\vgamma}) &= \sum_{\substack{\fraku \subseteq \{1, \ldots, d\} \\ \fraku \ne \emptyset}}\gamma_\fraku D^2_{\fraku} (\Xdes,\rho,K), \qquad \gamma_{\fraku} = \prod_{j \in \fraku} \gamma_j\\
     D^2_{\fraku} (\Xdes_\fraku,F_\fraku,K) & = c^{\abs{\fraku}} - \frac 2N \sum_{i=1}^N \prod_{j \in \fraku} h(x_{ij}) + \frac{1}{N^2} \sum_{i,k=1}^N \prod_{j \in \fraku} \tK(x_{ij},x_{kj}),
 \end{align*}
-where $c$ and $h$ are defined in \eqref{eq:chHdef}. Here $\Xdes_\fraku$ denotes the projection of the design into the coordinates contained in $\fraku$, and $F_\fraku = \prod_{j \in \fraku} F_j$ is the $\fraku$-marginal distribution.  Each discrepancy piece, $D_{\fraku} (\Xdes_\fraku,F_\fraku,K)$, measures how well $\Xdes_\fraku$ matches $F_\fraku$. 
+where $c$ and $h$ are defined in \eqref{eq:chHdef}. Here, $\Xdes_\fraku$ denotes the projection of the design into the coordinates contained in $\fraku$, and $F_\fraku = \prod_{j \in \fraku} F_j$ is the $\fraku$-marginal distribution.  Each discrepancy piece, $D_{\fraku} (\Xdes_\fraku,F_\fraku,K)$, measures how well the projected design $\Xdes_\fraku$ matches $F_\fraku$. 
 
 The values of the coordinate weights can be chosen to reflect the user's belief as to the importance of the design matching the target for various coordinate projections.  A large value of $\gamma_j$ relative to the other $\gamma_{j'}$ places more importance on the $D_{\fraku} (\Xdes_\fraku,F_\fraku,K)$ with $j \in \fraku$.  Thus, $\gamma_j$ is an indication of the importance of coordinate $j$ in the definition of $D(\Xdes,F,K_{\vgamma})$.  
 
