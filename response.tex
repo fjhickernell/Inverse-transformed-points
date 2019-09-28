@@ -1,0 +1,180 @@
+\documentclass[12pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amsfonts}
+\usepackage{amssymb, amsmath, amsthm,graphicx}
+\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{fancyhdr}
+\usepackage{comment}
+\usepackage{float}
+\usepackage{enumerate}
+\usepackage{tikz-cd}
+\setlength{\oddsidemargin}{0.0cm} \setlength{\evensidemargin}{0.0cm}
+\setlength{\topmargin}{-15mm} \advance\headheight by 2pt
+\setlength{\footskip}{8mm} \setlength{\textheight}{265mm}
+\advance\textheight by-2\headheight \advance\textheight by-2\headsep
+\setlength{\textwidth}{165mm}
+\setlength{\parskip}{1.5em}
+\def\baselinestrech{1.0}
+\linespread{1}
+\pagenumbering{arabic} 
+\usepackage{url}
+\newtheorem{lem}{Lemma}
+\newtheorem{cor}{Corollary}[section]
+\newtheorem{thm}{Theorem}
+\theoremstyle{definition}
+\newtheorem{pro}{Proposition}[section]
+\newtheorem{defn}{Definition}[section]
+\newtheorem{rmk}{Remark}[section]
+\newtheorem{ex}{Example}[section]
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\pr}{Pr}
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\E}{E}
+\DeclareMathOperator{\cov}{cov} \DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\tr}{tr} \DeclareMathOperator{\err}{err}
+\DeclareMathOperator{\IMSE}{IMSE}
+\DeclareMathOperator{\Diag}{diag}
+\DeclareMathOperator{\diag}{diag}
+
+\newcommand{\blind}{1}
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\naturals}{\mathbb{R}}
+\newcommand{\va}{\boldsymbol{a}}
+\newcommand{\vb}{\boldsymbol{b}}
+\newcommand{\vc}{\boldsymbol{c}}
+\newcommand{\vx}{\boldsymbol{x}}
+\newcommand{\vX}{\boldsymbol{X}}
+\newcommand{\vt}{\boldsymbol{t}}
+\newcommand{\vz}{\boldsymbol{z}}
+\newcommand{\vu}{\boldsymbol{u}}
+\newcommand{\vv}{\boldsymbol{v}}
+\newcommand{\vy}{\boldsymbol{y}}
+\newcommand{\fraku}{\mathfrak{u}}
+\newcommand{\frakv}{\mathfrak{v}}
+\newcommand{\mX}{{\mathsf X}}
+\newcommand{\vinfty}{\boldsymbol{\infty}}
+\newcommand{\vzero}{\boldsymbol{0}}
+\newcommand{\vPsi}{\boldsymbol{\Psi}}
+\newcommand{\dif}{{\rm d}}
+\DeclareMathOperator{\sign}{sign}
+
+\newcommand{\Udes}{\mathcal{U}}
+\newcommand{\Xdes}{\mathcal{X}}
+\newcommand{\FXdes}{F_{\Xdes}}
+\newcommand{\cm}{\mathcal{M}}
+\newcommand{\ch}{\mathcal{H}}
+\newcommand{\MATLAB}{\textsc{Matlab}\xspace}
+\newcommand{\Ftar}{F}
+\newcommand{\ftar}{\varrho}
+\newcommand{\cube}{\ensuremath{(0,1)^d}}
+\newcommand{\bbone}{\mathbbm{1}}
+\newcommand{\Ex}{\mathbb{E}}
+\newcommand{\ip}[3][{}]{\ensuremath{\left \langle #2, #3 \right \rangle_{#1}}}
+\newcommand{\norm}[2][{}]{\ensuremath{\left \lVert #2 \right \rVert}_{#1}}
+
+\newcommand{\unif}{\textup{unif}}
+\newcommand{\normal}{\textup{normal}}
+\newcommand{\frakd}{\mathfrak{d}}
+\newcommand{\tK}{\widetilde{K}}
+\newcommand{\tOmega}{\widetilde{\Omega}}
+\newcommand{\tvarrho}{\widetilde{\varrho}}
+\newcommand{\Order}{\mathcal{O}}
+\newcommand{\TOL}{\text{TOL}}
+\newcommand{\vT}{\boldsymbol{T}}
+\newcommand{\vone}{\boldsymbol{1}}
+\newcommand{\vgamma}{\boldsymbol{\gamma}}
+\newcommand{\figdir}{} %internally
+%\newcommand{\figdir}{} %internally
+
+
+\def\abs#1{\ensuremath{\left \lvert #1 \right \rvert}}
+\pagestyle{fancy}
+
+\bibliographystyle{amsplain}
+
+% define a mysection env which content is excluded
+\excludecomment{answer}
+%\includecomment{answer}
+
+\begin{document}
+
+%header
+%\rhead{\footnotesize{Yiou Li\\DePaul University}}
+\chead{ }
+\cfoot{\thepage}
+
+
+%here the body of your document is beginning
+\thispagestyle{empty}
+\begin{center}
+\center{\Large{Response to Referee Comments}}\\
+\end{center}
+
+\bigskip
+
+We would like to thank the referee(s) for the valuable comments on the manuscript. The following are our responses to referee(s) comments and concerns.
+
+\begin{enumerate}
+\item
+\emph{However, as the proposed approach is a stochastic algorithm, I would like to suggest the authors clarify the following issues: 1. What is the benefit to use the coordinate-exchange algorithm here? Since other stochastic algorithms, including the threshold accepting (TA), had been successfully applied to search for uniform designs, it seemed necessary to conduct some comparison, or at least add some comments, about the performance among different stochastic algorithms;}
+
+First, we need to correct a misunderstanding. 
+The coordinate-exchange algorithm is a deterministic algorithm, rather than stochastic. 
+We only change one coordinate in each iteration, when change one design to one of its neighboring designs. 
+To decide which coordinate for exchange, we compute the point deletion function to decide the row index, and then compute the coordinate deletion function to decide which coordinate of the chosen row to be exchanged. 
+The selection is deterministic, i.e., we always pick the indices corresponding to the largest deletion function values. 
+The exchange for the coordinates is also deterministic, as long as the objective function is improved with the exchange. 
+Please see details in Algorithm 1. 
+
+We admit that the major flaw of the greedy algorithm is that the solution is likely to be a local minima. 
+To overcome this, we can either run the algorithms with multiple random starts, if the initial design can be randomly generated, rather than being given, or we can combine the combine the coordinate-exchange with stochastic optimization algorithms, such as simulated annealing (SA) or threshold accepting (TA) methods. 
+For example, before making the exchange of the coordinates, we can incorporate a random scheme to accept the exchange or not, as in SA algorithm. 
+To combine it with the TA, it can be done similarly. 
+
+
+However, we eventually decided not to revise the algorithm and keep it in this greedy fashion. 
+The main reason is that to use these stochastic algorithms, many tuning parameters have to be carefully selected to make the stochastic algorithm truly effective. 
+For example, for SA we need to decide how fast the temperature would decrease, and for TA we need to design the sequence of the threshold values. 
+Even though combining SA or TA with the coordinate-exchange algorithm is straightforward, setting these tuning parameters is not. 
+We need to do many simulation studies and probably some theoretical derivation to make reasonable choices
+It would significantly increase the length of our manuscript. 
+Moreover, it will distract the readers from the main focus of our work, which is to raise the concern of the potential danger of directly using the inverse transformed uniform design. 
+The goal of the algorithm is not to achieve the ``optimal'', rather to elevate the issue caused by transformation. 
+In this sense, we would are satisfied with the current coordinate-exchange algorithm. 
+
+
+We do add one paragraph to commenting on the TA and SA algorithm and how it can be incorporated with the current algorithm in end of the Section 5. 
+
+
+\item
+\emph{What is the benefit to use the transformed design as the input? What if just using a randomly generated input design?}
+
+One can start with either randomly generated input design or the transformed one. 
+As we have shown that $D(\mathcal{U}, F_{\textrm{unif}}, K_{\textrm{unif}})$ has a certain amount of positive correlation with $D(\vPsi(\Udes),F_\normal, K)$, especially for low dimension, if the initial design is the transformed uniform design, the corresponding $D(\vPsi(\Udes),F_\normal, K)$ value might be smaller than some randomly generated design. 
+Thus, the algorithm would take fewer iterations to converge. 
+
+\item \emph{In the abstract, it is said that "one remedy is to ensure that the original uniform design has optimal one-dimensional projection". Does it mean the importance of using E-SOBOL designs? It seems necessary to give more explanation.}
+
+We revised the relevant states in the abstract and add some more details to clarify as the following. 
+
+``One remedy is to ensure that the original uniform design has optimal one-dimensional projection, but this remedy works best if the design is dense, or in other words, the ratio of sample size divided by the dimension of the random variable is relatively large. 
+Another remedy is to use the transformed design as the input to a coordinate-exchange algorithm that optimizes the desired discrepancy, and this works for both dense or sparse designs. ''
+
+This conclusion is from our observations of the simulations. 
+The E-SOBOL design, which simply is the inverse transformed scrambled Sobol' design with one-dimension project property. 
+The CE is the coordinate exchange that further improves the E-SOBOL design, as E-SOBOL design is used as the initial design. 
+
+Our simulation shows that CE always outperforms the others. 
+For dense design, E-SOBOL is good enough, but this is not the case for sparse design, i.e., $N/d$ is small. 
+Hence, we wrote the statement on remedies in the abstract. 
+
+\item We have corrected the typos pointed out by the referee. 
+
+
+
+\end{enumerate}
+\end{document}
+
+
+
