@@ -160,7 +160,7 @@ However, these conditions may be undesirable for practical reasons.
 In such a case, the transformation of a low discrepancy uniform design may yield a design with a large discrepancy. 
 We illustrate how this may occur.
 We also suggest some remedies. 
-One remedy is to ensure that the original uniform design has optimal one-dimensional projection, but this remedy works best if the design is dense, or in other words, the ratio of sample size divided by the dimension of the random variable is relatively large. \FJH{How do we know that $N/d$ is the right quantity to be large?}
+One remedy is to ensure that the original uniform design has optimal one-dimensional projection, but this remedy works best if the design is dense, or in other words, the ratio of sample size divided by the dimension of the random variable is relatively large. 
 Another remedy is to use the transformed design as the input to a coordinate-exchange algorithm that optimizes the desired discrepancy, and this works for both dense or sparse designs. 
 The effectiveness of these two remedies is illustrated via simulation.}
 
@@ -169,7 +169,7 @@ The effectiveness of these two remedies is illustrated via simulation.}
 Professor Kai-Tai Fang and his collaborators have demonstrated the effectiveness of low discrepancy points as space filling designs \cites{FangHic07a, FangEtal19a, FanLiSud06, FanWan94}. 
 They have promoted discrepancy as a quality measure for statistical experimental designs to the statistics, science, and engineering communities \cites{FanMa01b, FanMaWin02, FanMuk00, FanMa01a}. 
 
-Low discrepancy uniform designs, $\Udes = \{\vu_i\}_{i=1}^N$, are typically constructed so that their empirical distributions, $F_\Udes$, approximate $F_\unif$, the uniform distribution on the unit cube, \cube.  
+Low discrepancy uniform designs, $\Udes = \{\vu_i\}_{i=1}^N$, are typically constructed so that their empirical distributions, $F_\Udes$, approximate $F_\unif$, the uniform distribution on the unit cube, \cube. 
 The discrepancy measures the magnitude of $F_\unif-F_\Udes$. 
 The uniform design is a commonly used space filling design for computer experiments \cite{FanLiSud06} and can be constructed using  JMP\textsuperscript{\textregistered} \cite{sall2012jmp}.
 
@@ -739,11 +739,11 @@ Note that $A, B_1, \ldots, B_N, C$ only need to be computed once for each iterat
 Note that the coordinate-exchange algorithm we have developed is a greedy and deterministic algorithm. 
 The coordinate that we choose to make exchange is the one has the largest point and coordinate deletion function values, and we always make the exchange for new coordinate as long as the new optimal coordinate improves the objective function. 
 It is true that such deterministic and greedy algorithm is likely to return a design of whose discrepancy attains a \emph{local} minimum. 
-To overcome this, we can either run the algorithm with multiple random initial designs, or we can combine the combine coordinate-exchange with stochastic optimization algorithms, such as simulated annealing (SA) \cite{kirkpatrick1983optimization} or threshold accepting (TA) \cite{fang2003lower}. 
-For example, before making the exchange of the coordinates, we can incorporate a random decision to accept the exchange or not. 
+To overcome this, we can either run the algorithm with multiple random initial designs, or we can combine the coordinate-exchange with stochastic optimization algorithms, such as simulated annealing (SA) \cite{kirkpatrick1983optimization} or threshold accepting (TA) \cite{fang2003lower}. 
+For example, we can add a random selection scheme when choosing a coordinate to exchange, and when making the exchange of the coordinates, we can incorporate a random decision to accept the exchange or not. 
 The random decision can follow the SA or TA method. 
 Tuning parameters must be carefully chosen to make the SA or TA method effective. 
-Interested readers can refer to \cite{winker1997application} to see how TA can be applied to evaluation \FJH{minimization?} of discrepancy. 
+Interested readers can refer to \cite{winker1997application} to see how TA can be applied to the minimization of discrepancy. 
 
 % However, we eventually decided not to revise the algorithm and keep it in this greedy fashion. 
 % The main reason is that to use these stochastic algorithms, many tuning parameters have to be carefully selected to make the stochastic algorithm truly effective. 
